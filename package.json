@@ -1,0 +1,25 @@
+{
+  "name": "vortekore-ts",
+  "version": "1.0.0",
+  "description": "cool b0t",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaosphoe/vortekore-ts.git"
+  },
+  "author": "chaos and johna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chaosphoe/vortekore-ts/issues"
+  },
+  "homepage": "https://github.com/chaosphoe/vortekore-ts#readme",
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1"
+  }
+}

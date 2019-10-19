@@ -5,11 +5,9 @@ import { config } from "dotenv";
 config({ path: `${__dirname}/../.env` })
 
 const bot = new VorteClient();
-const handler = new Handler(bot);
+bot.handler = new Handler(bot);
 
-handler.loadCommands();
-handler.loadEvents();
-
-export = handler;
+bot.handler.loadCommands();
+bot.handler.loadEvents();
 
 bot.login(process.env.TOKEN);

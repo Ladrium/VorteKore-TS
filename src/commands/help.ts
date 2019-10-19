@@ -11,6 +11,6 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, args: string[]) {
-    
+    message.reply("Yahee")
   }
 };

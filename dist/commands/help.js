@@ -10,6 +10,7 @@ class Cmd extends Command_1.Command {
         });
     }
     run(message, args) {
+        message.reply("Yahee");
     }
 }
 exports.Cmd = Cmd;

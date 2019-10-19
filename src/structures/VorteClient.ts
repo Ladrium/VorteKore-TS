@@ -1,6 +1,6 @@
 import { Client, ClientOptions, Collection } from "discord.js";
 
-export class VorteClient extends Client { 
+export class VorteClient extends Client {
   commands: Collection<string, any>;
   aliases: Collection<string, string>;
   constructor(options?: ClientOptions) {
@@ -11,4 +11,4 @@ export class VorteClient extends Client {
       console.log(`${this.user!.username} is ready to rumble!`);
     })
   }
-}
+};

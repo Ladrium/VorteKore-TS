@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const Handler_1 = require("./structures/Handler");
 const VorteClient_1 = require("./structures/VorteClient");
 const dotenv_1 = require("dotenv");
@@ -9,3 +8,4 @@ const handler = new Handler_1.Handler(bot);
 handler.loadCommands();
 handler.loadEvents();
 bot.login(process.env.TOKEN);
+module.exports = handler;

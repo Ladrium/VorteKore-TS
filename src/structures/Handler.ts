@@ -3,6 +3,8 @@ import { readdirSync } from "fs";
 import { Message } from "discord.js";
 import { dirname } from "path";
 
+const cooldowns = new Set();
+
 export class Handler {
   bot: VorteClient;
   constructor(client: VorteClient) {
@@ -10,13 +12,20 @@ export class Handler {
     this.loadEvents = this.loadEvents.bind(this);
     this.loadCommands = this.loadCommands.bind(this);
   }
-  runCommand(message: Message, prefix: string): void {
+  runCommand(message: Message, prefix: string): void | Promise<Message> {
     if (message.author.bot || !message.guild) return;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift();
 
     const command = this.bot.commands.get(cmd!) || this.bot.commands.get(this.bot.aliases.get(cmd!)!) || null
-    if (command) command.run(message, args);
+    if (command) {
+      if (cooldowns.has(message.author.id)) return message.reply("Sorry you still have a cooldown! Please wait");
+      cooldowns.add(message.author.id);
+      command.run(message, args)
+      setTimeout(() => {
+        cooldowns.delete(message.author.id);
+      }, command.cooldown);
+    };
   }
   loadEvents = (): boolean | void => {
     console.log("Loading Events...");
@@ -44,7 +53,7 @@ export class Handler {
         console.log(file);
         if (!file.endsWith(".js")) console.log(`[❌] => ${file} doesn't end with .js`)
         let Cmd = require(`${dirname(require.main!.filename)}/commands/${file}`);
-  
+
         try {
           Cmd = new Cmd(this.bot);
           this.bot.commands.set(Cmd.name, Cmd);

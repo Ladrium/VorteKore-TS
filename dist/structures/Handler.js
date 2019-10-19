@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const path_1 = require("path");
+const cooldowns = new Set();
 class Handler {
     constructor(client) {
         this.loadEvents = () => {
@@ -56,8 +57,16 @@ class Handler {
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const cmd = args.shift();
         const command = this.bot.commands.get(cmd) || this.bot.commands.get(this.bot.aliases.get(cmd)) || null;
-        if (command)
+        if (command) {
+            if (cooldowns.has(message.author.id))
+                return message.reply("Sorry you still have a cooldown! Please wait");
+            cooldowns.add(message.author.id);
             command.run(message, args);
+            setTimeout(() => {
+                cooldowns.delete(message.author.id);
+            }, command.cooldown);
+        }
+        ;
     }
     getCommand(name) {
         return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)) || null;

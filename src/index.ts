@@ -10,5 +10,6 @@ const handler = new Handler(bot);
 handler.loadCommands();
 handler.loadEvents();
 
+export = handler;
 
 bot.login(process.env.TOKEN);

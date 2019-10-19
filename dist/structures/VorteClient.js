@@ -12,3 +12,4 @@ class VorteClient extends discord_js_1.Client {
     }
 }
 exports.VorteClient = VorteClient;
+;

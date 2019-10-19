@@ -52,15 +52,13 @@ export class Handler {
       if (!file.endsWith(".d.ts")) {
         console.log(file);
         if (!file.endsWith(".js")) console.log(`[❌] => ${file} doesn't end with .js`)
-        let Cmd = require(`${dirname(require.main!.filename)}/commands/${file}`);
-
+        let { Cmd } = require(`${dirname(require.main!.filename)}/commands/${file}`);
         try {
           Cmd = new Cmd(this.bot);
           this.bot.commands.set(Cmd.name, Cmd);
         } catch (e) {
-          console.log(`[❌] => ${file} has an error`)
+          console.log(`[❌] => ${file} has an error: ${e.toString()}`)
         }
-
         if (Cmd.aliases[0]) Cmd.aliases.forEach((alias: string) => this.bot.aliases.set(alias, Cmd.name));
 
         console.log(`[✅] => Successfully loaded command: ${file}`);

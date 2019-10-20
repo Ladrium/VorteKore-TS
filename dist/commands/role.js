@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
+const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -21,9 +25,9 @@ class Cmd extends Command_1.Command {
     run(message, args) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!args[0])
-                return message.channel.send("Please provide an argument: `add`, `remove`");
+                return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("You want to add or remove the role."));
             if (!args[1])
-                return message.channel.send(`Please provide a member name/id`);
+                return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription('Please provide a member'));
             const member = message.mentions.members.first() || message.guild.members.find(x => x.displayName === args[1]) || (yield message.guild.members.fetch(args[1]));
             if (!member)
                 return message.channel.send("Unable to find the member");

@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/chaosphoe/vortekore-ts#readme",
   "dependencies": {
-    "@types/node": "^12.11.1",
     "discord.js": "github:discordjs/discord.js",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "eslint": "^6.5.1"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1"

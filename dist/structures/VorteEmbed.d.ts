@@ -1,5 +1,7 @@
 import { MessageEmbed, Message } from "discord.js";
 export default class {
-    baseEmbed(message: Message): MessageEmbed;
+    message: Message;
+    constructor(message: Message);
+    baseEmbed(): MessageEmbed;
     ErrorEmbed(message: Message, error: string): MessageEmbed;
 }

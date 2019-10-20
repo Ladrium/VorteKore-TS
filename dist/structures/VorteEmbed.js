@@ -11,10 +11,10 @@ class default_1 {
             .setFooter(this.message.client.user.username, this.message.client.user.displayAvatarURL())
             .setColor("#f54b02");
     }
-    ErrorEmbed(error) {
+    errorEmbed(error) {
         return this.baseEmbed()
             .setTitle("ERROR")
-            .addField("Sorry a problem occured", error)
+            .setDescription(error)
             .setColor("#ff0000");
     }
 }

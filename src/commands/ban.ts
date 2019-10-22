@@ -14,7 +14,7 @@ export class Cmd extends Command {
   run(message: Message, args: string[]) {
     message.delete().catch()
     if (!args[0]) return new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban");
-    let member = message.mentions.members!.first() || message.guild!.members.find(r => r.displayName === args[0]) || message.guild!.members.get(args[0]); 
+    let member:  = message.mentions.members!.first() || message.guild!.members.find(r => r.displayName === args[0]) || message.guild!.members.get(args[0]);
     if (!member) return message.channel.send("Invalid username/id provided")
     if (!args[1]) {
       return new VorteEmbed(message).baseEmbed().setDescription("Please provide a specific reason.")
@@ -24,14 +24,6 @@ export class Cmd extends Command {
       reason: reason
     });
     message.channel.send("Succesfully banned the user.")
-    message.guild!.channels
-      .get(conf.channels.mod_logs)!
-      .send(
-        new VorteEmbed().baseEmbed().setDescription(
-          `**>** Executor: ${message.author.tag} (${message.author.id})
-          **>** Banned: ${member.user.tag} (${member.user.id})
-          **>** Reason: ${reason}`
-          )
-    )
+    message.
   }
 };

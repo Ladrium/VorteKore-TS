@@ -1,6 +1,7 @@
-.env
+src/config.ts
 .package.json
 node_modules/
 .settings.json
 .tsconfig.json
 .eslintrc
+dist/config.js

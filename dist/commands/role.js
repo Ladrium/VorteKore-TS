@@ -30,19 +30,19 @@ class Cmd extends Command_1.Command {
                 return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription('Please provide a member'));
             const member = message.mentions.members.first() || message.guild.members.find(x => x.displayName === args[1]) || (yield message.guild.members.fetch(args[1]));
             if (!member)
-                return message.channel.send("Unable to find the member");
+                return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Unable to find the member."));
             if (!args[2])
-                return message.channel.send("Please provide a specific role");
+                return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a specific role."));
             const role = message.mentions.roles.first() || message.guild.roles.find(r => r.name === args[2]) || message.guild.roles.get(args[2]);
             if (!role)
-                return message.channel.send("Unable to find the role");
+                return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Unable to find the role."));
             if (args[0].toLowerCase() === 'add') {
                 member.roles.add(role);
-                message.channel.send(`Added the role!`);
+                message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Succesfully added the role."));
             }
             else if (args[0] === 'remove') {
                 member.roles.remove(role);
-                message.channel.send("Succesfully removed the role");
+                message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Succesfully removed the role."));
             }
         });
     }

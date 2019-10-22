@@ -50,7 +50,6 @@ export class Handler {
     if (!files[0]) return console.log("No commands found!");
     for (const file of files) {
       if (!file.endsWith(".d.ts")) {
-        console.log(file);
         if (!file.endsWith(".js")) console.log(`[❌] => ${file} doesn't end with .js`)
         let { Cmd } = require(`${dirname(require.main!.filename)}/commands/${file}`);
         try {

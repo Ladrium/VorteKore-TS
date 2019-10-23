@@ -1,9 +1,14 @@
 import { Handler } from "./structures/Handler";
 import { VorteClient } from "./structures/VorteClient";
-import config from "./config";
+import { config } from 'dotenv';
 import mongoose from "mongoose";
 
-mongoose.connect(config.uri, {
+config({
+  path: `${__dirname}/../../.env`
+});
+
+
+mongoose.connect(process.env.URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }, (err: Error) => {
@@ -17,4 +22,4 @@ bot.handler.loadCommands();
 bot.handler.loadEvents();
 
 
-bot.login(config.token);
+bot.login(process.env.TOKEN);

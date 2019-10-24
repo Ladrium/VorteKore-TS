@@ -29,22 +29,42 @@ export class VorteGuild {
     this.guild.save().catch(console.error);
     return this;
   }
-  addAutoRole(role: string): this | void {
-    this.guild.autoRoles.push(role);
+  addRole(locale: string, role: string): this {
+    this.guild[locale].push(role);
     this.guild.save().catch(console.error);
     return this;
   }
-  removeAutoRole(role: string): this {
-    const index = this.guild.autoRoles.findIndex((x: string) => x === role);
+  removeRole(whereToRemove: string, role: string): this {
+    const index = this.guild[whereToRemove].findIndex((x: string) => x === role);
     if (!index) return this;
-    this.guild.autoRoles.splice(index, 1);
+    this.guild[whereToRemove].splice(index, 1);
     this.guild.save().catch(console.error);
     return this;
   }
-  get this() {
-    return this.guild;
+  getLog(log: string) {
+    return {
+      enabled: this.guild.logs[log],
+      channel: this.guild.logs.channel
+    }
   }
   get prefix() {
     return this.guild.prefix;
+  }
+  get case() {
+    return this.guild.case;
+  }
+  get welcome() {
+    return {
+      enabled: this.guild.welcome.enabled,
+      message: this.guild.welcome.message,
+      channel: this.guild.welcome.channel
+    }
+  }
+  get leave() {
+    return {
+      enabled: this.guild.leave.enabled,
+      message: this.guild.leave.message,
+      channel: this.guild.leave.channel
+    }
   }
 };

@@ -2,6 +2,7 @@ import { VorteClient } from "./VorteClient";
 import { readdirSync } from "fs";
 import { Message } from "discord.js";
 import { dirname } from "path";
+import { VorteGuild } from "./VorteGuild";
 
 const cooldowns = new Set();
 
@@ -12,16 +13,19 @@ export class Handler {
     this.loadEvents = this.loadEvents.bind(this);
     this.loadCommands = this.loadCommands.bind(this);
   }
-  runCommand(message: Message, prefix: string): void | Promise<Message> {
+  async runCommand(message: Message, prefix: string) {
     if (message.author.bot || !message.guild) return;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const cmd = args.shift();
-
     const command = this.bot.commands.get(cmd!) || this.bot.commands.get(this.bot.aliases.get(cmd!)!) || null
+   
+    const guild = new VorteGuild();
+    await guild._load(message.guild);
     if (command) {
       if (cooldowns.has(message.author.id)) return message.reply("Sorry you still have a cooldown! Please wait");
       cooldowns.add(message.author.id);
-      command.run(message, args)
+      command.run(message, args, guild)
+
       setTimeout(() => {
         cooldowns.delete(message.author.id);
       }, command.cooldown);

@@ -43,7 +43,7 @@ export class VorteGuild {
   }
   getLog(log: string) {
     return {
-      enabled: this.guild.logs[log],
+      enabled: this.guild.logs[log] ? this.guild.logs[log] : false,
       channel: this.guild.logs.channel
     }
   }

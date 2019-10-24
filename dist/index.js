@@ -5,9 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Handler_1 = require("./structures/Handler");
 const VorteClient_1 = require("./structures/VorteClient");
-const config_1 = __importDefault(require("./config"));
+const dotenv_1 = require("dotenv");
 const mongoose_1 = __importDefault(require("mongoose"));
-mongoose_1.default.connect(config_1.default.uri, {
+dotenv_1.config({
+    path: `${__dirname}/../../.env`
+});
+mongoose_1.default.connect(process.env.URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }, (err) => {
@@ -18,4 +21,4 @@ const bot = new VorteClient_1.VorteClient();
 bot.handler = new Handler_1.Handler(bot);
 bot.handler.loadCommands();
 bot.handler.loadEvents();
-bot.login(config_1.default.token);
+bot.login(process.env.TOKEN);

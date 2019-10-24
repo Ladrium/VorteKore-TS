@@ -5,13 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
 const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
-const Guild_1 = require("../structures/Guild");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
             name: "ban",
-            category: "Information",
-            cooldown: 5000
+            category: "Moderation",
+            cooldown: 0
         });
     }
     run(message, args, guild) {
@@ -30,9 +29,11 @@ class Cmd extends Command_1.Command {
         member.ban({
             reason: reason
         });
-        console.log(Guild_1.VorteGuild);
+        const { channel, enabled } = guild.getLog("ban");
         message.channel.send("Succesfully banned the user.");
-        const logChannel = member.guild.channels.find(channel => channel.id == "632460737146519552");
+        if (enabled == false)
+            return;
+        const logChannel = member.guild.channels.find(c => c.id == channel.id);
         if (!logChannel)
             return;
         if (!((logChannel) => logChannel.type === 'text')(logChannel))

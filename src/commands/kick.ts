@@ -6,14 +6,14 @@ import { VorteGuild } from "../structures/VorteGuild"
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
-      name: "ban",
+      name: "kick",
       category: "Moderation",
       cooldown: 0
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {
     message.delete().catch()
-    if (!args[0]) return new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban");
+    if (!args[0]) return new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to kick");
     let member = message.mentions.members!.first() || message.guild!.members.find((r: { displayName: string; }) => {
       return r.displayName === args[0];
     }) || message.guild!.members.get(args[0]);
@@ -22,11 +22,9 @@ export class Cmd extends Command {
       return new VorteEmbed(message).baseEmbed().setDescription("Please provide a specific reason.")
     }
     const reason = args.slice(2).join(" ");
-    member!.ban({
-      reason: reason
-    });
-    const { channel, enabled } = guild.getLog("ban")
-    message.channel.send("Succesfully banned the user.")
+    member!.kick(reason);
+    const { channel, enabled } = guild.getLog("kick")
+    message.channel.send("Succesfully kicked the user.")
     if (enabled == false) return;
     const logChannel = member.guild.channels.find(c => c.id == channel.id);
     if (!logChannel) return;
@@ -34,7 +32,7 @@ export class Cmd extends Command {
     logChannel.send(
       new VorteEmbed(message).baseEmbed().setTimestamp().setDescription(
         `**>** Executor: ${message.author.tag} (${message.author.id})
-        **>** Banned: ${member.user.tag} (${member.user.id})
+        **>** kicked: ${member.user.tag} (${member.user.id})
         **>** Reason: ${reason}
         `
       )

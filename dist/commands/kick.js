@@ -8,7 +8,7 @@ const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
-            name: "ban",
+            name: "kick",
             category: "Moderation",
             cooldown: 0
         });
@@ -16,7 +16,7 @@ class Cmd extends Command_1.Command {
     run(message, args, guild) {
         message.delete().catch();
         if (!args[0])
-            return new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a user to ban");
+            return new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a user to kick");
         let member = message.mentions.members.first() || message.guild.members.find((r) => {
             return r.displayName === args[0];
         }) || message.guild.members.get(args[0]);
@@ -26,11 +26,9 @@ class Cmd extends Command_1.Command {
             return new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a specific reason.");
         }
         const reason = args.slice(2).join(" ");
-        member.ban({
-            reason: reason
-        });
-        const { channel, enabled } = guild.getLog("ban");
-        message.channel.send("Succesfully banned the user.");
+        member.kick(reason);
+        const { channel, enabled } = guild.getLog("kick");
+        message.channel.send("Succesfully kicked the user.");
         if (enabled == false)
             return;
         const logChannel = member.guild.channels.find(c => c.id == channel.id);
@@ -39,7 +37,7 @@ class Cmd extends Command_1.Command {
         if (!((logChannel) => logChannel.type === 'text')(logChannel))
             return;
         logChannel.send(new VorteEmbed_1.default(message).baseEmbed().setTimestamp().setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})
-        **>** Banned: ${member.user.tag} (${member.user.id})
+        **>** kicked: ${member.user.tag} (${member.user.id})
         **>** Reason: ${reason}
         `));
         guild.increaseCase();

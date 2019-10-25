@@ -12,19 +12,21 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {
-    message.delete().catch()
-    if (!args[0]) return new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban");
+    message.delete()
+    if (!args[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban"));
     let member = message.mentions.members!.first() || message.guild!.members.find((r: { displayName: string; }) => {
       return r.displayName === args[0];
     }) || message.guild!.members.get(args[0]);
     if (!member) return message.channel.send("Invalid username|id provided")
     if (!args[1]) {
-      return new VorteEmbed(message).baseEmbed().setDescription("Please provide a specific reason.")
+      return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a specific reason."))
     }
-    const reason = args.slice(2).join(" ");
-    // member!.ban({
-    //   reason: reason
-    // });
+    const reason = args.slice(1).join(" ");
+    if (message.author.id === member.user.id) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("You can't ban yourself"));
+    if (message.member!.roles.highest <= member.roles.highest) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("The user has higher role than you."))
+    member!.ban({
+      reason: reason
+    });
     message.channel.send("Succesfully banned the user.")
     guild.increaseCase();
     const { channel, enabled } = guild.getLog("ban")

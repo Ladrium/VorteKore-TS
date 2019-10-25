@@ -6,3 +6,4 @@ node_modules/
 .eslintrc
 dist/config.js
 .env
+.vscode/settings.json

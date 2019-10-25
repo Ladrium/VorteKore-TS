@@ -13,8 +13,7 @@ export class Cmd extends Command {
     })
   }
   async run(message: Message) {
-    const { image } = await fetch("api.chaosphoe.xyz/meme").then(res => res.json());
-
+    const { image } = await fetch("https://api.chaosphoe.xyz/meme").then(res => res.json());
     const memeEmbed = new VorteEmbed(message)
       .baseEmbed()
       .setImage(image);

@@ -25,7 +25,7 @@ class Cmd extends Command_1.Command {
     }
     run(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { image } = yield node_fetch_1.default("api.chaosphoe.xyz/meme").then(res => res.json());
+            const { image } = yield node_fetch_1.default("https://api.chaosphoe.xyz/meme").then(res => res.json());
             const memeEmbed = new VorteEmbed_1.default(message)
                 .baseEmbed()
                 .setImage(image);

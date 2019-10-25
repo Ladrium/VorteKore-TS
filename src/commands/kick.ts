@@ -23,9 +23,10 @@ export class Cmd extends Command {
     }
     const reason = args.slice(2).join(" ");
     member!.kick(reason);
-    const { channel, enabled } = guild.getLog("kick")
     message.channel.send("Succesfully kicked the user.")
+    const { channel, enabled } = guild.getLog("kick")
     if (enabled == false) return;
+    guild.increaseCase();
     const logChannel = member.guild.channels.find(c => c.id == channel.id);
     if (!logChannel) return;
     if (!((logChannel): logChannel is TextChannel => logChannel.type === 'text')(logChannel)) return;
@@ -37,6 +38,5 @@ export class Cmd extends Command {
         `
       )
     )
-    guild.increaseCase();
   }
 };

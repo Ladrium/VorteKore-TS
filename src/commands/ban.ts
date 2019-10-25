@@ -22,23 +22,23 @@ export class Cmd extends Command {
       return new VorteEmbed(message).baseEmbed().setDescription("Please provide a specific reason.")
     }
     const reason = args.slice(2).join(" ");
-    member!.ban({
-      reason: reason
-    });
-    const { channel, enabled } = guild.getLog("ban")
+    // member!.ban({
+    //   reason: reason
+    // });
     message.channel.send("Succesfully banned the user.")
+    guild.increaseCase();
+    const { channel, enabled } = guild.getLog("ban")
     if (enabled == false) return;
     const logChannel = member.guild.channels.find(c => c.id == channel.id);
     if (!logChannel) return;
     if (!((logChannel): logChannel is TextChannel => logChannel.type === 'text')(logChannel)) return;
     logChannel.send(
-      new VorteEmbed(message).baseEmbed().setTimestamp().setDescription(
+      new VorteEmbed(message).baseEmbed().setTimestamp().setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `).setDescription(
         `**>** Executor: ${message.author.tag} (${message.author.id})
         **>** Banned: ${member.user.tag} (${member.user.id})
         **>** Reason: ${reason}
         `
       )
     )
-    guild.increaseCase();
   }
 };

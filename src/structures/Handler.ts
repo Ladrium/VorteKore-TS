@@ -13,14 +13,15 @@ export class Handler {
     this.loadEvents = this.loadEvents.bind(this);
     this.loadCommands = this.loadCommands.bind(this);
   }
-  async runCommand(message: Message, prefix: string) {
+  async runCommand(message: Message) {
     if (message.author.bot || !message.guild) return;
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
-    const cmd = args.shift();
-    const command = this.bot.commands.get(cmd!) || this.bot.commands.get(this.bot.aliases.get(cmd!)!) || null
-   
     const guild = new VorteGuild();
     await guild._load(message.guild);
+    const args = message.content.slice(guild.prefix.length).trim().split(/ +/g);
+    const cmd = args.shift();
+    const command = this.bot.commands.get(cmd!) || this.bot.commands.get(this.bot.aliases.get(cmd!)!) || null;
+
+    if (!message.content.startsWith(guild.prefix)) return;
     if (command) {
       if (cooldowns.has(message.author.id)) return message.reply("Sorry you still have a cooldown! Please wait");
       cooldowns.add(message.author.id);

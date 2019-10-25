@@ -55,7 +55,7 @@ class Cmd extends Command_1.Command {
                 message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Succesfully removed the role."));
                 guild.increaseCase();
                 const { channel, enabled } = guild.getLog("roleRemove");
-                if (enabled == false)
+                if (!enabled)
                     return;
                 const chan = message.guild.channels.find(c => c.id === channel.id);
                 chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Remove [Case ID: ${guild.case}]`).setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})

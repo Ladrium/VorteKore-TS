@@ -40,7 +40,6 @@ class Cmd extends Command_1.Command {
         **>** Banned: ${member.user.tag} (${member.user.id})
         **>** Reason: ${reason}
         `));
-        guild.increaseCase();
     }
 }
 exports.Cmd = Cmd;

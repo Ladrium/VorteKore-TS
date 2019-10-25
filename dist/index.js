@@ -1,6 +1,6 @@
 "use strict";
-let __importDefault = (this && this.__importDefault) || function(mod) {
-	return (mod && mod.__esModule) ? mod : { "default": mod };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Handler_1 = require("./structures/Handler");
@@ -8,14 +8,14 @@ const VorteClient_1 = require("./structures/VorteClient");
 const dotenv_1 = require("dotenv");
 const mongoose_1 = __importDefault(require("mongoose"));
 dotenv_1.config({
-	path: `${__dirname}/../../.env`,
+    path: `${__dirname}/../.env`
 });
 mongoose_1.default.connect(process.env.URI, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 }, (err) => {
-	if (err)
-		{console.log(err);}
+    if (err)
+        console.log(err);
 });
 const bot = new VorteClient_1.VorteClient();
 bot.handler = new Handler_1.Handler(bot);

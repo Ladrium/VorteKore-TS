@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import mongoose from "mongoose";
 
 config({
-  path: `${__dirname}/../../.env`
+  path: `${__dirname}/../.env`
 });
 
 

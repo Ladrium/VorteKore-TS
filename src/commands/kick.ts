@@ -25,18 +25,16 @@ export class Cmd extends Command {
     member!.kick(reason);
     message.channel.send("Succesfully kicked the user.")
     const { channel, enabled } = guild.getLog("kick")
-    if (enabled == false) return;
     guild.increaseCase();
-    const logChannel = member.guild.channels.find(c => c.id == channel.id);
-    if (!logChannel) return;
-    if (!((logChannel): logChannel is TextChannel => logChannel.type === 'text')(logChannel)) return;
+    if (enabled == false) return;
+    const logChannel = member.guild.channels.find(c => c.id == channel.id) as TextChannel;
     logChannel.send(
       new VorteEmbed(message).baseEmbed().setTimestamp().setDescription(
         `**>** Executor: ${message.author.tag} (${message.author.id})
         **>** kicked: ${member.user.tag} (${member.user.id})
         **>** Reason: ${reason}
         `
-      )
+      ).setTitle(`Moderation: Kick [Case ID: ${guild.case}]`)
     )
   }
 };

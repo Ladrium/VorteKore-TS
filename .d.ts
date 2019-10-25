@@ -1,6 +1,6 @@
-declare var process : {
+declare var process: {
   env: {
     TOKEN: string
     URI: string
-}
+  }
 }

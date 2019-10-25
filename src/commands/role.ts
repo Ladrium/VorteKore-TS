@@ -31,7 +31,7 @@ export class Cmd extends Command {
       guild.increaseCase()
       const { channel, enabled } = guild.getLog("roleAdd")
       if (enabled == false) return;
-     const chan = message.guild!.channels.find(c => c.id === channel.id) as TextChannel;
+      const chan = message.guild!.channels.find(c => c.id === channel.id) as TextChannel;
       chan.send(
         new VorteEmbed(message).baseEmbed().setTitle(`Moderation: Role Add [Case ID: ${guild.case}]`).setDescription(
           `**>** Executor: ${message.author.tag} (${message.author.id})
@@ -43,14 +43,14 @@ export class Cmd extends Command {
       guild.increaseCase()
       const { channel, enabled } = guild.getLog("roleRemove")
       if (enabled == false) return;
-     const chan = message.guild!.channels.find(c => c.id === channel.id) as TextChannel;
+      const chan = message.guild!.channels.find(c => c.id === channel.id) as TextChannel;
       chan.send(
         new VorteEmbed(message).baseEmbed().setTitle(`Moderation: Role Remove [Case ID: ${guild.case}]`).setDescription(
           `**>** Executor: ${message.author.tag} (${message.author.id})
           **>** User: ${member.user.tag} (${member.user.id})
           **>** Role Removed: ${role.name}`).setTimestamp())
     } else {
-     return message.channel.send("What do you want to do? \`Add\`/\`Remove\`")
+      return message.channel.send("What do you want to do? \`Add\`/\`Remove\`")
     }
   }
 };

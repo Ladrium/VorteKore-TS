@@ -29,18 +29,14 @@ class Cmd extends Command_1.Command {
         member.kick(reason);
         message.channel.send("Succesfully kicked the user.");
         const { channel, enabled } = guild.getLog("kick");
+        guild.increaseCase();
         if (enabled == false)
             return;
-        guild.increaseCase();
         const logChannel = member.guild.channels.find(c => c.id == channel.id);
-        if (!logChannel)
-            return;
-        if (!((logChannel) => logChannel.type === 'text')(logChannel))
-            return;
         logChannel.send(new VorteEmbed_1.default(message).baseEmbed().setTimestamp().setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})
         **>** kicked: ${member.user.tag} (${member.user.id})
         **>** Reason: ${reason}
-        `));
+        `).setTitle(`Moderation: Kick [Case ID: ${guild.case}]`));
     }
 }
 exports.Cmd = Cmd;

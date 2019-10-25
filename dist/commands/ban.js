@@ -13,30 +13,25 @@ class Cmd extends Command_1.Command {
             cooldown: 0
         });
     }
-    run(message, args, guild) {
+    run(message, [mem, ...reason], guild) {
         message.delete();
-        if (!args[0])
+        if (!mem)
             return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a user to ban"));
-        let member = message.mentions.members.first() || message.guild.members.find((r) => {
-            return r.displayName === args[0];
-        }) || message.guild.members.get(args[0]);
+        const member = message.mentions.members.first() || message.guild.members.find((r) => {
+            return r.displayName === mem;
+        }) || message.guild.members.get(mem);
         if (!member)
-            return message.channel.send("Invalid username|id provided");
-        if (!args[1]) {
-            return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a specific reason."));
-        }
-        const reason = args.slice(1).join(" ");
+            return message.channel.send("Couldn't find that user!");
         if (message.author.id === member.user.id)
             return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("You can't ban yourself"));
         if (message.member.roles.highest <= member.roles.highest)
             return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("The user has higher role than you."));
-        member.ban({
-            reason: reason
-        });
-        message.channel.send("Succesfully banned the user.");
+        reason = reason[0] ? reason.join(" ") : "No reason";
+        member.ban({ reason: reason });
         guild.increaseCase();
+        message.channel.send("Succesfully banned the user.");
         const { channel, enabled } = guild.getLog("ban");
-        if (enabled == false)
+        if (!enabled)
             return;
         const logChannel = member.guild.channels.find(c => c.id == channel.id);
         logChannel.send(new VorteEmbed_1.default(message).baseEmbed().setTimestamp().setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `).setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})

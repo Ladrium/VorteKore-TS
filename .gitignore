@@ -2,4 +2,6 @@ src/config.ts
 node_modules/
 .eslintrc
 .env
-.vscode/
+.vscode/settings.json
+.vscode
+project.js

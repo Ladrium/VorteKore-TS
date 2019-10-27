@@ -3,7 +3,6 @@ import { VorteClient } from "../structures/VorteClient";
 import { Message, TextChannel, Guild } from "discord.js";
 import VorteEmbed from "../structures/VorteEmbed"
 import { VorteGuild } from "../structures/VorteGuild"
-
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
@@ -13,6 +12,7 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, [mem, ...reason]: any, guild: VorteGuild) {
+    
     message.delete()
     if (!mem) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban"));
     const member = message.mentions.members!.first() || message.guild!.members.find((r: { displayName: string; }) => {
@@ -31,12 +31,17 @@ export class Cmd extends Command {
     if (!enabled) return;
     const logChannel = member.guild.channels.find(c => c.id == channel.id) as TextChannel;
     logChannel.send(
-      new VorteEmbed(message).baseEmbed().setTimestamp().setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `).setDescription(
-        `**>** Executor: ${message.author.tag} (${message.author.id})
-        **>** Banned: ${member.user.tag} (${member.user.id})
-        **>** Reason: ${reason}
+      new VorteEmbed(message)
+        .baseEmbed()
+        .setTimestamp()
+        .setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `)
+        .setDescription(
+        `**>**Executor: ${message.author.tag} (${message.author.id})
+        **>**Banned: ${member.user.tag} (${member.user.id})
+        **>**Reason: ${reason}
         `
       )
+      
     )
   }
 };

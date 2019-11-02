@@ -13,7 +13,7 @@ class Cmd extends Command_1.Command {
             cooldown: 5000
         });
     }
-    run(message, args) {
+    run(message, args, guild) {
         const chan = message.channel;
         if (!args[0])
             return new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a valid number");
@@ -29,6 +29,17 @@ class Cmd extends Command_1.Command {
         chan.edit({
             rateLimitPerUser: sec
         });
+        guild.increaseCase();
+        const { channel, enabled } = guild.getLog("slowmode");
+        if (!enabled)
+            return;
+        const cha = message.guild.channels.get(channel.id);
+        cha.send(new VorteEmbed_1.default(message)
+            .baseEmbed()
+            .setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
+      **>**Channel: ${chan.name} (${chan.id})
+      **>**Reason: ${reason}`)
+            .setTimestamp());
         if (reason) {
             message.channel.send(`This channel is in slowmode due to: ${reason}`);
         }

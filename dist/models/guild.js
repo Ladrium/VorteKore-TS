@@ -11,6 +11,8 @@ const Guild = new mongoose_1.Schema({
         kick: Boolean,
         mute: Boolean,
         warn: Boolean,
+        lockdown: Boolean,
+        slowmode: Boolean,
         roleRemove: Boolean,
         roleAdd: Boolean,
         channel: String,

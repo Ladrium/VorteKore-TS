@@ -10,6 +10,8 @@ const Guild = new Schema({
     kick: Boolean,
     mute: Boolean,
     warn: Boolean,
+    lockdown: Boolean,
+    slowmode: Boolean,
     roleRemove: Boolean,
     roleAdd: Boolean,
     channel: String,

@@ -8,7 +8,7 @@ const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
-            name: "help",
+            name: "warn",
             category: "Information",
             cooldown: 5000
         });

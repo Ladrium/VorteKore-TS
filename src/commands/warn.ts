@@ -7,7 +7,7 @@ import { VorteGuild } from "../structures/VorteGuild";
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
-      name: "help",
+      name: "warn",
       category: "Information",
       cooldown: 5000
     })

@@ -31,7 +31,7 @@ class Cmd extends Command_1.Command {
             let link = `https://imgur.com/r/${image}/hot.json`;
             const { data } = yield node_fetch_1.default(link).then(res => res.json());
             link = data[Math.floor(Math.random() * data.length)];
-            if (link.nsfw)
+            if (message.channel.nsfw && link.nsfw)
                 return message.reply("Sorry this result was NSFW");
             link = `https://i.imgur.com/${link.hash}${link.ext}`;
             const emb = new VorteEmbed_1.default(message).baseEmbed()

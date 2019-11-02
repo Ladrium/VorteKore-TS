@@ -1,6 +1,6 @@
 import { Command } from "../structures/Command";
 import { VorteClient } from "../structures/VorteClient";
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import fetch from "node-fetch";
 import VorteEmbed from "../structures/VorteEmbed";
 export class Cmd extends Command {
@@ -17,7 +17,7 @@ export class Cmd extends Command {
     let link: any = `https://imgur.com/r/${image}/hot.json`;
     const { data } = await fetch(link).then(res => res.json());
     link = data[Math.floor(Math.random() * data.length)]
-    if (link.nsfw) return message.reply("Sorry this result was NSFW");
+    if ((message.channel as TextChannel).nsfw && link.nsfw) return message.reply("Sorry this result was NSFW");
     link = `https://i.imgur.com/${link.hash}${link.ext}`;
     const emb = new VorteEmbed(message).baseEmbed()
       .setColor("#000000")

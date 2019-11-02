@@ -46,9 +46,9 @@ class Cmd extends Command_1.Command {
                 if (enabled == false)
                     return;
                 const chan = message.guild.channels.find(c => c.id === channel.id);
-                chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Add [Case ID: ${guild.case}]`).setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})
-          **>** User: ${member.user.tag} (${member.user.id})
-          **>** Role Added: ${role.name}`).setTimestamp());
+                chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Add [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
+          **>**User: ${member.user.tag} (${member.user.id})
+          **>**Role Added: ${role.name}`).setTimestamp());
             }
             else if (args[0] === 'remove') {
                 member.roles.remove(role);
@@ -58,9 +58,9 @@ class Cmd extends Command_1.Command {
                 if (!enabled)
                     return;
                 const chan = message.guild.channels.find(c => c.id === channel.id);
-                chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Remove [Case ID: ${guild.case}]`).setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})
-          **>** User: ${member.user.tag} (${member.user.id})
-          **>** Role Removed: ${role.name}`).setTimestamp());
+                chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Remove [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
+          **>**User: ${member.user.tag} (${member.user.id})
+          **>**Role Removed: ${role.name}`).setTimestamp());
             }
             else {
                 return message.channel.send("What do you want to do? \`Add\`/\`Remove\`");

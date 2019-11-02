@@ -34,9 +34,13 @@ class Cmd extends Command_1.Command {
         if (!enabled)
             return;
         const logChannel = member.guild.channels.find(c => c.id == channel.id);
-        logChannel.send(new VorteEmbed_1.default(message).baseEmbed().setTimestamp().setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `).setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})
-        **>** Banned: ${member.user.tag} (${member.user.id})
-        **>** Reason: ${reason}
+        logChannel.send(new VorteEmbed_1.default(message)
+            .baseEmbed()
+            .setTimestamp()
+            .setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `)
+            .setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
+        **>**Banned: ${member.user.tag} (${member.user.id})
+        **>**Reason: ${reason}
         `));
     }
 }

@@ -33,7 +33,7 @@ class Cmd extends Command_1.Command {
         const { channel, enabled } = guild.getLog("ban");
         if (!enabled)
             return;
-        const logChannel = member.guild.channels.find(c => c.id == channel.id);
+        const logChannel = member.guild.channels.find((c) => c.id == channel.id);
         logChannel.send(new VorteEmbed_1.default(message)
             .baseEmbed()
             .setTimestamp()

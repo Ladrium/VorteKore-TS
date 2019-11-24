@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
 const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -14,14 +15,14 @@ class Cmd extends Command_1.Command {
         });
     }
     run(message, args, guild) {
+        if (!util_1.checkPermissions(message.member, "KICK_MEMBERS"))
+            return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
         if (!args[0])
             return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a user to warn."));
         const member = message.mentions.members.first() || message.guild.members.find(r => r.displayName === args[0] || r.id === args[0]);
+        const reason = args.slice(1).join(" ") || "No Reason.";
         if (!member)
             return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Couldn't find that user!"));
-        const reason = args.slice(1).join(" ");
-        if (!reason)
-            return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a specific reason"));
         member.user.send(`You have been warned due to **${reason}**`);
         guild.increaseCase();
         const { channel, enabled } = guild.getLog("warn");

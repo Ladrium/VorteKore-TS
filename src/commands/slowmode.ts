@@ -15,7 +15,7 @@ export class Cmd extends Command {
   }
   run(message: Message, args: string[], guild: VorteGuild) {
     const chan = message.channel as GuildChannel;
-    if (!checkPermissions(message.member!, "MANAGE_CHANNELS")) return message.reply("Missing permissions!");
+    if (!checkPermissions(message.member!, "MANAGE_CHANNELS")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
     if (!args[0]) return new VorteEmbed(message).baseEmbed().setDescription("Please provide a valid number");
     if (args[0].toLowerCase() === "remove" || "release" || "rel") {
       message.channel.send("Succesffully removed the slowmode")

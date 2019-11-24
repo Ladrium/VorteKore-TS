@@ -17,7 +17,7 @@ class Cmd extends Command_1.Command {
     run(message, args, guild) {
         const chan = message.channel;
         if (!util_1.checkPermissions(message.member, "MANAGE_CHANNELS"))
-            return message.reply("Missing permissions!");
+            return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
         if (!args[0])
             return new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a valid number");
         if (args[0].toLowerCase() === "remove" || "release" || "rel") {

@@ -3,6 +3,7 @@ import { VorteClient } from "../structures/VorteClient";
 import { Message, GuildMember, TextChannel } from "discord.js";
 import VorteEmbed from "../structures/VorteEmbed"
 import { VorteGuild } from "../structures/VorteGuild";
+import { checkPermissions } from "../util";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -15,7 +16,7 @@ export class Cmd extends Command {
     })
   }
   async run(message: Message, args: string[], guild: VorteGuild) {
-
+    if (!checkPermissions(message.member!, "MANAGE_ROLES")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
     if (!args[0]) return message.channel.send(new VorteEmbed(message).errorEmbed("Provide if you want to add or remove the role!"));
     if (!args[1]) return message.channel.send(new VorteEmbed(message).errorEmbed("Provide a member to add/remove the role to!"));
     if (!args[2]) return message.channel.send(new VorteEmbed(message).errorEmbed("Provide a role to add/remove!"));

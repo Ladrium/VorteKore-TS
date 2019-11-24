@@ -5,6 +5,7 @@ import { VorteGuild } from "../structures/VorteGuild";
 import VorteEmbed from "../structures/VorteEmbed";
 import { Mute } from "../structures/Mute";
 import ms from "ms";
+import { checkPermissions } from "../util";
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
@@ -14,6 +15,8 @@ export class Cmd extends Command {
     })
   }
   async run(message: Message, args: string[], guild: VorteGuild) {
+    if (!checkPermissions(message.member!, "MANAGE_ROLES")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
+
     message.delete()
     if (!args[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to mute"));
     if (!args[1]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a time."));

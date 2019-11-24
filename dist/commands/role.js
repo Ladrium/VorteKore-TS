@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
 const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -26,6 +27,8 @@ class Cmd extends Command_1.Command {
     }
     run(message, args, guild) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!util_1.checkPermissions(message.member, "MANAGE_ROLES"))
+                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
             if (!args[0])
                 return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Provide if you want to add or remove the role!"));
             if (!args[1])

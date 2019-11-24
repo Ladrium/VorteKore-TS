@@ -5,6 +5,7 @@ import { Message, GuildChannel, TextChannel } from "discord.js";
 import { VorteGuild } from "../structures/VorteGuild";
 import VorteEmbed from "../structures/VorteEmbed";
 import ms = require("ms");
+import { checkPermissions } from "../util";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -15,8 +16,10 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {
+    if (!checkPermissions(message.member!, "MANAGE_CHANNELS")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
+
     const chan = message.channel as GuildChannel;
-    
+
     if (!args[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a reason to lockdown this channel."));
     if (args[0].toLowerCase() === 'release' || 'unlock' || 'remove') {
       chan.overwritePermissions({

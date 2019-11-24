@@ -3,6 +3,7 @@ import { VorteClient } from "../structures/VorteClient";
 import { Message, TextChannel } from "discord.js";
 import VorteEmbed from "../structures/VorteEmbed";
 import { VorteGuild } from "../structures/VorteGuild";
+import { checkPermissions } from "../util";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -13,11 +14,12 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {
+    if (!checkPermissions(message.member!, "KICK_MEMBERS")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
     if (!args[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to warn."));
     const member = message.mentions.members!.first() || message.guild!.members.find(r => r.displayName === args[0] || r.id === args[0]);
+    const reason = args.slice(1).join(" ") || "No Reason.";
+
     if (!member) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Couldn't find that user!"));
-    const reason = args.slice(1).join(" ");
-    if (!reason) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a specific reason"));
     member.user.send(`You have been warned due to **${reason}**`)
     guild.increaseCase()
     const { channel, enabled } = guild.getLog("warn");

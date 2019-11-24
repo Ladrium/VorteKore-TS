@@ -16,6 +16,7 @@ const Command_1 = require("../structures/Command");
 const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
 const Mute_1 = require("../structures/Mute");
 const ms_1 = __importDefault(require("ms"));
+const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -26,6 +27,8 @@ class Cmd extends Command_1.Command {
     }
     run(message, args, guild) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!util_1.checkPermissions(message.member, "MANAGE_ROLES"))
+                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
             message.delete();
             if (!args[0])
                 return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a user to mute"));

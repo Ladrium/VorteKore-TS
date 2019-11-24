@@ -3,6 +3,7 @@ import { VorteClient } from "../structures/VorteClient";
 import { Message } from "discord.js";
 import VorteEmbed from "../structures/VorteEmbed";
 import { userInfo } from "os";
+import { checkPermissions } from "../util";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -13,6 +14,8 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, args: string[]) {
+    if (!checkPermissions(message.member!, "MANAGE_MESSAGES")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
+
     if (!args[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a number."));
     const num = parseInt(args[0]);
     const member = message.mentions.users!.first() || message.guild!.members.find(x => x.displayName === args[0] || x.id === args[0]);

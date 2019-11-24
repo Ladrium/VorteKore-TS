@@ -3,6 +3,7 @@ import { VorteClient } from "../structures/VorteClient";
 import { Message, TextChannel, Guild } from "discord.js";
 import VorteEmbed from "../structures/VorteEmbed"
 import { VorteGuild } from "../structures/VorteGuild"
+import { checkPermissions } from "../util";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -13,6 +14,8 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, [mem, ...reason]: any, guild: VorteGuild) {
+    if (!checkPermissions(message.member!, "KICK_MEMBERS")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
+
     message.delete()
     if (!mem) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban"));
     const member = message.mentions.members!.first() || message.guild!.members.find((r: { displayName: string; }) => {

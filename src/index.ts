@@ -22,5 +22,4 @@ bot.handler = new Handler(bot);
 bot.handler.loadCommands();
 bot.handler.loadEvents();
 
-
 bot.login(process.env.TOKEN);

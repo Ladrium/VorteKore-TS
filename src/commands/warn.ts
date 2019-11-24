@@ -29,7 +29,7 @@ export class Cmd extends Command {
         .setTitle(`Moderation: Warn [Case ID: ${guild.case}]`)
         .setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})\n**>**Warn: ${member.user.tag} (${member.user.id})\n**>**Reason: ${reason}`)
         .setTimestamp()
-      
+
     )
   }
 };

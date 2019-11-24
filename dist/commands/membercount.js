@@ -15,9 +15,8 @@ class Cmd extends Command_1.Command {
         });
     }
     run(message, args) {
-        var _a;
         const guild = message.guild;
-        new VorteEmbed_1.default(message).baseEmbed().setDescription(`**>** Member Count: ${(_a = guild) === null || _a === void 0 ? void 0 : _a.memberCount}
+        new VorteEmbed_1.default(message).baseEmbed().setDescription(`**>** Member Count: ${guild.memberCount}
      **>**`);
     }
 }

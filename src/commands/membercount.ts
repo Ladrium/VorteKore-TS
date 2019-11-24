@@ -15,7 +15,7 @@ export class Cmd extends Command {
   run(message: Message, args: string[]) {
     const guild = message.guild;
     new VorteEmbed(message).baseEmbed().setDescription(
-    `**>** Member Count: ${guild?.memberCount}
+      `**>** Member Count: ${guild!.memberCount}
      **>**`
     )
   }

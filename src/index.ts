@@ -1,4 +1,3 @@
-
 import { Handler } from "./structures/Handler";
 import { VorteClient } from "./structures/VorteClient";
 import { config } from 'dotenv';

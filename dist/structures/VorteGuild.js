@@ -43,17 +43,36 @@ class VorteGuild {
         return this;
     }
     addRole(locale, role) {
+        if (locale == "ar")
+            locale = "autoRole";
+        else if (locale == "staff")
+            locale = "staffRole";
         this.guild[locale].push(role);
         this.guild.save().catch(console.error);
         return this;
     }
-    removeRole(whereToRemove, role) {
-        const index = this.guild[whereToRemove].findIndex((x) => x === role);
+    removeRole(locale, role) {
+        if (locale == "ar")
+            locale = "autoRole";
+        else if (locale == "staff")
+            locale = "staffRole";
+        const index = this.guild[locale].findIndex((x) => x === role);
         if (!index)
             return this;
-        this.guild[whereToRemove].splice(index, 1);
+        this.guild[locale].splice(index, 1);
         this.guild.save().catch(console.error);
         return this;
+    }
+    setLog(log, query) {
+        if (log === "channel")
+            this.guild.logs.channel = query;
+        else
+            this.guild.logs[log] = query;
+        this.guild.save().catch(console.error);
+    }
+    setAutoMessage(locale, toSet, query) {
+        this.guild[locale][toSet] = query;
+        this.guild.save().catch(console.error);
     }
     getLog(log) {
         return {

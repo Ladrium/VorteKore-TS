@@ -6,7 +6,9 @@ export declare class VorteGuild {
     increaseCase(): this;
     setPrefix(prefix: string): this;
     addRole(locale: string, role: string): this;
-    removeRole(whereToRemove: string, role: string): this;
+    removeRole(locale: string, role: string): this;
+    setLog(log: string, query: string | boolean): void;
+    setAutoMessage(locale: string, toSet: string, query: string | boolean): void;
     getLog(log: string): {
         enabled: any;
         channel: any;

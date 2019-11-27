@@ -28,9 +28,9 @@ export class Cmd extends Command {
     chan.edit({
       rateLimitPerUser: sec
     });
-    guild.increaseCase()
     const { channel, enabled } = guild.getLog("slowmode");
     if (!enabled) return;
+    guild.increaseCase()
     const cha = message.guild!.channels.get(channel.id) as TextChannel;
     cha.send(
       new VorteEmbed(message)

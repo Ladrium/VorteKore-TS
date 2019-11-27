@@ -21,9 +21,9 @@ export class Cmd extends Command {
 
     if (!member) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Couldn't find that user!"));
     member.user.send(`You have been warned due to **${reason}**`)
-    guild.increaseCase()
     const { channel, enabled } = guild.getLog("warn");
     if (!enabled) return;
+    guild.increaseCase()
     const chan = message.guild!.channels.get(channel.id) as TextChannel;
     chan.send(
       new VorteEmbed(message)

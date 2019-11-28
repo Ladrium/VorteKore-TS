@@ -57,10 +57,10 @@ class Cmd extends Command_1.Command {
                 });
                 message.channel.send("Successfully unlocked the channel.");
             }, time);
-            guild.increaseCase();
             const { channel, enabled } = guild.getLog("lockdown");
             if (!enabled)
                 return;
+            guild.increaseCase();
             const cha = message.guild.channels.get(channel.id);
             cha.send('Succesfully locked the channel');
         }

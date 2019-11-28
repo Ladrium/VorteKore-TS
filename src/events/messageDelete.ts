@@ -12,6 +12,6 @@ export = (bot: VorteClient, deletedMessage: Message, guild: VorteGuild) => {
   chan.send(
     new VorteEmbed(deletedMessage)
       .baseEmbed()
-      .setDescription(`Event: Message Deleted\nUser: ${deletedMessage.author.tag}\nMessage: ${deletedMessage.content}`).setTimestamp()
+      .setDescription(`Event: Message Deleted [Case ID: ${guild.case}]\nUser: ${deletedMessage.author.tag} (${deletedMessage.author.id})\nMessage: ${deletedMessage.content}`).setTimestamp()
   );
 };

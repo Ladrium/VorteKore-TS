@@ -9,7 +9,8 @@ module.exports = (bot, deletedMessage, guild) => {
     if (!enabled)
         return;
     const chan = deletedMessage.guild.channels.get(channel.id);
+    guild.increaseCase();
     chan.send(new VorteEmbed_1.default(deletedMessage)
         .baseEmbed()
-        .setDescription(`Event: Message Deleted\nUser: ${deletedMessage.author.tag}\nMessage: ${deletedMessage.content}`).setTimestamp());
+        .setDescription(`Event: Message Deleted [Case ID: ${guild.case}]\nUser: ${deletedMessage.author.tag} (${deletedMessage.author.id})\nMessage: ${deletedMessage.content}`).setTimestamp());
 };

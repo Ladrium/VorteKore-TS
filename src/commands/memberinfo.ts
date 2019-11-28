@@ -12,12 +12,18 @@ export class Cmd extends Command {
       aliases: ["mi", "ui", "meminfo"]
     })
   }
-  run(message: Message, args: string[]) {
+  run(message: Message, [mem]: any) {
+    let per = message.member; 
+    if (mem) {
+     per = message.guild!.members.find(a => a.displayName === mem || a.id === mem) || null;
+
+    };
+    if (!per) return message.channel.send(`Unable to `)
     new VorteEmbed(message).baseEmbed().setDescription(
-      `**>** Name: ${message.author.tag}
-     **>** Joined At: ${message.member!.joinedAt}
-     **>** Presence: ${message.member!.presence.status}
-     **>** Roles: ${message.member!.roles}` 
+    `**>** Name: ${per!.user.tag}
+     **>** Joined At: ${per!.joinedAt}
+     **>** Presence: ${per!.presence.status}
+     **>** Roles: ${per!.roles.array().toString().replace('@everyone', '')}` 
     )
   }
 };

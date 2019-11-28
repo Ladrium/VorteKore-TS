@@ -26,10 +26,10 @@ export class Cmd extends Command {
     if (message.member!.roles.highest <= member.roles.highest) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("The user has higher role than you."))
     reason = reason[0] ? reason.join(" ") : "No Reason";
     member.kick(reason);
-    guild.increaseCase();
     message.channel.send("Succesfully kicked the user.")
-
+    
     const { channel, enabled } = guild.getLog("ban")
+    guild.increaseCase();
 
     if (!enabled) return;
     const logChannel = member.guild.channels.find(c => c.id == channel.id) as TextChannel;

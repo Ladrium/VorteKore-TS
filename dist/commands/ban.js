@@ -31,12 +31,12 @@ class Cmd extends Command_1.Command {
             return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("The user has higher role than you."));
         reason = reason[0] ? reason.join(" ") : "No reason";
         member.ban({ reason: reason });
-        guild.increaseCase();
         message.channel.send("Succesfully banned the user.");
         const { channel, enabled } = guild.getLog("ban");
         if (!enabled)
             return;
-        const logChannel = member.guild.channels.find((c) => c.id == channel.id);
+        guild.increaseCase();
+        const logChannel = member.guild.channels.get(channel.id);
         logChannel.send(new VorteEmbed_1.default(message)
             .baseEmbed()
             .setTimestamp()

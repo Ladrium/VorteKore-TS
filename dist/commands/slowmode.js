@@ -39,9 +39,7 @@ class Cmd extends Command_1.Command {
         const cha = message.guild.channels.get(channel.id);
         cha.send(new VorteEmbed_1.default(message)
             .baseEmbed()
-            .setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
-      **>**Channel: ${chan.name} (${chan.id})
-      **>**Reason: ${reason}`)
+            .setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})\n**>** Channel: ${chan.name} (${chan.id})\n**>** Reason: ${reason}`)
             .setTimestamp());
         if (reason) {
             message.channel.send(`This channel is in slowmode due to: ${reason}`);

@@ -14,18 +14,37 @@ class Cmd extends Command_1.Command {
         });
     }
     run(message, args) {
+        let command;
+        if (args[0])
+            command = this.bot.handler.getCommand(args[0]);
         const helpEmbed = new VorteEmbed_1.default(message).baseEmbed()
             .setTitle("Help");
-        const commands = this.bot.handler.getAllCommands().commands;
-        const categories = [];
-        commands.forEach((cmd) => {
-            if (!categories.includes(cmd.category))
-                categories.push(cmd.category);
-        });
-        categories.forEach((cat) => {
-            const cmds = commands.filter((cmd) => cmd.category === cat);
-            helpEmbed.addField(cat, cmds.map((x) => `\`\`${x.name}\`\``).join(",\n"), true);
-        });
+        if (!command) {
+            const commands = this.bot.handler.getAllCommands().commands;
+            const categories = [];
+            commands.forEach((cmd) => {
+                if (!categories.includes(cmd.category))
+                    categories.push(cmd.category);
+            });
+            categories.forEach((cat) => {
+                const cmds = commands.filter((cmd) => cmd.category === cat);
+                helpEmbed.addField(cat, cmds.map((x) => `\`\`${x.name}\`\``).join(",\n"), true);
+            });
+        }
+        else {
+            let info = "";
+            Object.keys(command).forEach((x) => {
+                if (x === "bot")
+                    return;
+                if (x === "name")
+                    return helpEmbed.setTitle(`Help: ${x}`);
+                if (x === "aliases")
+                    return command[x][0] ? info += `aliases: ${command[x].map((y) => `\`\`${y}\`\``).join(", ")}\n` : null;
+                if (command[x])
+                    info += `${x}: ${command[x]}\n`;
+            });
+            helpEmbed.setDescription(info);
+        }
         message.channel.send(helpEmbed);
     }
 }

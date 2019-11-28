@@ -73,7 +73,7 @@ export class Handler {
   getCommand(name: string): any {
     return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)!) || null;
   }
-  getAllCommands(): object {
+  getAllCommands() {
     return {
       commands: this.bot.commands.map((x) => x),
       size: this.bot.commands.size

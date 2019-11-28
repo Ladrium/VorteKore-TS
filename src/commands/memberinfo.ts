@@ -6,17 +6,18 @@ import VorteEmbed from "../structures/VorteEmbed";
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
-      name: "si",
+      name: "memberinfo",
       category: "Utility",
       cooldown: 5000,
-      aliases: ["serverinfo"]
+      aliases: ["mi", "ui", "meminfo"]
     })
   }
   run(message: Message, args: string[]) {
-    const guild = message.guild;
     new VorteEmbed(message).baseEmbed().setDescription(
-      `**>** Member Count: ${guild!.memberCount}
-     **>**`
+      `**>** Name: ${message.author.tag}
+     **>** Joined At: ${message.member!.joinedAt}
+     **>** Presence: ${message.member!.presence.status}
+     **>** Roles: ${message.member!.roles}` 
     )
   }
 };

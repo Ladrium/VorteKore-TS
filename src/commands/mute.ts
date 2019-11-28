@@ -38,7 +38,7 @@ export class Cmd extends Command {
     const { channel, enabled } = guild.getLog("mute");
     if (!enabled) return;
     guild.increaseCase();
-    (message.guild?.channels.get(channel.id) as TextChannel).send(
+    (message.guild!.channels.get(channel.id) as TextChannel).send(
       new VorteEmbed(message)
         .baseEmbed()
         .setTitle(`Moderation: Mute [Case ID: ${guild.case}]`)

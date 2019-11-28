@@ -35,9 +35,7 @@ export class Cmd extends Command {
     cha.send(
       new VorteEmbed(message)
         .baseEmbed()
-        .setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
-      **>**Channel: ${chan.name} (${chan.id})
-      **>**Reason: ${reason}`)
+        .setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})\n**>** Channel: ${chan.name} (${chan.id})\n**>** Reason: ${reason}`)
         .setTimestamp()
     )
     if (reason) {

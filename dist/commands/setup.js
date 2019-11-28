@@ -16,7 +16,7 @@ class Cmd extends Command_1.Command {
     }
     run(message, args, guild) {
         if (!args[0])
-            return message.reply("What to setup bruh");
+            return message.reply("What do you want to setup?");
         const toSetup = args[0].toLowerCase();
         if (toSetup === "prefix") {
             if (!util_1.checkPermissions(message.member, "ADMINISTRATOR"))

@@ -14,7 +14,7 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {
-    if (!args[0]) return message.reply("What to setup bruh");
+    if (!args[0]) return message.reply("What do you want to setup?");
     const toSetup = args[0].toLowerCase();
 
     if (toSetup === "prefix") {

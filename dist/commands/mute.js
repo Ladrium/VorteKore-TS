@@ -51,6 +51,14 @@ class Cmd extends Command_1.Command {
             const mute = new Mute_1.Mute(member.id, message.guild.id);
             mute._load().setTime(time);
             message.channel.send("Successfully muted the user");
+            const { channel, enabled } = guild.getLog("mute");
+            if (!enabled)
+                return;
+            guild.increaseCase();
+            message.guild.channels.get(channel.id).send(new VorteEmbed_1.default(message)
+                .baseEmbed()
+                .setTitle(`Moderation: Mute [Case ID: ${guild.case}]`)
+                .setDescription(`**>** Muted: ${member.user.tag}\n**>** Muted By: ${message.author.tag}\n**>** Time: ${time}`));
         });
     }
 }

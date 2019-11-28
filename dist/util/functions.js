@@ -7,3 +7,11 @@ function checkPermissions(guildMember, permissions = "ADMINISTRATOR") {
     });
 }
 exports.checkPermissions = checkPermissions;
+function findRole(message, role) {
+    return message.guild.roles.find((r) => {
+        const name = r.name.toLowerCase();
+        return name === role || name.toLowerCase().startsWith(role);
+    });
+}
+exports.findRole = findRole;
+;

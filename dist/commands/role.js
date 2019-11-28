@@ -44,10 +44,10 @@ class Cmd extends Command_1.Command {
             if (args[0].toLowerCase() === 'add') {
                 member.roles.add(role);
                 message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Succesfully added the role."));
-                guild.increaseCase();
                 const { channel, enabled } = guild.getLog("roleAdd");
-                if (enabled == false)
+                if (!enabled)
                     return;
+                guild.increaseCase();
                 const chan = message.guild.channels.find(c => c.id === channel.id);
                 chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Add [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
           **>**User: ${member.user.tag} (${member.user.id})
@@ -56,10 +56,10 @@ class Cmd extends Command_1.Command {
             else if (args[0] === 'remove') {
                 member.roles.remove(role);
                 message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Succesfully removed the role."));
-                guild.increaseCase();
                 const { channel, enabled } = guild.getLog("roleRemove");
                 if (!enabled)
                     return;
+                guild.increaseCase();
                 const chan = message.guild.channels.find(c => c.id === channel.id);
                 chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Remove [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
           **>**User: ${member.user.tag} (${member.user.id})

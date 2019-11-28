@@ -30,15 +30,17 @@ export class VorteGuild {
     return this;
   }
   addRole(locale: string, role: string): this {
-    if (locale == "ar") locale = "autoRole";
-    else if (locale == "staff") locale = "staffRole";
+    if (locale == "ar") locale = "autoRoles";
+    else if (locale == "staff") locale = "staffRoles";
+    console.log(locale);
+    console.log(this.guild);
     this.guild[locale].push(role);
     this.guild.save().catch(console.error);
     return this;
   }
   removeRole(locale: string, role: string): this {
-    if (locale == "ar") locale = "autoRole";
-    else if (locale == "staff") locale = "staffRole";
+    if (locale == "ar") locale = "autoRoles";
+    else if (locale == "staff") locale = "staffRoles";
     const index = this.guild[locale].findIndex((x: string) => x === role);
     if (!index) return this;
     this.guild[locale].splice(index, 1);

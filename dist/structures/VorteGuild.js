@@ -44,18 +44,20 @@ class VorteGuild {
     }
     addRole(locale, role) {
         if (locale == "ar")
-            locale = "autoRole";
+            locale = "autoRoles";
         else if (locale == "staff")
-            locale = "staffRole";
+            locale = "staffRoles";
+        console.log(locale);
+        console.log(this.guild);
         this.guild[locale].push(role);
         this.guild.save().catch(console.error);
         return this;
     }
     removeRole(locale, role) {
         if (locale == "ar")
-            locale = "autoRole";
+            locale = "autoRoles";
         else if (locale == "staff")
-            locale = "staffRole";
+            locale = "staffRoles";
         const index = this.guild[locale].findIndex((x) => x === role);
         if (!index)
             return this;

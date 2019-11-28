@@ -7,7 +7,7 @@ export function checkPermissions(guildMember: GuildMember, permissions: BitField
   })
 }
 export function findRole(message: Message, role: string) {
-  return message.guild!.roles.find((r) => {
+  return message.mentions.roles.first() || message.guild!.roles.find((r) => {
     const name = r.name.toLowerCase()
     return name === role || name.toLowerCase().startsWith(role);
   })

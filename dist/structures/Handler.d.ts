@@ -7,5 +7,8 @@ export declare class Handler {
     loadEvents: () => boolean | void;
     loadCommands: () => boolean | void;
     getCommand(name: string): any;
-    getAllCommands(): object;
+    getAllCommands(): {
+        commands: any[];
+        size: number;
+    };
 }

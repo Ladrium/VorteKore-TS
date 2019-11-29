@@ -10,7 +10,10 @@ export class Cmd extends Command {
     super(bot, {
       name: "warn",
       category: "Information",
-      cooldown: 5000
+      cooldown: 5000,
+      description: "Warns a member",
+      usage: "!warn @user reason",
+      example: "!warn @Johna3212#1708 not following rules"
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {

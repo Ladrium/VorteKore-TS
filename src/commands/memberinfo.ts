@@ -9,7 +9,8 @@ export class Cmd extends Command {
       name: "memberinfo",
       category: "Utility",
       cooldown: 5000,
-      aliases: ["mi", "ui", "meminfo"]
+      aliases: ["mi", "ui", "meminfo"],
+      description: "!ui @user"
     })
   }
   run(message: Message, [mem]: any) {

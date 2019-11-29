@@ -10,7 +10,8 @@ export class Cmd extends Command {
     super(bot, {
       name: "slowmode",
       category: "Moderation",
-      cooldown: 5000
+      cooldown: 3000,
+      usage: "To remove the slowmode: !slowmode <remove|release|rel>\nTo add the slowmode: !slowmode <time> (reason)"
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {

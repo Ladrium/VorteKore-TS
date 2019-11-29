@@ -8,7 +8,9 @@ export class Cmd extends Command {
     super(bot, {
       name: "image",
       category: "Information",
-      cooldown: 5000
+      cooldown: 5000,
+      description: "Provides you image with provided name",
+      example: "!image cow"
     })
   }
   async run(message: Message, [...image]: any) {

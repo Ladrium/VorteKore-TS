@@ -10,7 +10,9 @@ export class Cmd extends Command {
     super(bot, {
       name: "ban",
       category: "Moderation",
-      cooldown: 0
+      cooldown: 0,
+      description: "Kicks a member",
+      example: "!ban @user mass pinging"
     })
   }
   run(message: Message, [mem, ...reason]: any, guild: VorteGuild) {

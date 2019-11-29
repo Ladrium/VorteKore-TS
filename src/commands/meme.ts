@@ -9,7 +9,10 @@ export class Cmd extends Command {
     super(bot, {
       name: "meme",
       category: "Fun",
-      cooldown: 3000
+      aliases: ["joke"],
+      cooldown: 3000,
+      description: "Provides a meme",
+      example: "!meme"
     })
   }
   async run(message: Message) {

@@ -9,7 +9,10 @@ export class Cmd extends Command {
     super(bot, {
       name: "edit",
       category: "Utility",
-      cooldown: 0
+      cooldown: 0,
+      description: "Edits an embed",
+      usage: "!edit MessageID Title | Description",
+      example: "!edit 648491057318723584 This is the title | This is the Description"
     })
   }
   run(message: Message, args: string[]) {

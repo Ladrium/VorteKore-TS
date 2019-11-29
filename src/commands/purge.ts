@@ -10,7 +10,9 @@ export class Cmd extends Command {
     super(bot, {
       name: "purge",
       category: "Moderation",
-      cooldown: 5000
+      cooldown: 5000,
+      description: "Purge a number of messages",
+      example: "!purge @user 20"
     })
   }
   run(message: Message, args: string[]) {

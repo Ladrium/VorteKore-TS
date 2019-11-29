@@ -10,7 +10,9 @@ export class Cmd extends Command {
     super(bot, {
       name: "setup",
       category: "Moderation",
-      cooldown: 200
+      cooldown: 200,
+      usage: "!setup <toSetup>",
+      example: "!setup prefix"
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {

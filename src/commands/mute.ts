@@ -11,7 +11,9 @@ export class Cmd extends Command {
     super(bot, {
       name: "mute",
       category: "Moderation",
-      cooldown: 0
+      cooldown: 0,
+      description: "Mutes a member",
+      example: "!mute @user 10m"
     })
   }
   async run(message: Message, args: string[], guild: VorteGuild) {

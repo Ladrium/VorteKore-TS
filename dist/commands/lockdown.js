@@ -12,7 +12,10 @@ class Cmd extends Command_1.Command {
         super(bot, {
             name: "lockdown",
             category: "Moderation",
-            cooldown: 5000
+            aliases: ["ld"],
+            cooldown: 5000,
+            description: "Lockdowns a channel",
+            example: "!lockdown 10m time to sleep"
         });
     }
     run(message, args, guild) {

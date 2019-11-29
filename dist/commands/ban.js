@@ -11,7 +11,10 @@ class Cmd extends Command_1.Command {
         super(bot, {
             name: "ban",
             category: "Moderation",
-            cooldown: 0
+            cooldown: 0,
+            description: "Bans a member from the server",
+            example: "!ban @user not cool",
+            usage: "!ban @user <reason>"
         });
     }
     run(message, [mem, ...reason], guild) {

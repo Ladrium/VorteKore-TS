@@ -20,7 +20,9 @@ class Cmd extends Command_1.Command {
         super(bot, {
             name: "image",
             category: "Information",
-            cooldown: 5000
+            cooldown: 5000,
+            description: "Provides you image with provided name",
+            example: "!image cow"
         });
     }
     run(message, [...image]) {

@@ -11,7 +11,9 @@ class Cmd extends Command_1.Command {
         super(bot, {
             name: "purge",
             category: "Moderation",
-            cooldown: 5000
+            cooldown: 5000,
+            description: "Purge a number of messages",
+            example: "!purge @user 20"
         });
     }
     run(message, args) {

@@ -22,7 +22,9 @@ class Cmd extends Command_1.Command {
         super(bot, {
             name: "mute",
             category: "Moderation",
-            cooldown: 0
+            cooldown: 0,
+            description: "Mutes a member",
+            example: "!mute @user 10m"
         });
     }
     run(message, args, guild) {

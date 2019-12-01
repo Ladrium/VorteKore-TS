@@ -30,13 +30,14 @@ export class Cmd extends Command {
     const toSetup = args[0].toLowerCase();
 
     if (toSetup === "prefix") {
+
       if (!checkPermissions(message.member!, "ADMINISTRATOR")) return message.channel.send(`Missing Permissions for using this command.`);
       if (!args[1]) message.channel.send(new VorteEmbed(message).baseEmbed().setTitle(`Please use \`${guild.prefix}prefix\` to see the current prefix.`))
       guild.setPrefix(args[1]);
       message.channel.send(`Successfully changed the prefix to ${args[1]}`);
     } else if (toSetup === "staff" || toSetup === "ar") {
-      if (!args[2]) return message.reply("What role to add/remove?");
 
+      if (!args[2]) return message.reply("What role to add/remove?");
       const role = findRole(message, args.slice(2).join(" ").toLowerCase());
       if (!role) message.reply("Couldn't find that role");
 
@@ -44,7 +45,8 @@ export class Cmd extends Command {
       else if (args[1] === "remove") guild.removeRole(toSetup, role!.name);
       else message.reply("N0")
     } else if (toSetup === "welcome" || toSetup === "leave") {
-      if (args[1] === "disable") guild.setAutoMessage(toSetup, "enabled", false)
+      if (args[1] === "disable") guild.setAutoMessage(toSetup, "enabled", false);
+        if (args[1] === "enable") guild.setAutoMessage(toSetup, "enabled", true)
       else if (args[1] === "message") guild.setAutoMessage(toSetup, "message", args.slice(2).join(" "));
       else if (args[1] === "channel") {
         const channel = message.mentions.channels.first();
@@ -71,6 +73,7 @@ export class Cmd extends Command {
       ].includes(args[1])) {
         if (!["enable", "disable"].includes(args[2])) return message.reply("Do you want to enable or disable it?");
         guild.setLog(args[1], args[2]);
+        message.channel.send("Done!")
       } else message.reply("What to set?")
     }
   }

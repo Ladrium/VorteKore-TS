@@ -4,7 +4,6 @@ import { VorteGuild } from "../structures/VorteGuild";
 import VorteEmbed from "../structures/VorteEmbed";
 
 export = (bot: VorteClient, deletedMessage: Message, guild: VorteGuild) => {
-  console.log(deletedMessage.content)
   const { channel, enabled } = guild.getLog("deleteMessage")
   if (!enabled) return;
   const chan = deletedMessage.guild!.channels.get(channel.id) as TextChannel;

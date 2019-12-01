@@ -51,6 +51,8 @@ class Cmd extends Command_1.Command {
         else if (toSetup === "welcome" || toSetup === "leave") {
             if (args[1] === "disable")
                 guild.setAutoMessage(toSetup, "enabled", false);
+            if (args[1] === "enable")
+                guild.setAutoMessage(toSetup, "enabled", true);
             else if (args[1] === "message")
                 guild.setAutoMessage(toSetup, "message", args.slice(2).join(" "));
             else if (args[1] === "channel") {
@@ -85,6 +87,7 @@ class Cmd extends Command_1.Command {
                 if (!["enable", "disable"].includes(args[2]))
                     return message.reply("Do you want to enable or disable it?");
                 guild.setLog(args[1], args[2]);
+                message.channel.send("Done!");
             }
             else
                 message.reply("What to set?");

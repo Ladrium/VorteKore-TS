@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
 module.exports = (bot, deletedMessage, guild) => {
-    console.log(deletedMessage.content);
     const { channel, enabled } = guild.getLog("deleteMessage");
     if (!enabled)
         return;

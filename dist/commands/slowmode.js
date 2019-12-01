@@ -27,23 +27,25 @@ class Cmd extends Command_1.Command {
                 rateLimitPerUser: 0
             });
         }
-        ;
-        const sec = parseInt(args[0]);
-        const reason = args.slice(1).join(" ") || "No reason provided";
-        chan.edit({
-            rateLimitPerUser: sec
-        });
-        const { channel, enabled } = guild.getLog("slowmode");
-        if (!enabled)
-            return;
-        guild.increaseCase();
-        const cha = message.guild.channels.get(channel.id);
-        cha.send(new VorteEmbed_1.default(message)
-            .baseEmbed()
-            .setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})\n**>** Channel: ${chan.name} (${chan.id})\n**>** Reason: ${reason}`)
-            .setTimestamp());
-        if (reason) {
-            message.channel.send(`This channel is in slowmode due to: ${reason}`);
+        else {
+            ;
+            const sec = parseInt(args[0]);
+            const reason = args.slice(1).join(" ") || "No reason provided";
+            chan.edit({
+                rateLimitPerUser: sec
+            });
+            const { channel, enabled } = guild.getLog("slowmode");
+            if (!enabled)
+                return;
+            guild.increaseCase();
+            const cha = message.guild.channels.get(channel.id);
+            cha.send(new VorteEmbed_1.default(message)
+                .baseEmbed()
+                .setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})\n**>** Channel: ${chan.name} (${chan.id})\n**>** Reason: ${reason}`)
+                .setTimestamp());
+            if (reason) {
+                message.channel.send(`This channel is in slowmode due to: ${reason}`);
+            }
         }
     }
 }

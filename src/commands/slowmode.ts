@@ -23,7 +23,7 @@ export class Cmd extends Command {
       return chan.edit({
         rateLimitPerUser: 0
       });
-    };
+    } else {;
     const sec = parseInt(args[0]);
     const reason = args.slice(1).join(" ") || "No reason provided";
     chan.edit({
@@ -41,6 +41,6 @@ export class Cmd extends Command {
     )
     if (reason) {
       message.channel.send(`This channel is in slowmode due to: ${reason}`);
-    }
+    }}
   }
 };

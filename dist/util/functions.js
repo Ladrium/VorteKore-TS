@@ -15,3 +15,14 @@ function findRole(message, role) {
 }
 exports.findRole = findRole;
 ;
+function formatString(message, member) {
+    const obj = {
+        "{{mention}}": member.toString(),
+        "{{member}}": member.user.tag,
+        "{{server}}": member.guild.name,
+        "{{memberCount}}": member.guild.memberCount
+    };
+    const string = message.replace(new RegExp(Object.keys(obj).join("|")), (m) => obj[m]);
+    return string;
+}
+exports.formatString = formatString;

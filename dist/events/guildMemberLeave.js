@@ -12,7 +12,7 @@ const VorteGuild_1 = require("../structures/VorteGuild");
 const util_1 = require("../util");
 module.exports = (bot, member) => __awaiter(void 0, void 0, void 0, function* () {
     const guild = yield new VorteGuild_1.VorteGuild()._load(member.guild);
-    const { channel, enabled, message } = guild.welcome;
+    const { channel, enabled, message } = guild.leave;
     if (!enabled)
         return;
     const welcomeChannel = member.guild.channels.get(channel.id);

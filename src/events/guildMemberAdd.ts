@@ -6,6 +6,7 @@ import { GuildMember, TextChannel } from "discord.js";
 export = (bot: VorteClient, mem: GuildMember, guild: VorteGuild) => {
   const { channel, enabled, message } = guild.welcome;
   if (!enabled) return;
-  (mem.guild.channels.get(channel.id)as TextChannel).send(message);
+  const m = message as String
+  (mem.guild.channels.get(channel.id)as TextChannel).send(m.replace(`{user}`, `${mem}`));
 
 }

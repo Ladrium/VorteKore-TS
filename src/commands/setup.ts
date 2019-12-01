@@ -16,17 +16,24 @@ export class Cmd extends Command {
     })
   }
   run(message: Message, args: string[], guild: VorteGuild) {
-    if (!args[0]) return message.reply("What do you want to setup?");
+    if (!args[0]) return message.channel.send(
+      new VorteEmbed(message)
+        .baseEmbed()
+        .setDescription("What do you want to setup?")
+        .addField(`prefix`, `Changes the current prefix of the server\nUsage: ${guild.prefix}setup prefix <new prefix>`)
+        .addField(`staff`, `Add/Remove a provided role from staff roles\nUsage: ${guild.prefix}setup staff <add|remove> @role`)
+        .addField(`ar`, `Adds a role when a user joins the guild.\nUsage: ${guild.prefix}setup ar <add> <ID OF THE ROLE>`)
+        .addField(`welcome|leave`, `disable: disable the welcome/leave message\nchannel: Sets the default channel for welcome/leave #channel\nmessage: Sets the default message **Use {user} to tag them\nUsage: ${guild.prefix}setup <welcome|leave> <disable|message|channel> <message|#channel>`)
+        .addField(`logs`, `logs available: \`deleteMessage\`,\`editMessage\`,\`ban\`,\`kick\`,\`mute\`,\`warn\`,\`lockdown\`,\`slowmode\`,\`roleRemove\`,\`roleAdd\`,\`channel\`\n\nUsage: To setup the channel: ${guild.prefix}setup logs #channel\nTo enable/disable: ${guild.prefix}setup logs <logname> enable/disable.`)
+      
+    )
     const toSetup = args[0].toLowerCase();
 
     if (toSetup === "prefix") {
       if (!checkPermissions(message.member!, "ADMINISTRATOR")) return message.channel.send(`Missing Permissions for using this command.`);
-      if (!args[1]) {
-        message.channel.send(new VorteEmbed(message).baseEmbed().setTitle(`Current prefix is: \`${guild.prefix}\``))
-      } else {
+      if (!args[1]) message.channel.send(new VorteEmbed(message).baseEmbed().setTitle(`Please use \`${guild.prefix}prefix\` to see the current prefix.`))
         guild.setPrefix(args[1]);
         message.channel.send(`Successfully changed the prefix to ${args[1]}`);
-      };
     } else if (toSetup === "staff" || toSetup === "ar") {
       if (!args[2]) return message.reply("What role to add/remove?");
 

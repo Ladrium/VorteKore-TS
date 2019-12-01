@@ -1,10 +1,20 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
 const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -16,17 +26,15 @@ class Cmd extends Command_1.Command {
         });
     }
     run(message, [mem]) {
-        let per = message.member;
-        if (mem) {
-            per = message.guild.members.find(a => a.displayName === mem || a.id === mem) || null;
-        }
-        ;
-        if (!per)
-            return message.channel.send(`Unable to `);
-        new VorteEmbed_1.default(message).baseEmbed().setDescription(`**>** Name: ${per.user.tag}
-     **>** Joined At: ${per.joinedAt}
-     **>** Presence: ${per.presence.status}
-     **>** Roles: ${per.roles.array().toString().replace('@everyone', '')}`);
+        return __awaiter(this, void 0, void 0, function* () {
+            const member = yield util_1.findMember(message, mem);
+            if (!member)
+                return message.channel.send(`Unable to `);
+            new VorteEmbed_1.default(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
+     **>** Joined At: ${member.joinedAt}
+     **>** Presence: ${member.presence.status}
+     **>** Roles: ${member.roles.array().toString().replace('@everyone', '')}`);
+        });
     }
 }
 exports.Cmd = Cmd;

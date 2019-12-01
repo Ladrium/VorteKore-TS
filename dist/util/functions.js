@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 function checkPermissions(guildMember, permissions = "ADMINISTRATOR") {
     return guildMember.hasPermission(permissions, {
@@ -26,3 +35,20 @@ function formatString(message, member) {
     return string;
 }
 exports.formatString = formatString;
+function findMember(message, toFind) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let member;
+        if (message.mentions && message.mentions.members.size == 0 && message.mentions.users.size > 0) {
+            const toFetch = yield message.guild.members.fetch(message.mentions.users.first());
+            return toFetch;
+        }
+        else {
+            if (!toFind)
+                return message.member;
+            toFind = toFind.toLowerCase();
+            member = message.mentions.members.first() || message.guild.members.find((x) => x.user.username.toLowerCase() === toFind) || message.guild.members.get(toFind);
+        }
+        return member;
+    });
+}
+exports.findMember = findMember;

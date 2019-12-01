@@ -2,6 +2,7 @@ import { Command } from "../structures/Command";
 import { VorteClient } from "../structures/VorteClient";
 import { Message } from "discord.js";
 import VorteEmbed from "../structures/VorteEmbed";
+import { findMember } from "../util";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -13,18 +14,14 @@ export class Cmd extends Command {
       description: "!ui @user"
     })
   }
-  run(message: Message, [mem]: any) {
-    let per = message.member; 
-    if (mem) {
-     per = message.guild!.members.find(a => a.displayName === mem || a.id === mem) || null;
-
-    };
-    if (!per) return message.channel.send(`Unable to `)
+  async run(message: Message, [mem]: any) {
+    const member = await findMember(message, mem);
+    if (!member) return message.channel.send(`Unable to `)
     new VorteEmbed(message).baseEmbed().setDescription(
-    `**>** Name: ${per!.user.tag}
-     **>** Joined At: ${per!.joinedAt}
-     **>** Presence: ${per!.presence.status}
-     **>** Roles: ${per!.roles.array().toString().replace('@everyone', '')}` 
+    `**>** Name: ${member!.user.tag}
+     **>** Joined At: ${member!.joinedAt}
+     **>** Presence: ${member!.presence.status}
+     **>** Roles: ${member!.roles.array().toString().replace('@everyone', '')}` 
     )
   }
 };

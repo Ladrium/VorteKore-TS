@@ -3,5 +3,5 @@ import { VorteClient } from "../structures/VorteClient";
 import { Message } from "discord.js";
 export declare class Cmd extends Command {
     constructor(bot: VorteClient);
-    run(message: Message, [mem]: any): Promise<Message> | undefined;
+    run(message: Message, [mem]: any): Promise<Message | undefined>;
 }

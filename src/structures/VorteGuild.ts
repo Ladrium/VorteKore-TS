@@ -19,6 +19,11 @@ export class VorteGuild {
     });
     return this;
   }
+  static delete(guild: guild) {
+    Guild.deleteOne({ guildID: guild.id }, (err) => {
+      if (err) console.log(err);
+    });
+  }
   increaseCase(): this {
     this.guild.case++;
     this.guild.save().catch(console.error);

@@ -3,6 +3,7 @@ export declare class VorteGuild {
     guild: any;
     constructor();
     _load(g: guild): Promise<this>;
+    static delete(guild: guild): void;
     increaseCase(): this;
     setPrefix(prefix: string): this;
     addRole(locale: string, role: string): this;

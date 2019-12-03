@@ -70,17 +70,17 @@ class Cmd extends Command_1.Command {
                 guild.setLog("channel", channel.id);
             }
             else if ([
-                "deleteMessage ",
-                " editMessage ",
-                " ban ",
-                " kick ",
-                " mute ",
-                " warn ",
-                " lockdown ",
-                " slowmode ",
-                " roleRemove ",
-                " roleAdd ",
-                " channel"
+                "deleteMessage",
+                "editMessage",
+                "ban",
+                "kick",
+                "mute",
+                "warn",
+                "lockdown",
+                "slowmode",
+                "roleRemove",
+                "roleAdd",
+                "channel"
             ].includes(args[1])) {
                 if (!["enable", "disable"].includes(args[2]))
                     return message.reply("Do you want to enable or disable it?");

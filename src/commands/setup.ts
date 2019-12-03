@@ -25,15 +25,15 @@ export class Cmd extends Command {
         .addField(`ar`, `Adds a role when a user joins the guild.\nUsage: ${guild.prefix}setup ar <add> <ID OF THE ROLE>`)
         .addField(`welcome|leave`, `disable: disable the welcome/leave message\nchannel: Sets the default channel for welcome/leave #channel\nmessage: Sets the default message **Use {user} to tag them\nUsage: ${guild.prefix}setup <welcome|leave> <disable|message|channel> <message|#channel>`)
         .addField(`logs`, `logs available: \`deleteMessage\`,\`editMessage\`,\`ban\`,\`kick\`,\`mute\`,\`warn\`,\`lockdown\`,\`slowmode\`,\`roleRemove\`,\`roleAdd\`,\`channel\`\n\nUsage: To setup the channel: ${guild.prefix}setup logs #channel\nTo enable/disable: ${guild.prefix}setup logs <logname> enable/disable.`)
-      
+
     )
     const toSetup = args[0].toLowerCase();
 
     if (toSetup === "prefix") {
       if (!checkPermissions(message.member!, "ADMINISTRATOR")) return message.channel.send(`Missing Permissions for using this command.`);
       if (!args[1]) message.channel.send(new VorteEmbed(message).baseEmbed().setTitle(`Please use \`${guild.prefix}prefix\` to see the current prefix.`))
-        guild.setPrefix(args[1]);
-        message.channel.send(`Successfully changed the prefix to ${args[1]}`);
+      guild.setPrefix(args[1]);
+      message.channel.send(`Successfully changed the prefix to ${args[1]}`);
     } else if (toSetup === "staff" || toSetup === "ar") {
       if (!args[2]) return message.reply("What role to add/remove?");
 
@@ -57,19 +57,19 @@ export class Cmd extends Command {
         if (!channel) return message.reply("Mention a channel to set");
         guild.setLog("channel", channel.id);
       } else if ([
-        "deleteMessage ",
-        " editMessage ",
-        " ban ",
-        " kick ",
-        " mute ",
-        " warn ",
-        " lockdown ",
-        " slowmode ",
-        " roleRemove ",
-        " roleAdd ",
-        " channel"
+        "deleteMessage",
+        "editMessage",
+        "ban",
+        "kick",
+        "mute",
+        "warn",
+        "lockdown",
+        "slowmode",
+        "roleRemove",
+        "roleAdd",
+        "channel"
       ].includes(args[1])) {
-        if(!["enable", "disable"].includes(args[2])) return message.reply("Do you want to enable or disable it?");
+        if (!["enable", "disable"].includes(args[2])) return message.reply("Do you want to enable or disable it?");
         guild.setLog(args[1], args[2]);
       } else message.reply("What to set?")
     }

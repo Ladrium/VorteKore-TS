@@ -72,6 +72,12 @@ class VorteGuild {
         return this;
     }
     setLog(log, query) {
+        if (query === "enable")
+            query = true;
+        else if (query === "disable")
+            query = false;
+        else
+            query = false;
         if (log === "channel")
             this.guild.logs.channel = query;
         else

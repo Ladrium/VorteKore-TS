@@ -3,8 +3,8 @@ import { Message, TextChannel } from "discord.js";
 import { VorteGuild } from "../structures/VorteGuild";
 import VorteEmbed from "../structures/VorteEmbed";
 
-export = (bot: VorteClient, deletedMessage: Message) => {
-  const guild = new VorteGuild();
+export = async(bot: VorteClient, deletedMessage: Message) => {
+  const guild = await new VorteGuild()._load(deletedMessage.guild!);
   const { channel, enabled } = guild.getLog("deleteMessage")
   if (!enabled) return;
   const chan = deletedMessage.guild!.channels.get(channel.id) as TextChannel;

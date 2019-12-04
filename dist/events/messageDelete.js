@@ -18,7 +18,7 @@ module.exports = (bot, deletedMessage) => __awaiter(void 0, void 0, void 0, func
     const { channel, enabled } = guild.getLog("deleteMessage");
     if (!enabled)
         return;
-    const chan = deletedMessage.guild.channels.get(channel.id);
+    const chan = deletedMessage.guild.channels.get(channel);
     guild.increaseCase();
     chan.send(new VorteEmbed_1.default(deletedMessage)
         .baseEmbed()

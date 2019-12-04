@@ -15,7 +15,7 @@ module.exports = (bot, member) => __awaiter(void 0, void 0, void 0, function* ()
     const { channel, enabled, message } = guild.leave;
     if (!enabled)
         return;
-    const welcomeChannel = member.guild.channels.get(channel.id);
+    const welcomeChannel = member.guild.channels.get(channel);
     if (!welcomeChannel)
         return;
     welcomeChannel.send(util_1.formatString(message, member));

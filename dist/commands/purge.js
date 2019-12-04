@@ -21,18 +21,19 @@ class Cmd extends Command_1.Command {
             return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
         if (!args[0])
             return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a number."));
-        const num = parseInt(args[0]);
         const member = message.mentions.users.first() || message.guild.members.find(x => x.displayName === args[0] || x.id === args[0]);
         if (member) {
+            const num = parseInt(args[1]);
             message.channel.messages.fetch({
                 limit: num
             }).then((messages) => {
-                messages = messages.filter(m => m.id === member.id);
+                messages = messages.filter(m => m.author.id === member.id);
                 message.channel.bulkDelete(messages);
                 message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription(`Successfully deleted ${num} messages.`));
             });
         }
         else {
+            const num = parseInt(args[0]);
             message.channel.bulkDelete(num);
             message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription(`Successfully deleted ${num} messages.`));
         }

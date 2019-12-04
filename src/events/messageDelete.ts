@@ -7,7 +7,7 @@ export = async(bot: VorteClient, deletedMessage: Message) => {
   const guild = await new VorteGuild()._load(deletedMessage.guild!);
   const { channel, enabled } = guild.getLog("deleteMessage")
   if (!enabled) return;
-  const chan = deletedMessage.guild!.channels.get(channel.id) as TextChannel;
+  const chan = deletedMessage.guild!.channels.get(channel) as TextChannel;
   guild.increaseCase();
   chan.send(
     new VorteEmbed(deletedMessage)

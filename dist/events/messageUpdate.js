@@ -2,8 +2,10 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+const VorteGuild_1 = require("../structures/VorteGuild");
 const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
-module.exports = (bot, oldmsg, newmsg, guild) => {
+module.exports = (bot, oldmsg, newmsg) => {
+    const guild = new VorteGuild_1.VorteGuild();
     if (!oldmsg || !newmsg || oldmsg.content === newmsg.content)
         return;
     const { channel, enabled } = guild.getLog("editMessage");

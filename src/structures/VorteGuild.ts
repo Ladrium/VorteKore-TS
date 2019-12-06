@@ -84,6 +84,9 @@ export class VorteGuild {
       channel: this.guild.logs.channel
     }
   }
+  get autoRoles() {
+    return this.guild.autoRoles;
+  }
   get prefix() {
     return this.guild.prefix;
   }

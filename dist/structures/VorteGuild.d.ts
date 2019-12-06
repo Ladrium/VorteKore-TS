@@ -14,6 +14,7 @@ export declare class VorteGuild {
         enabled: any;
         channel: any;
     };
+    readonly autoRoles: any;
     readonly prefix: any;
     readonly case: any;
     readonly welcome: {

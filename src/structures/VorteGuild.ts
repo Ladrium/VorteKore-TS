@@ -15,7 +15,18 @@ export class VorteGuild {
       staffRoles: [],
       welcome: {},
       leave: {},
-      logs: {}
+      logs: {
+        deleteMessage: "enable",
+        editMessage: "enable",
+        ban: "enable",
+        kick: "enable",
+        mute: "enable",
+        warn: "enable",
+        lockdown: "enable",
+        slowmode: "enable",
+        roleRemove: "enable",
+        roleAdd: "enable",
+      }
     });
     return this;
   }

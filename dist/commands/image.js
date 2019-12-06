@@ -36,10 +36,14 @@ class Cmd extends Command_1.Command {
             if (message.channel.nsfw && link.nsfw)
                 return message.reply("Sorry this result was NSFW");
             link = `https://i.imgur.com/${link.hash}${link.ext}`;
+            while (!link) {
+                data[Math.floor(Math.random() * data.length)];
+            }
             const emb = new VorteEmbed_1.default(message).baseEmbed()
                 .setColor("#000000")
-                .setTitle(link.title)
                 .setImage(link);
+            if (link.title)
+                emb.setTitle(link.title);
             message.channel.send(emb);
         });
     }

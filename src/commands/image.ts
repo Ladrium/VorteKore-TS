@@ -18,13 +18,16 @@ export class Cmd extends Command {
     if (!image) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a query to search."))
     let link: any = `https://imgur.com/r/${image}/hot.json`;
     const { data } = await fetch(link).then(res => res.json());
-    link = data[Math.floor(Math.random() * data.length)]
+    link = data[Math.floor(Math.random() * data.length)];
     if ((message.channel as TextChannel).nsfw && link.nsfw) return message.reply("Sorry this result was NSFW");
     link = `https://i.imgur.com/${link.hash}${link.ext}`;
+    while (!link) {
+      data[Math.floor(Math.random() * data.length)];
+    }
     const emb = new VorteEmbed(message).baseEmbed()
       .setColor("#000000")
-      .setTitle(link.title)
-      .setImage(link);
+      .setImage(link)
+    if (link.title) emb.setTitle(link.title)
     message.channel.send(emb);
   }
 }

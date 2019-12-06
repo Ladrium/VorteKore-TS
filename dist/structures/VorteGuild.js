@@ -27,7 +27,18 @@ class VorteGuild {
                 staffRoles: [],
                 welcome: {},
                 leave: {},
-                logs: {}
+                logs: {
+                    deleteMessage: "enable",
+                    editMessage: "enable",
+                    ban: "enable",
+                    kick: "enable",
+                    mute: "enable",
+                    warn: "enable",
+                    lockdown: "enable",
+                    slowmode: "enable",
+                    roleRemove: "enable",
+                    roleAdd: "enable",
+                }
             });
             return this;
         });
@@ -105,7 +116,8 @@ class VorteGuild {
         return {
             enabled: this.guild.welcome.enabled,
             message: this.guild.welcome.message,
-            channel: this.guild.welcome.channel
+            channel: this.guild.welcome.channel,
+            role: this.guild.autoRoles
         };
     }
     get leave() {

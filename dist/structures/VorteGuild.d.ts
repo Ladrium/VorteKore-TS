@@ -14,14 +14,15 @@ export declare class VorteGuild {
         enabled: any;
         channel: any;
     };
-    readonly prefix: any;
-    readonly case: any;
-    readonly welcome: {
+    get prefix(): any;
+    get case(): any;
+    get welcome(): {
         enabled: any;
         message: any;
         channel: any;
+        role: any;
     };
-    readonly leave: {
+    get leave(): {
         enabled: any;
         message: any;
         channel: any;

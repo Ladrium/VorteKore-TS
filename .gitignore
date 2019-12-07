@@ -4,3 +4,6 @@ node_modules/
 .env
 .vscode/
 project.js
+logs/spring.log
+application.yml
+Lavalink.jar

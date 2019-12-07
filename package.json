@@ -22,6 +22,7 @@
     "@types/ms": "^0.7.31",
     "@types/node-fetch": "^2.5.2",
     "discord.js": "github:discordjs/discord.js",
+    "discord.js-lavalink": "^2.2.3",
     "dotenv": "^8.2.0",
     "eslint": "^6.5.1",
     "mongoose": "^5.7.6",

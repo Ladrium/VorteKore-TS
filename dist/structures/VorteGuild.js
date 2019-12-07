@@ -119,8 +119,7 @@ class VorteGuild {
         return {
             enabled: this.guild.welcome.enabled,
             message: this.guild.welcome.message,
-            channel: this.guild.welcome.channel,
-            role: this.guild.autoRoles
+            channel: this.guild.welcome.channel
         };
     }
     get leave() {

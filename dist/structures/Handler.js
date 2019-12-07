@@ -84,7 +84,7 @@ class Handler {
         });
     }
     getCommand(name) {
-        return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)) || null;
+        return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)) || undefined;
     }
     getAllCommands() {
         return {

@@ -2,7 +2,7 @@ import { Guild as guild } from "discord.js";
 import Guild from "../models/guild";
 
 export class VorteGuild {
-  guild: any;
+  guild?: any;
   constructor() {
     this.guild;
   }

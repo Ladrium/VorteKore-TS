@@ -13,10 +13,9 @@ export class Cmd extends Command {
       example: "!image cow"
     })
   }
-  async run(message: Message, [...image]: any) {
-    image = image.join(" ")
-    if (!image) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a query to search."))
-    let link: any = `https://imgur.com/r/${image}/hot.json`;
+  async run(message: Message, [...image]: string[]) {
+    if (!image[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a query to search."))
+    let link: any = `https://imgur.com/r/${image.join(" ")}/hot.json`;
     const { data } = await fetch(link).then(res => res.json());
     link = data[Math.floor(Math.random() * data.length)];
     if ((message.channel as TextChannel).nsfw && link.nsfw) return message.reply("Sorry this result was NSFW");

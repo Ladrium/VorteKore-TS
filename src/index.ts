@@ -2,7 +2,7 @@ import { Handler } from "./structures/Handler";
 import { VorteClient } from "./structures/VorteClient";
 import { config } from 'dotenv';
 import mongoose from "mongoose";
-import nodes from "./config"
+import nodes  from "./config"
 
 config({
   path: `${__dirname}/../.env`
@@ -16,7 +16,7 @@ mongoose.connect(process.env.URI!, {
   if (err) console.log(err);
 });
 
-const bot = new VorteClient(nodes);
+const bot = new VorteClient();
 bot.handler = new Handler(bot);
 
 bot.handler.loadCommands();

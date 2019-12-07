@@ -1,5 +1,7 @@
 import { IData } from "../interfaces/IData";
 import { VorteClient } from "./VorteClient";
+import { Message } from "discord.js";
+import { VorteGuild } from "./VorteGuild";
 export declare class Command {
     bot: VorteClient;
     name: string;
@@ -10,4 +12,5 @@ export declare class Command {
     example: string | undefined;
     cooldown: number;
     constructor(bot: VorteClient, data: IData);
+    run(message: Message, args: string[], guild: VorteGuild): void;
 }

@@ -4,5 +4,5 @@ import { Message, GuildChannel } from "discord.js";
 import { VorteGuild } from "../structures/VorteGuild";
 export declare class Cmd extends Command {
     constructor(bot: VorteClient);
-    run(message: Message, args: string[], guild: VorteGuild): Promise<GuildChannel> | import("discord.js").MessageEmbed | Promise<Message> | undefined;
+    run(message: Message, args: string[], guild: VorteGuild): Promise<Message> | import("discord.js").MessageEmbed | Promise<GuildChannel> | undefined;
 }

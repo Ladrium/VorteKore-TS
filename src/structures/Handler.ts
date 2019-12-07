@@ -3,6 +3,7 @@ import { readdirSync } from "fs";
 import { Message } from "discord.js";
 import { dirname } from "path";
 import { VorteGuild } from "./VorteGuild";
+import { Command } from "./Command";
 
 const cooldowns = new Set();
 
@@ -70,8 +71,8 @@ export class Handler {
     }
     console.log("Loaded all commands!");
   }
-  getCommand(name: string): any {
-    return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)!) || null;
+  getCommand(name: string): Command | undefined {
+    return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)!) || undefined;
   }
   getAllCommands() {
     return {

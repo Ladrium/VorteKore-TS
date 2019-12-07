@@ -11,5 +11,8 @@ class Command {
         this.example = data.example;
         this.cooldown = data.cooldown || 0;
     }
+    run(message, args, guild) {
+        console.log("This command isnt added yet!");
+    }
 }
 exports.Command = Command;

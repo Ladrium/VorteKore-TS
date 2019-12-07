@@ -27,10 +27,9 @@ class Cmd extends Command_1.Command {
     }
     run(message, [...image]) {
         return __awaiter(this, void 0, void 0, function* () {
-            image = image.join(" ");
-            if (!image)
+            if (!image[0])
                 return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a query to search."));
-            let link = `https://imgur.com/r/${image}/hot.json`;
+            let link = `https://imgur.com/r/${image.join(" ")}/hot.json`;
             const { data } = yield node_fetch_1.default(link).then(res => res.json());
             link = data[Math.floor(Math.random() * data.length)];
             if (message.channel.nsfw && link.nsfw)

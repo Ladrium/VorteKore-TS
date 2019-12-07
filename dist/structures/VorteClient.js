@@ -13,15 +13,14 @@ const discord_js_1 = require("discord.js");
 const Mute_1 = require("./Mute");
 const Player_1 = require("./Player");
 class VorteClient extends discord_js_1.Client {
-    constructor(nodes, options) {
+    constructor(options) {
         super(options);
         this.commands = new discord_js_1.Collection();
         this.aliases = new discord_js_1.Collection();
         this.player;
-        this.nodes = nodes;
         this.on("ready", () => {
             console.log(`${this.user.username} is ready to rumble!`);
-            this.player = new Player_1.Player(nodes, this);
+            this.player = new Player_1.Player(this);
             this.player._init();
             setInterval(() => __awaiter(this, void 0, void 0, function* () {
                 const mutes = yield Mute_1.Mute.getAll();

@@ -3,3 +3,7 @@ export declare function checkPermissions(guildMember: GuildMember, permissions?:
 export declare function findRole(message: Message, role: string): import("discord.js").Role | undefined;
 export declare function formatString(message: string, member: GuildMember): string;
 export declare function findMember(message: Message, toFind: string): Promise<GuildMember | null | undefined>;
+export declare const get: <T>(url: RequestInfo, options?: RequestInit | undefined) => {
+    data: null;
+    error: null;
+};

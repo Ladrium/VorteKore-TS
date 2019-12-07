@@ -23,16 +23,27 @@ export function formatString(message: string, member: GuildMember) {
   const string = message.replace(new RegExp(Object.keys(obj).join("|")), (m) => obj[m as "{{mention}}"])
   return string;
 }
-export async function findMember (message: Message, toFind: string) {
+export async function findMember(message: Message, toFind: string) {
   let member;
-  if(message.mentions && message.mentions.members!.size == 0 && message.mentions.users.size > 0) {
+  if (message.mentions && message.mentions.members!.size == 0 && message.mentions.users.size > 0) {
     const toFetch = await message.guild!.members.fetch(message.mentions.users.first()!);
     return toFetch;
   }
-  else{
-    if(!toFind) return message.member;
+  else {
+    if (!toFind) return message.member;
     toFind = toFind.toLowerCase();
     member = message.mentions.members!.first() || message.guild!.members.find((x) => x.user.username.toLowerCase() === toFind) || message.guild!.members.get(toFind);
   }
   return member;
+}
+export const get = <T>(url: RequestInfo, options?: RequestInit) => {
+  let data: T | null = null;
+  let error: string | null = null;
+
+  fetch(url, options)
+    .then(res => res.json())
+    .then(json => data = json)
+    .catch(error => error = error)
+
+  return { data, error }
 }

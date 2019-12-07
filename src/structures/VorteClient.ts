@@ -1,17 +1,27 @@
 import { Client, ClientOptions, Collection } from "discord.js";
 import { Handler } from "./Handler";
 import { Mute } from "./Mute";
+import { Queue } from "./Queue";
+import { Player } from "./Player";
+import { PlayerManager } from "discord.js-lavalink";
 
 export class VorteClient extends Client {
   commands: Collection<string, any>;
   aliases: Collection<string, string>;
-  handler: Handler | undefined;
-  constructor(options?: ClientOptions) {
+  handler?: Handler;
+  player?: Player;
+  nodes: any;
+  constructor(nodes: any, options?: ClientOptions) {
     super(options);
     this.commands = new Collection();
     this.aliases = new Collection();
+    this.player;
+    this.nodes = nodes;
     this.on("ready", () => {
       console.log(`${this.user!.username} is ready to rumble!`);
+      this.player = new Player(nodes, this);
+      this.player._init();
+
       setInterval(async () => {
         const mutes = await Mute.getAll();
         mutes.forEach(async (x: any) => {
@@ -28,4 +38,4 @@ export class VorteClient extends Client {
       }, 5000)
     })
   }
-};
+}

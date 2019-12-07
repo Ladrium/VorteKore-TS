@@ -1,5 +1,11 @@
 declare const _default: {
     token: string;
-    uri: string;
+    owner: string;
+    key: string;
+    nodes: {
+        host: string;
+        port: number;
+        password: string;
+    }[];
 };
-export default _default;
+export = _default;

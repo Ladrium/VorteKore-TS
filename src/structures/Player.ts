@@ -2,7 +2,7 @@ import { VorteClient } from "./VorteClient";
 import { PlayerManager } from "discord.js-lavalink";
 import { get } from "../util";
 import { Queue } from "./Queue";
-import nodes from "../config";
+import nodes from "../config"
 export class Player {
   bot: VorteClient;
   lavalink?: PlayerManager;

@@ -2,7 +2,6 @@ import { Handler } from "./structures/Handler";
 import { VorteClient } from "./structures/VorteClient";
 import { config } from 'dotenv';
 import mongoose from "mongoose";
-import nodes  from "./config"
 
 config({
   path: `${__dirname}/../.env`

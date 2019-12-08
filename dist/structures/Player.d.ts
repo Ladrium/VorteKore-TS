@@ -6,9 +6,9 @@ export declare class Player {
     lavalink?: PlayerManager;
     queue: typeof Queue;
     constructor(bot: VorteClient);
-    getSongs(query: string): {
-        data: null;
+    getSongs(query: string): Promise<{
+        data: any;
         error: null;
-    };
+    }>;
     _init(): void;
 }

@@ -12,5 +12,5 @@ export declare class Command {
     example: string | undefined;
     cooldown: number;
     constructor(bot: VorteClient, data: IData);
-    run(message: Message, args: string[], guild: VorteGuild): void;
+    run(message: Message, args: string[] | string, guild: VorteGuild): void;
 }

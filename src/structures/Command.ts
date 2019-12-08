@@ -22,7 +22,7 @@ export class Command {
     this.example = data.example;
     this.cooldown = data.cooldown || 0;
   }
-  run(message: Message, args: string[], guild: VorteGuild) {
+  run(message: Message, args: string[] | string, guild: VorteGuild) {
     console.log("This command isnt added yet!");
   }
 }

@@ -1,5 +1,5 @@
 import { GuildMember, BitFieldResolvable, PermissionString, Message } from "discord.js";
-import { stringify } from "querystring";
+import fetch from "node-fetch";
 
 export function checkPermissions(guildMember: GuildMember, permissions: BitFieldResolvable<PermissionString> = "ADMINISTRATOR"): boolean {
   return guildMember.hasPermission(permissions, {
@@ -36,14 +36,14 @@ export async function findMember(message: Message, toFind: string) {
   }
   return member;
 }
-export const get = <T>(url: RequestInfo, options?: RequestInit) => {
-  let data: T | null = null;
+export const get = async <T>(url: string, options?: any) => {
+  let data: any = null;
   let error: string | null = null;
 
-  fetch(url, options)
-    .then(res => res.json())
-    .then(json => data = json)
-    .catch(error => error = error)
+  await fetch(url, options!)
+    .then((res: any) => res.json())
+    .then((json: any) => data = json)
+    .catch((error: Error) => error = error)
 
   return { data, error }
 }

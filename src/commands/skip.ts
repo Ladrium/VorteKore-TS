@@ -12,9 +12,8 @@ export class Cmd extends Command {
     })
   }
   async run({ guild, member, reply }: Message, query: string[]) {
-    let queue = this.bot.player?.queue
-    if (!queue) return reply(`There's nothing in the queue!`);
-    let player = this.bot.player!.lavalink!.get(guild!.id);
-    player!.stop();
+    const player = this.bot.player!.lavalink!.get(guild!.id);
+    const song = this.bot.player!.queue!.getQueue(guild!)?.nextSong() as any
+    player!.play(song);
   }
 }

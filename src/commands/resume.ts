@@ -2,19 +2,22 @@ import { Command } from "../structures/Command";
 import { VorteClient } from "../structures/VorteClient";
 import { Message } from "discord.js";
 import message = require("../events/message");
+import { VorteGuild } from "../structures/VorteGuild";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
-      name: "skip",
+      name: "resume",
       category: "Music",
       cooldown: 0
     })
   }
-  async run({ guild, member, reply }: Message, query: string[]) {
+  async run({ guild, member, reply, channel }: Message, query: string[], gui: VorteGuild) {
     const player = this.bot.player!.lavalink!.get(guild!.id);
-    const song = this.bot.player!.queue!.getQueue(guild!)?.nextSong() as any
-    if (!player) return reply("There's nothing being played.")
-    player!.play(song);
+    if (!player) return reply(` There's nothing being played`);
+    if (player.playing) return reply(` Bot is playing music`)
+    player!.resume()
+    channel.send(`Successfully resumed the music`)
+    
   }
 }

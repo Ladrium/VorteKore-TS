@@ -13,19 +13,20 @@ const Command_1 = require("../structures/Command");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
-            name: "skip",
+            name: "resume",
             category: "Music",
             cooldown: 0
         });
     }
-    run({ guild, member, reply }, query) {
-        var _a;
+    run({ guild, member, reply, channel }, query, gui) {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.player.lavalink.get(guild.id);
-            const song = (_a = this.bot.player.queue.getQueue(guild)) === null || _a === void 0 ? void 0 : _a.nextSong();
             if (!player)
-                return reply("There's nothing being played.");
-            player.play(song);
+                return reply(` There's nothing being played`);
+            if (player.playing)
+                return reply(` Bot is playing music`);
+            player.resume();
+            channel.send(`Successfully resumed the music`);
         });
     }
 }

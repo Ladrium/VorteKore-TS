@@ -18,7 +18,7 @@ class Cmd extends Command_1.Command {
             cooldown: 0
         });
     }
-    run({ guild, member, reply }, query) {
+    run({ guild, member, reply, channel }, query) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!query[0])
                 return reply("No query to search for provided!");
@@ -36,7 +36,15 @@ class Cmd extends Command_1.Command {
             const { data, error } = yield this.bot.player.getSongs(query.join(" "));
             if (error || !data)
                 return reply("Couldn't find that song!");
-            player.play(data.tracks[0].track);
+            const queue = this.bot.player.queue.getQueue(guild) || new this.bot.player.queue(guild)._init();
+            queue.addSong(data);
+            channel.send(`Successfully added \`${data.tracks[0].info.title}\` to the queue!`);
+            if (!player.playing) {
+                player.play(data.tracks[0].track)
+                    .on("end", (data) => {
+                    this.bot.emit("songEnd", data, player, queue, { guild, channel });
+                });
+            }
         });
     }
     ;

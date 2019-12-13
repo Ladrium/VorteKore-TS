@@ -12,12 +12,12 @@ export class Cmd extends Command {
       cooldown: 0
     })
   }
-  async run({ guild, member, reply, channel }: Message, query: string[], gui: VorteGuild) {
+  async run({ guild, member, reply }: Message, query: string[], gui: VorteGuild) {
     const player = this.bot.player!.lavalink!.get(guild!.id);
     if (!player) return reply(` There's nothing being played`);
     if (player.playing) return reply(` Bot is playing music`)
-    player!.resume()
-    channel.send(`Successfully resumed the music`)
+    player!.pause(false)
+    reply(`Successfully resumed the music`)
     
   }
 }

@@ -4,20 +4,25 @@ const queues: Queue[] = [];
 
 export class Queue {
   guild: Guild;
-  queue: object[];
+  queue: any[];
   constructor(guild: Guild) {
     this.guild = guild;
     this.queue = [];
   }
   _init() {
     queues.push(this);
+    return this;
+  }
+  addSong(data: any) {
+    this.queue.push(data.tracks[0]);
   }
   removeSong(position = 0) {
-    return new Promise((resolve, reject) => {
-      if (!this.queue[position]) return reject(false);
-      resolve(true)
-      this.queue.splice(position, 1);
-    });
+    if (!this.queue[position]) return;
+    if (position === 0) {
+      this.queue.shift();
+      return;
+    }
+    this.queue = this.queue.splice(position, 1);
   }
   nextSong() {
     return this.queue[0] || null;

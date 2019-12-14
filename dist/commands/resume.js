@@ -18,15 +18,15 @@ class Cmd extends Command_1.Command {
             cooldown: 0
         });
     }
-    run({ guild, member, reply }, query, gui) {
+    run({ guild, member, channel }, query, gui) {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.player.lavalink.get(guild.id);
             if (!player)
-                return reply(` There's nothing being played`);
-            if (player.playing)
-                return reply(` Bot is playing music`);
+                return channel.send(`There's nothing being played`);
+            if (!player.paused)
+                return channel.send(`Bot is playing music`);
             player.pause(false);
-            reply(`Successfully resumed the music`);
+            channel.send(`Successfully resumed the music`);
         });
     }
 }

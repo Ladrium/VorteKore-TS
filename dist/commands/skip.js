@@ -18,14 +18,17 @@ class Cmd extends Command_1.Command {
             cooldown: 0
         });
     }
-    run({ guild, member, reply }, query) {
-        var _a;
+    run({ guild, member, reply, channel }, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.player.lavalink.get(guild.id);
-            const song = (_a = this.bot.player.queue.getQueue(guild)) === null || _a === void 0 ? void 0 : _a.nextSong();
+            const queue = this.bot.player.queue.getQueue(guild);
+            queue.queue = queue.queue.slice(1);
+            const nextSong = queue.nextSong();
             if (!player)
                 return reply("There's nothing being played.");
-            player.play(song);
+            player.play(nextSong).on("end", (data) => {
+                this.bot.emit("songEnd", data, player, queue, { guild, channel });
+            });
         });
     }
 }

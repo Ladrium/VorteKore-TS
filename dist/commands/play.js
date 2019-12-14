@@ -8,8 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
+const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const ms_1 = __importDefault(require("ms"));
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -18,8 +23,9 @@ class Cmd extends Command_1.Command {
             cooldown: 0
         });
     }
-    run({ guild, member, reply, channel }, query) {
+    run(message, query) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { reply, channel, guild, member } = message;
             if (!query[0])
                 return reply("No query to search for provided!");
             if (!member.voice)
@@ -38,13 +44,18 @@ class Cmd extends Command_1.Command {
                 return reply("Couldn't find that song!");
             const queue = this.bot.player.queue.getQueue(guild) || new this.bot.player.queue(guild)._init();
             queue.addSong(data);
-            channel.send(`Successfully added \`${data.tracks[0].info.title}\` to the queue!`);
+            const info = data.tracks[0].info;
+            const musicEmbed = new VorteEmbed_1.default(message).baseEmbed()
+                .setTitle("Added to queue")
+                .setDescription(`**Song:** [${info.title}](${info.uri})\n**Author:** ${info.author}\n**Length:** ${ms_1.default(info.length)}`);
+            channel.send(musicEmbed);
             if (!player.playing) {
                 player.play(data.tracks[0].track)
                     .on("end", (data) => {
                     this.bot.emit("songEnd", data, player, queue, { guild, channel });
                 });
             }
+            ;
         });
     }
     ;

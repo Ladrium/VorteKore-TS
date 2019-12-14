@@ -16,7 +16,7 @@ export class Cmd extends Command {
     const queue = this.bot.player!.queue!.getQueue(guild!)!;
     queue.queue = queue.queue.slice(1);
     const nextSong = queue.nextSong();
-    if (!player) return reply("There's nothing being played.")
+    if(!player || !player.playing) return channel.send("The bot isn't playing any music yet!")
     player!.play(nextSong).on("end", (data: object) => {
       this.bot.emit("songEnd", data, player, queue, { guild, channel });
     });

@@ -17,6 +17,7 @@ export class Cmd extends Command {
     const queue = this.bot.player!.queue!.getQueue(guild!)!;
     if (!player || !player.playing) return channel.send("The bot isn't playing any music yet!")
     queue.queue = queue.queue.slice(1);
+    if (!queue.queue[0]) return this.bot.player!.lavalink!.leave(guild!.id);
     player.play(queue.queue[0].track)
   }
 }

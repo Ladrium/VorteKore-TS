@@ -22,7 +22,7 @@ export class Cmd extends Command {
     const queueEmbed = new VorteEmbed(message).baseEmbed()
       .setTitle("Queue")
       .addField("Now Playing", `**[${queue.queue[0].info.title}](${queue.queue[0].info.uri})**`);
-    if(queue.queue[1])
+    if (queue.queue[1])
       queueEmbed.setDescription(queue.queue.slice(1, 10).map((song, i) => `${i + 1}. **[${song.info.title}](${song.info.uri})**`))
     message.channel.send(queueEmbed);
   }

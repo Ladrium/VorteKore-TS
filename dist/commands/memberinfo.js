@@ -16,7 +16,7 @@ class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
             name: "memberinfo",
-            category: "Utility",
+            category: "Information",
             cooldown: 5000,
             aliases: ["mi", "ui", "meminfo"],
             description: "!ui @user"
@@ -29,8 +29,11 @@ class Cmd extends Command_1.Command {
                 return message.channel.send(`Unable to `);
             new structures_1.VorteEmbed(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
      **>** Joined At: ${member.joinedAt}
+     **>** Created At: ${member.user.createdAt}
      **>** Presence: ${member.presence.status}
-     **>** Roles: ${member.roles.array().toString().replace('@everyone', '')}`);
+     **>** Hoist Role: ${member.roles.hoist}
+     **>** Roles: ${member.roles.array().toString().replace('@everyone', '')}`)
+                .setThumbnail(member.user.displayAvatarURL());
         });
     }
 }

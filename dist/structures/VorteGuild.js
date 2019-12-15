@@ -22,16 +22,16 @@ class VorteGuild {
                 welcome: {},
                 leave: {},
                 logs: {
-                    deleteMessage: "enable",
-                    editMessage: "enable",
-                    ban: "enable",
-                    kick: "enable",
-                    mute: "enable",
-                    warn: "enable",
-                    lockdown: "enable",
-                    slowmode: "enable",
-                    roleRemove: "enable",
-                    roleAdd: "enable",
+                    deleteMessage: false,
+                    editMessage: false,
+                    ban: false,
+                    kick: false,
+                    mute: false,
+                    warn: false,
+                    lockdown: false,
+                    slowmode: false,
+                    roleRemove: false,
+                    roleAdd: false,
                 }
             });
         return this;

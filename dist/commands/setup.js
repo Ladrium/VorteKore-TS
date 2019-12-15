@@ -57,6 +57,7 @@ class Cmd extends Command_1.Command {
                 if (!channel)
                     return message.reply("Mention a channel to set");
                 guild.setAutoMessage(toSetup, "channel", channel.id);
+                message.channel.send(`Successfully set welcome channel to ${channel.name}`);
             }
             else
                 message.reply("What to set?");

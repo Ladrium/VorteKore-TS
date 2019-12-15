@@ -35,7 +35,7 @@ class Cmd extends structures_1.Command {
             const info = song.info;
             const pos = Math.round((player.state.position / info.length) * 10);
             const pos2 = Math.round(10 - pos);
-            let str = `${"➖".repeat(pos)}🔘${"➖".repeat(pos2)}`;
+            let str = `\`${"▬".repeat(pos)}🔘${"▬".repeat(pos2)}\`\n`;
             const playingEmbed = new structures_1.VorteEmbed(message).baseEmbed()
                 .setTitle("Now Playing")
                 .addField("Song Name", `[${info.title}](${info.uri})`)

@@ -26,5 +26,6 @@ module.exports = (bot, oldmsg, newmsg) => __awaiter(void 0, void 0, void 0, func
         .baseEmbed()
         .setTitle(`Event: Message Update [Case ID: ${guild.case}]\n`)
         .addField(`Old Message:`, oldcon)
-        .addField(`New Message`, newcon));
+        .addField(`New Message`, newcon)
+        .addField(`Channel`, `<#${ch.id}> [Jump To Message]`));
 });

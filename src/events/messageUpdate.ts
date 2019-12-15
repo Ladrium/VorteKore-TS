@@ -18,8 +18,9 @@ export = async(bot: VorteClient, oldmsg: Message, newmsg: Message) => {
   ch.send(
     new VorteEmbed(newmsg)
       .baseEmbed()
-      .setTitle(`Event: Message Delete [Case ID: ${guild.case}]\n`)
+      .setTitle(`Event: Message Update [Case ID: ${guild.case}]\n`)
       .addField(`Old Message:`, oldcon)
       .addField(`New Message`, newcon)
+    .addField(`Channel`, `<#${ch.id}> [Jump To Message]`)
   )
 }

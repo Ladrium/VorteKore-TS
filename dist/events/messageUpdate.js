@@ -28,7 +28,7 @@ module.exports = (bot, oldmsg, newmsg) => __awaiter(void 0, void 0, void 0, func
         return;
     ch.send(new VorteEmbed_1.default(newmsg)
         .baseEmbed()
-        .setTitle(`Event: Message Delete [Case ID: ${guild.case}]\n`)
+        .setTitle(`Event: Message Update [Case ID: ${guild.case}]\n`)
         .addField(`Old Message:`, oldcon)
         .addField(`New Message`, newcon));
 });

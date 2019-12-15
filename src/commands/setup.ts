@@ -21,7 +21,7 @@ export class Cmd extends Command {
         .addField(`prefix`, `Changes the current prefix of the server\nUsage: ${guild.prefix}setup prefix <new prefix>`)
         .addField(`staff`, `Add/Remove a provided role from staff roles\nUsage: ${guild.prefix}setup staff <add|remove> @role`)
         .addField(`ar`, `Adds a role when a user joins the guild.\nUsage: ${guild.prefix}setup ar <add> <ID OF THE ROLE>`)
-        .addField(`welcome|leave`, `disable: disable the welcome/leave message\nchannel: Sets the default channel for welcome/leave #channel\nmessage: Sets the default message **Use {user} to tag them\nUsage: ${guild.prefix}setup <welcome|leave> <disable|message|channel> <message|#channel>`)
+        .addField(`welcome|leave`, `disable: disable the welcome/leave message\nchannel: Sets the default channel for welcome/leave #channel\nmessage: Sets the default message **Use {{mention}} to tag them {{member}} for the name {{server}} for the server name and {{memberCount}} for the memberCount**\nUsage: ${guild.prefix}setup <welcome|leave> <disable|message|channel> <message|#channel>`)
         .addField(`logs`, `logs available: \`deleteMessage\`,\`editMessage\`,\`ban\`,\`kick\`,\`mute\`,\`warn\`,\`lockdown\`,\`slowmode\`,\`roleRemove\`,\`roleAdd\`,\`channel\`\n\nUsage: To setup the channel: ${guild.prefix}setup logs channel #channel\nTo enable/disable: ${guild.prefix}setup logs <logname> enable/disable.`)
 
     )
@@ -44,13 +44,16 @@ export class Cmd extends Command {
       else message.reply("N0")
     } else if (toSetup === "welcome" || toSetup === "leave") {
       if (args[1] === "disable") guild.setAutoMessage(toSetup, "enabled", false);
-        if (args[1] === "enable") guild.setAutoMessage(toSetup, "enabled", true)
-      else if (args[1] === "message") guild.setAutoMessage(toSetup, "message", args.slice(2).join(" "));
+      if (args[1] === "enable") guild.setAutoMessage(toSetup, "enabled", true)
+      else if (args[1] === "message") {
+        guild.setAutoMessage(toSetup, "message", args.slice(2).join(" "));
+        message.channel.send(`Successfully set message to: ${args.slice(2).join(" ")}`)
+      }
       else if (args[1] === "channel") {
         const channel = message.mentions.channels.first();
         if (!channel) return message.reply("Mention a channel to set");
-          guild.setAutoMessage(toSetup, "channel", channel!.id)
-          message.channel.send(`Successfully set welcome channel to ${channel.name}`)
+        guild.setAutoMessage(toSetup, "channel", channel!.id)
+        message.channel.send(`Successfully set channel to ${channel.name}`)
       } else message.reply("What to set?");
     } else if (toSetup === "logs") {
       if (args[1] === "channel") {

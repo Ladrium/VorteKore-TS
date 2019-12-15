@@ -11,10 +11,14 @@ export class Cmd extends Command {
       cooldown: 0
     })
   }
-  async run({ guild, member, reply }: Message, query: string[]) {
+  async run({ guild, member, reply, channel }: Message, query: string[]) {
     const player = this.bot.player!.lavalink!.get(guild!.id);
-    const song = this.bot.player!.queue!.getQueue(guild!)?.nextSong() as any
-    if (!player) return reply("There's nothing being played.")
-    player!.play(song);
+    const queue = this.bot.player!.queue!.getQueue(guild!)!;
+    queue.queue = queue.queue.slice(1);
+    const nextSong = queue.nextSong();
+    if(!player || !player.playing) return channel.send("The bot isn't playing any music yet!")
+    player!.play(nextSong).on("end", (data: object) => {
+      this.bot.emit("songEnd", data, player, queue, { guild, channel });
+    });
   }
 }

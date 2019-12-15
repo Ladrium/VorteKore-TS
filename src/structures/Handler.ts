@@ -16,6 +16,7 @@ export class Handler {
   }
   async runCommand(message: Message) {
     if (message.author.bot || !message.guild) return;
+    if (!message.member) Object.defineProperty(message, "member", await message.guild.members.fetch(message.author));
     const guild = new VorteGuild();
     await guild._load(message.guild);
     const args = message.content.slice(guild.prefix.length).trim().split(/ +/g);

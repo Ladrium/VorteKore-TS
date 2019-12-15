@@ -64,6 +64,8 @@ class Handler {
         return __awaiter(this, void 0, void 0, function* () {
             if (message.author.bot || !message.guild)
                 return;
+            if (!message.member)
+                Object.defineProperty(message, "member", yield message.guild.members.fetch(message.author));
             const guild = new VorteGuild_1.VorteGuild();
             yield guild._load(message.guild);
             const args = message.content.slice(guild.prefix.length).trim().split(/ +/g);

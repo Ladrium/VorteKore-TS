@@ -13,20 +13,25 @@ const Command_1 = require("../structures/Command");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
-            name: "resume",
+            name: "seek",
             category: "Music",
-            cooldown: 0
+            cooldown: 0,
+            example: "!seek 5s"
         });
     }
-    run({ guild, member, channel }, query, gui) {
+    run({ guild, member, reply, channel }, [time]) {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.player.lavalink.get(guild.id);
-            if (!player)
-                return channel.send(`There's nothing being played`);
-            if (!player.paused)
-                return channel.send(`Bot is playing music`);
-            player.pause(false);
-            channel.send(`Successfully resumed the music`);
+            if (!player || !player.playing)
+                return channel.send("The bot isn't playing any music yet!");
+            const match = time.match(/(.*)s/);
+            if (!match || !match[1])
+                return channel.send("Please provide a time to skip in (provide it in seconds, Example: !seek 5s)");
+            let number = parseInt(match[1]);
+            if (isNaN(number) || match[1].includes("-"))
+                return channel.send("Provide a correct time to seek to (Example: !seek 5s)");
+            number = number * 1000;
+            player.seek(number);
         });
     }
 }

@@ -1,6 +1,8 @@
 import { Command } from "../structures/Command";
 import { VorteClient } from "../structures/VorteClient";
 import { Message } from "discord.js";
+import { checkDJ, checkPermissions } from "../util";
+import message = require("../events/message");
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -12,6 +14,7 @@ export class Cmd extends Command {
     })
   }
   async run({ guild, member, reply, channel }: Message, [time]: string) {
+    if (!checkDJ(member!) && !checkPermissions(member!, "ADMINISTRATOR")) return channel.send("You don't have permissions for this command!");
     const player = this.bot.player!.lavalink!.get(guild!.id)!;
     if (!player || !player.playing) return channel.send("The bot isn't playing any music yet!");
     const match = time.match(/(.*)s/)!;

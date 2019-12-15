@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const VorteGuild_1 = require("../structures/VorteGuild");
+const structures_1 = require("../structures");
 module.exports = (bot, guild) => __awaiter(void 0, void 0, void 0, function* () {
-    yield new VorteGuild_1.VorteGuild()._load(guild);
+    yield new structures_1.VorteGuild(guild);
 });

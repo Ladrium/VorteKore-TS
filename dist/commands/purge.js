@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
@@ -18,9 +15,9 @@ class Cmd extends Command_1.Command {
     }
     run(message, args) {
         if (!util_1.checkPermissions(message.member, "MANAGE_MESSAGES"))
-            return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
+            return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Missing Permissions!"));
         if (!args[0])
-            return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a number."));
+            return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a number."));
         const member = message.mentions.users.first() || message.guild.members.find(x => x.displayName === args[0] || x.id === args[0]);
         if (member) {
             const num = parseInt(args[1]);
@@ -29,13 +26,13 @@ class Cmd extends Command_1.Command {
             }).then((messages) => {
                 messages = messages.filter(m => m.author.id === member.id);
                 message.channel.bulkDelete(messages);
-                message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription(`Successfully deleted ${num} messages.`));
+                message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription(`Successfully deleted ${num} messages.`));
             });
         }
         else {
             const num = parseInt(args[0]);
             message.channel.bulkDelete(num);
-            message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription(`Successfully deleted ${num} messages.`));
+            message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription(`Successfully deleted ${num} messages.`));
         }
         ;
     }

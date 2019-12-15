@@ -1,8 +1,6 @@
 import { Command } from "../structures/Command";
-import { VorteClient } from "../structures/VorteClient";
+import { VorteClient, VorteEmbed, VorteGuild } from "../structures";
 import { Message, GuildMember, TextChannel } from "discord.js";
-import VorteEmbed from "../structures/VorteEmbed"
-import { VorteGuild } from "../structures/VorteGuild";
 import { checkPermissions } from "../util";
 
 export class Cmd extends Command {

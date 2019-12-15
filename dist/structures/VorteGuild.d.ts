@@ -1,8 +1,9 @@
 import { Guild as guild } from "discord.js";
 export declare class VorteGuild {
     guild?: any;
-    constructor();
-    _load(g: guild): Promise<this>;
+    g: guild;
+    constructor(g: guild);
+    _load(): this;
     static delete(guild: guild): void;
     increaseCase(): this;
     setPrefix(prefix: string): this;

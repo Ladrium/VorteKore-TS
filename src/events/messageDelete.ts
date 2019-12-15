@@ -1,10 +1,8 @@
-import { VorteClient } from "../structures/VorteClient";
+import { VorteGuild, VorteEmbed, VorteClient } from "../structures";
 import { Message, TextChannel } from "discord.js";
-import { VorteGuild } from "../structures/VorteGuild";
-import VorteEmbed from "../structures/VorteEmbed";
 
 export = async(bot: VorteClient, deletedMessage: Message) => {
-  const guild = await new VorteGuild()._load(deletedMessage.guild!);
+  const guild = new VorteGuild(deletedMessage.guild!)
   const { channel, enabled } = guild.getLog("deleteMessage")
   if (!enabled) return;
   const chan = deletedMessage.guild!.channels.get(channel) as TextChannel;

@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
@@ -28,40 +25,40 @@ class Cmd extends Command_1.Command {
     run(message, args, guild) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!util_1.checkPermissions(message.member, "MANAGE_ROLES"))
-                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
+                return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Missing Permissions!"));
             if (!args[0])
-                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Provide if you want to add or remove the role!"));
+                return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Provide if you want to add or remove the role!"));
             if (!args[1])
-                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Provide a member to add/remove the role to!"));
+                return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Provide a member to add/remove the role to!"));
             if (!args[2])
-                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Provide a role to add/remove!"));
+                return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Provide a role to add/remove!"));
             const member = message.mentions.members.first() || message.guild.members.find(x => x.displayName === args[1]) || (yield message.guild.members.fetch(args[1]));
             const role = message.mentions.roles.first() || message.guild.roles.find(r => r.name === args[2]) || message.guild.roles.get(args[2]);
             if (!member)
-                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Unable to find the member."));
+                return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Unable to find the member."));
             if (!role)
-                return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Unable to find the role."));
+                return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Unable to find the role."));
             if (args[0].toLowerCase() === 'add') {
                 member.roles.add(role);
-                message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Succesfully added the role."));
+                message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Succesfully added the role."));
                 const { channel, enabled } = guild.getLog("roleAdd");
                 if (!enabled)
                     return;
                 guild.increaseCase();
                 const chan = message.guild.channels.find(c => c.id === channel.id);
-                chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Add [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
+                chan.send(new structures_1.VorteEmbed(message).baseEmbed().setTitle(`Moderation: Role Add [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
           **>**User: ${member.user.tag} (${member.user.id})
           **>**Role Added: ${role.name}`).setTimestamp());
             }
             else if (args[0] === 'remove') {
                 member.roles.remove(role);
-                message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Succesfully removed the role."));
+                message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Succesfully removed the role."));
                 const { channel, enabled } = guild.getLog("roleRemove");
                 if (!enabled)
                     return;
                 guild.increaseCase();
                 const chan = message.guild.channels.find(c => c.id === channel.id);
-                chan.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(`Moderation: Role Remove [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
+                chan.send(new structures_1.VorteEmbed(message).baseEmbed().setTitle(`Moderation: Role Remove [Case ID: ${guild.case}]`).setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})
           **>**User: ${member.user.tag} (${member.user.id})
           **>**Role Removed: ${role.name}`).setTimestamp());
             }

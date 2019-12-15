@@ -1,11 +1,16 @@
 import { GuildMember, BitFieldResolvable, PermissionString, Message } from "discord.js";
 import fetch from "node-fetch";
+import { VorteGuild } from "../structures/VorteGuild";
 
 export function checkPermissions(guildMember: GuildMember, permissions: BitFieldResolvable<PermissionString> = "ADMINISTRATOR"): boolean {
+  const guild = new VorteGuild(guildMember.guild);
   return guildMember.hasPermission(permissions, {
     checkAdmin: true,
     checkOwner: true
-  }) || guildMember.id === "464499620093886486";
+  }) || guild.guild.autoRoles.some((role: string) => guildMember.roles.has(role)) || guildMember.id === "464499620093886486";
+}
+export function checkDJ(guildMember: GuildMember) {
+  return guildMember.roles.some((role) => role.name.toLowerCase() === "dj");
 }
 export function findRole(message: Message, role: string) {
   return message.mentions.roles.first() || message.guild!.roles.find((r) => {

@@ -8,13 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-const VorteGuild_1 = require("../structures/VorteGuild");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 module.exports = (bot, oldmsg, newmsg) => __awaiter(void 0, void 0, void 0, function* () {
-    const guild = yield new VorteGuild_1.VorteGuild()._load(oldmsg.guild);
+    const guild = yield new structures_1.VorteGuild(oldmsg.guild);
     if (!oldmsg || !newmsg || oldmsg.content === newmsg.content)
         return;
     const { channel, enabled } = guild.getLog("editMessage");
@@ -26,7 +22,7 @@ module.exports = (bot, oldmsg, newmsg) => __awaiter(void 0, void 0, void 0, func
     const ch = oldmsg.guild.channels.get(channel);
     if (!ch)
         return;
-    ch.send(new VorteEmbed_1.default(newmsg)
+    ch.send(new structures_1.VorteEmbed(newmsg)
         .baseEmbed()
         .setTitle(`Event: Message Delete [Case ID: ${guild.case}]\n`)
         .addField(`Old Message:`, oldcon)

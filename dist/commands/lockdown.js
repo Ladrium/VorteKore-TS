@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 const ms = require("ms");
 const util_1 = require("../util");
 class Cmd extends Command_1.Command {
@@ -20,10 +17,10 @@ class Cmd extends Command_1.Command {
     }
     run(message, args, guild) {
         if (!util_1.checkPermissions(message.member, "MANAGE_CHANNELS"))
-            return message.channel.send(new VorteEmbed_1.default(message).errorEmbed("Missing Permissions!"));
+            return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Missing Permissions!"));
         const chan = message.channel;
         if (!args[0])
-            return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a reason to lockdown this channel."));
+            return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a reason to lockdown this channel."));
         if (args[0].toLowerCase() === 'release' || 'unlock' || 'remove') {
             chan.overwritePermissions({
                 permissionOverwrites: [
@@ -37,7 +34,7 @@ class Cmd extends Command_1.Command {
         else {
             const time = ms(args[0]);
             if (!time)
-                return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Unable to resolve the time"));
+                return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Unable to resolve the time"));
             const reason = args.slice(2).join(" ");
             chan.overwritePermissions({
                 permissionOverwrites: [

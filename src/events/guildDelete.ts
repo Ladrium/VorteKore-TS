@@ -1,6 +1,5 @@
-import { VorteClient } from "../structures/VorteClient";
+import { VorteGuild, VorteEmbed, VorteClient } from "../structures";
 import { Guild } from "discord.js";
-import { VorteGuild } from "../structures/VorteGuild";
 
 export = async (bot: VorteClient, guild: Guild) => {
   await VorteGuild.delete(guild);

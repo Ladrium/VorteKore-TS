@@ -66,8 +66,7 @@ class Handler {
                 return;
             if (!message.member)
                 Object.defineProperty(message, "member", yield message.guild.members.fetch(message.author));
-            const guild = new VorteGuild_1.VorteGuild();
-            yield guild._load(message.guild);
+            const guild = new VorteGuild_1.VorteGuild(message.guild);
             const args = message.content.slice(guild.prefix.length).trim().split(/ +/g);
             const cmd = args.shift();
             const command = this.bot.commands.get(cmd) || this.bot.commands.get(this.bot.aliases.get(cmd)) || null;

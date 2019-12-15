@@ -3,12 +3,16 @@ import Guild from "../models/guild";
 
 export class VorteGuild {
   guild?: any;
-  constructor() {
+  g: guild;
+  constructor(g: guild) {
     this.guild;
+    this.g = g;
+    this._load();
   }
-  async _load(g: guild) {
-    this.guild = await Guild.findOne({ guildID: g.id }) || new Guild({
-      guildID: g.id,
+  _load() {
+    Guild.findOne({ guildID: this.g.id }).then((guild) => this.guild = guild);
+     if(!this.guild) this.guild = new Guild({
+      guildID: this.g.id,
       case: 0,
       prefix: "!",
       autoRoles: [],

@@ -1,5 +1,5 @@
 import { Command } from "../structures/Command";
-import { VorteClient } from "../structures/VorteClient";
+import { VorteClient } from "../structures";
 import { Message } from "discord.js";
 import { VorteGuild } from "../structures/VorteGuild";
 export declare class Cmd extends Command {

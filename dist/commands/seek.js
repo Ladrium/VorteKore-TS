@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
+const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -21,6 +22,8 @@ class Cmd extends Command_1.Command {
     }
     run({ guild, member, reply, channel }, [time]) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!util_1.checkDJ(member) && !util_1.checkPermissions(member, "ADMINISTRATOR"))
+                return channel.send("You don't have permissions for this command!");
             const player = this.bot.player.lavalink.get(guild.id);
             if (!player || !player.playing)
                 return channel.send("The bot isn't playing any music yet!");

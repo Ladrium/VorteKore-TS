@@ -25,13 +25,10 @@ class Cmd extends Command_1.Command {
                 return channel.send("You don't have permissions for this command!");
             const player = this.bot.player.lavalink.get(guild.id);
             const queue = this.bot.player.queue.getQueue(guild);
-            queue.queue = queue.queue.slice(1);
-            const nextSong = queue.nextSong();
             if (!player || !player.playing)
                 return channel.send("The bot isn't playing any music yet!");
-            player.play(nextSong).on("end", (data) => {
-                this.bot.emit("songEnd", data, player, queue, { guild, channel });
-            });
+            queue.queue = queue.queue.slice(1);
+            player.play(queue.queue[0].track);
         });
     }
 }

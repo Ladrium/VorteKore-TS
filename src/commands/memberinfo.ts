@@ -7,7 +7,7 @@ export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
       name: "memberinfo",
-      category: "Utility",
+      category: "Information",
       cooldown: 5000,
       aliases: ["mi", "ui", "meminfo"],
       description: "!ui @user"
@@ -19,8 +19,12 @@ export class Cmd extends Command {
     new VorteEmbed(message).baseEmbed().setDescription(
     `**>** Name: ${member!.user.tag}
      **>** Joined At: ${member!.joinedAt}
+     **>** Created At: ${member.user.createdAt}
      **>** Presence: ${member!.presence.status}
+     **>** Hoist Role: ${member.roles.hoist}
      **>** Roles: ${member!.roles.array().toString().replace('@everyone', '')}` 
     )
+    .setThumbnail(member.user.displayAvatarURL())
   }
+
 };

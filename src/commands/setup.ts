@@ -49,7 +49,8 @@ export class Cmd extends Command {
       else if (args[1] === "channel") {
         const channel = message.mentions.channels.first();
         if (!channel) return message.reply("Mention a channel to set");
-        guild.setAutoMessage(toSetup, "channel", channel!.id)
+          guild.setAutoMessage(toSetup, "channel", channel!.id)
+          message.channel.send(`Successfully set welcome channel to ${channel.name}`)
       } else message.reply("What to set?");
     } else if (toSetup === "logs") {
       if (args[1] === "channel") {

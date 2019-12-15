@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -17,7 +14,7 @@ class Cmd extends Command_1.Command {
         let command;
         if (args[0])
             command = this.bot.handler.getCommand(args[0]);
-        const helpEmbed = new VorteEmbed_1.default(message).baseEmbed()
+        const helpEmbed = new structures_1.VorteEmbed(message).baseEmbed()
             .setTitle("Help");
         if (!command) {
             const commands = this.bot.handler.getAllCommands().commands;

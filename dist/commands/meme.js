@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
+const structures_1 = require("../structures");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -29,7 +29,7 @@ class Cmd extends Command_1.Command {
     run(message) {
         return __awaiter(this, void 0, void 0, function* () {
             const { image } = yield node_fetch_1.default("https://api.chaosphoe.xyz/meme").then(res => res.json());
-            const memeEmbed = new VorteEmbed_1.default(message)
+            const memeEmbed = new structures_1.VorteEmbed(message)
                 .baseEmbed()
                 .setImage(image);
             message.channel.send(memeEmbed);

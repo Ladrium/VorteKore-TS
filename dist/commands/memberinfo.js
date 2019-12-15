@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
@@ -30,7 +27,7 @@ class Cmd extends Command_1.Command {
             const member = yield util_1.findMember(message, mem);
             if (!member)
                 return message.channel.send(`Unable to `);
-            new VorteEmbed_1.default(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
+            new structures_1.VorteEmbed(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
      **>** Joined At: ${member.joinedAt}
      **>** Presence: ${member.presence.status}
      **>** Roles: ${member.roles.array().toString().replace('@everyone', '')}`);

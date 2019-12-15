@@ -13,14 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 const ms_1 = __importDefault(require("ms"));
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
             name: "play",
             category: "Music",
-            cooldown: 0
+            cooldown: 2000
         });
     }
     run(message, query) {
@@ -45,7 +45,7 @@ class Cmd extends Command_1.Command {
             const queue = this.bot.player.queue.getQueue(guild) || new this.bot.player.queue(guild)._init();
             queue.addSong(data);
             const info = data.tracks[0].info;
-            const musicEmbed = new VorteEmbed_1.default(message).baseEmbed()
+            const musicEmbed = new structures_1.VorteEmbed(message).baseEmbed()
                 .setTitle("Added to queue")
                 .setDescription(`**Song:** [${info.title}](${info.uri})\n**Author:** ${info.author}\n**Length:** ${ms_1.default(info.length)}`);
             channel.send(musicEmbed);

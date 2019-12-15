@@ -13,13 +13,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fetch_1 = __importDefault(require("node-fetch"));
+const VorteGuild_1 = require("../structures/VorteGuild");
 function checkPermissions(guildMember, permissions = "ADMINISTRATOR") {
+    const guild = new VorteGuild_1.VorteGuild(guildMember.guild);
     return guildMember.hasPermission(permissions, {
         checkAdmin: true,
         checkOwner: true
-    }) || guildMember.id === "464499620093886486";
+    }) || guild.guild.autoRoles.some((role) => guildMember.roles.has(role)) || guildMember.id === "464499620093886486";
 }
 exports.checkPermissions = checkPermissions;
+function checkDJ(guildMember) {
+    return guildMember.roles.some((role) => role.name.toLowerCase() === "dj");
+}
+exports.checkDJ = checkDJ;
 function findRole(message, role) {
     return message.mentions.roles.first() || message.guild.roles.find((r) => {
         const name = r.name.toLowerCase();

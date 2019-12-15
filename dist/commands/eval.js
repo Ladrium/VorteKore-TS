@@ -8,12 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -39,7 +36,7 @@ class Cmd extends Command_1.Command {
                         depth: 0,
                     });
                 }
-                embed = new VorteEmbed_1.default(message)
+                embed = new structures_1.VorteEmbed(message)
                     .baseEmbed()
                     .setTitle("Evaluation")
                     .addField("Input", `\`\`\`js\n${codein}\`\`\``)
@@ -47,7 +44,7 @@ class Cmd extends Command_1.Command {
                     .addField("Type", `\`\`\`js\n${ctype}\`\`\``);
             }
             catch (e) {
-                embed = new VorteEmbed_1.default(message)
+                embed = new structures_1.VorteEmbed(message)
                     .baseEmbed()
                     .setTitle("Error")
                     .setColor("#ff0000")

@@ -1,5 +1,5 @@
 import { MessageEmbed, Message } from "discord.js";
-export default class {
+export declare class VorteEmbed {
     message: Message;
     constructor(message: Message);
     baseEmbed(): MessageEmbed;

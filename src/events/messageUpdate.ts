@@ -1,10 +1,10 @@
-import { VorteClient } from "../structures/VorteClient";
+import { VorteGuild, VorteEmbed, VorteClient } from "../structures";
+
 import { Message, TextChannel } from "discord.js";
-import { VorteGuild } from "../structures/VorteGuild";
-import VorteEmbed from "../structures/VorteEmbed";
+
 
 export = async(bot: VorteClient, oldmsg: Message, newmsg: Message) => {
-  const guild = await new VorteGuild()._load(oldmsg.guild!);
+  const guild = await new VorteGuild(oldmsg.guild!);
   if (!oldmsg || !newmsg || oldmsg.content === newmsg.content) return;
   const { channel, enabled } = guild.getLog("editMessage");
   if (!enabled) return;

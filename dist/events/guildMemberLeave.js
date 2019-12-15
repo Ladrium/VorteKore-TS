@@ -8,10 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const VorteGuild_1 = require("../structures/VorteGuild");
+const structures_1 = require("../structures");
 const util_1 = require("../util");
 module.exports = (bot, member) => __awaiter(void 0, void 0, void 0, function* () {
-    const guild = yield new VorteGuild_1.VorteGuild()._load(member.guild);
+    const guild = yield new structures_1.VorteGuild(member.guild);
     const { channel, enabled, message } = guild.leave;
     if (!enabled)
         return;

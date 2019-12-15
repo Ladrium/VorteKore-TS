@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
+const structures_1 = require("../structures");
 const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
@@ -25,7 +22,7 @@ class Cmd extends Command_1.Command {
         if (!message.deletable)
             return message.channel.send("Dont have permission to delete the message");
         message.delete();
-        message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setTitle(emb[0]).setDescription(emb[1]).setFooter(message.author.tag, message.author.displayAvatarURL()));
+        message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setTitle(emb[0]).setDescription(emb[1]).setFooter(message.author.tag, message.author.displayAvatarURL()));
     }
 }
 exports.Cmd = Cmd;

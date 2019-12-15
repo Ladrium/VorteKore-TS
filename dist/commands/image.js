@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../structures/Command");
+const structures_1 = require("../structures");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const VorteEmbed_1 = __importDefault(require("../structures/VorteEmbed"));
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
@@ -28,7 +28,7 @@ class Cmd extends Command_1.Command {
     run(message, [...image]) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!image[0])
-                return message.channel.send(new VorteEmbed_1.default(message).baseEmbed().setDescription("Please provide a query to search."));
+                return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a query to search."));
             let link = `https://imgur.com/r/${image.join(" ")}/hot.json`;
             const { data } = yield node_fetch_1.default(link).then(res => res.json());
             link = data[Math.floor(Math.random() * data.length)];
@@ -38,7 +38,7 @@ class Cmd extends Command_1.Command {
             while (!link) {
                 data[Math.floor(Math.random() * data.length)];
             }
-            const emb = new VorteEmbed_1.default(message).baseEmbed()
+            const emb = new structures_1.VorteEmbed(message).baseEmbed()
                 .setColor("#000000")
                 .setImage(link);
             if (link.title)

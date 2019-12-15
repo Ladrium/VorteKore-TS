@@ -1,7 +1,6 @@
 import { Command } from "../structures/Command";
-import { VorteClient } from "../structures/VorteClient";
+import { VorteClient, VorteEmbed } from "../structures";
 import { Message } from "discord.js";
-import VorteEmbed from "../structures/VorteEmbed";
 import ms from "ms";
 
 export class Cmd extends Command {
@@ -9,7 +8,7 @@ export class Cmd extends Command {
     super(bot, {
       name: "play",
       category: "Music",
-      cooldown: 0
+      cooldown: 2000
     })
   }
   async run(message: Message, query: string[]) {
@@ -33,7 +32,7 @@ export class Cmd extends Command {
     const musicEmbed = new VorteEmbed(message).baseEmbed()
       .setTitle("Added to queue")
       .setDescription(`**Song:** [${info.title}](${info.uri})\n**Author:** ${info.author}\n**Length:** ${ms(info.length)}`);
-    
+
     channel.send(musicEmbed);
     if (!player!.playing) {
       player!.play(data.tracks[0].track)

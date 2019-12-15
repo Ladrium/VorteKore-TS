@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
-class default_1 {
+class VorteEmbed {
     constructor(message) {
         this.message = message;
     }
@@ -18,4 +18,4 @@ class default_1 {
             .setColor("#ff0000");
     }
 }
-exports.default = default_1;
+exports.VorteEmbed = VorteEmbed;

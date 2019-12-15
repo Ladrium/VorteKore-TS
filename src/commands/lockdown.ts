@@ -1,9 +1,8 @@
 
 import { Command } from "../structures/Command";
-import { VorteClient } from "../structures/VorteClient";
+import { VorteClient, VorteEmbed } from "../structures";
 import { Message, GuildChannel, TextChannel } from "discord.js";
 import { VorteGuild } from "../structures/VorteGuild";
-import VorteEmbed from "../structures/VorteEmbed";
 import ms = require("ms");
 import { checkPermissions } from "../util";
 

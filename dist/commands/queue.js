@@ -26,12 +26,13 @@ class Cmd extends Command_1.Command {
             if (!player || !player.playing)
                 return message.channel.send("The bot isn't playing any music yet!");
             const queue = this.bot.player.queue.getQueue(message.guild) || (yield new this.bot.player.queue(message.guild)._init());
-            if (!queue.queue)
+            if (!queue.queue[0])
                 return message.reply("Nothing queued right now!");
             const queueEmbed = new structures_1.VorteEmbed(message).baseEmbed()
                 .setTitle("Queue")
-                .addField("Now Playing", `**[${queue.queue[0].info.title}](${queue.queue[0].info.uri})**`)
-                .setDescription(queue.queue.slice(1, 10).map((song, i) => `${i + 1}. **[${song.info.title}](${song.info.uri})**`));
+                .addField("Now Playing", `**[${queue.queue[0].info.title}](${queue.queue[0].info.uri})**`);
+            if (queue.queue[1])
+                queueEmbed.setDescription(queue.queue.slice(1, 10).map((song, i) => `${i + 1}. **[${song.info.title}](${song.info.uri})**`));
             message.channel.send(queueEmbed);
         });
     }

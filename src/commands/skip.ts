@@ -19,5 +19,6 @@ export class Cmd extends Command {
     queue.queue = queue.queue.slice(1);
     if (!queue.queue[0]) return this.bot.player!.lavalink!.leave(guild!.id);
     player.play(queue.queue[0].track)
+    channel.send(`Skipped the song, Now Playing: \`${queue.queue[0].info.title}\``)
   }
 }

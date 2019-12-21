@@ -1,5 +1,6 @@
 import { Command, VorteClient, VorteEmbed } from "../structures";
 import { Message } from "discord.js";
+import { formatTime } from "../util";
 
 export class Cmd extends Command {
   constructor(bot: VorteClient) {
@@ -22,14 +23,15 @@ export class Cmd extends Command {
     const song = queue.queue[0];
     const info = song.info;
     const pos = Math.round(((player.state as any).position / info.length) * 10);
-    const pos2 = Math.round(10 - pos);
-
-    let str = `\`${"▬".repeat(pos)}🔘${"▬".repeat(pos2)}\`\n`
+    const pos2 = Math.round(15 - pos);
+    const currTime = formatTime((player.state as any).position);
+    const fullTime = formatTime(info.length);
+    let str = `${"▬".repeat(pos)}🔘${"▬".repeat(pos2)}`
     const playingEmbed = new VorteEmbed(message).baseEmbed()
       .setTitle("Now Playing")
       .addField("Song Name", `[${info.title}](${info.uri})`)
       .addField("Author", info.author)
-      .addField("Position", str);
+      .addField("Position", `${str} \n\`${currTime.m}:${currTime.s} / ${fullTime.m}:${fullTime.s}\``);
     message.channel.send(playingEmbed);
   }
 }

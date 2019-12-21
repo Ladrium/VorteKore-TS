@@ -52,3 +52,20 @@ export const get = async <T>(url: string, options?: any) => {
 
   return { data, error }
 }
+export function formatTime(ms: number) {
+  let day, hour, minute, seconds;
+  seconds = Math.floor(ms / 1000);
+  minute = Math.floor(seconds / 60);
+  seconds = seconds % 60;
+  hour = Math.floor(minute / 60);
+  minute = minute % 60;
+  day = Math.floor(hour / 24);
+  hour = hour % 24;
+
+  return {
+    d: day,
+    h: hour < 10 ? "0" + hour : hour,
+    m: minute < 10 ? "0" + minute : minute,
+    s: seconds < 10 ? "0" + seconds : seconds
+  }
+};

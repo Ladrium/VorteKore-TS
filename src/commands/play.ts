@@ -1,6 +1,7 @@
 import { Command } from "../structures/Command";
 import { VorteClient, VorteEmbed } from "../structures";
 import { Message } from "discord.js";
+
 import ms from "ms";
 
 export class Cmd extends Command {
@@ -11,9 +12,9 @@ export class Cmd extends Command {
       cooldown: 2000
     })
   }
-  async run(message: Message, query: string[]) {
+  async run(message: Message, args: string[]) {
     const { reply, channel, guild, member } = message;
-    if (!query[0]) return reply("No query to search for provided!");
+    if (!args[0]) return reply("No query to search for provided!");
     if (!member!.voice) return reply("You need to be in a VoiceChannel this command!");
     if (guild!.me!.voice && guild!.me!.voice.channel && guild!.me!.voice.channelID !== member!.voice.channelID) return reply("You need to be in the same VoiceChannel as me to use this command!");
 
@@ -24,8 +25,8 @@ export class Cmd extends Command {
       host: this.bot.player!.lavalink!.nodes.first()!.host
     }, { selfdeaf: true });
 
-    const { data, error } = await this.bot.player!.getSongs(query.join(" "));
-    if (error || !data) return reply("Couldn't find that song!");
+    const { data, error } = await this.bot.player!.getSongs(args.join(" "));
+    if (error || !data || !data.tracks || !data.tracks[0]) return reply("Couldn't find that song!");
     const queue = this.bot.player!.queue.getQueue(guild!) || new this.bot.player!.queue(guild!)._init();
     queue.addSong(data);
     const info = data.tracks[0].info;

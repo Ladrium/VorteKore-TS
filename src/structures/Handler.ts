@@ -1,9 +1,10 @@
 import { VorteClient } from "./VorteClient";
 import { readdirSync } from "fs";
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { dirname } from "path";
 import { VorteGuild } from "./VorteGuild";
 import { Command } from "./Command";
+import { VorteMember } from "./VorteMember";
 
 const cooldowns = new Set();
 
@@ -14,7 +15,7 @@ export class Handler {
     this.loadEvents = this.loadEvents.bind(this);
     this.loadCommands = this.loadCommands.bind(this);
   }
-  async runCommand(message: Message) {
+  async runCommand(message: Message, member: VorteMember) {
     if (message.author.bot || !message.guild) return;
     if (!message.member) Object.defineProperty(message, "member", await message.guild.members.fetch(message.author));
     const guild = new VorteGuild(message.guild!);
@@ -26,7 +27,11 @@ export class Handler {
     if (command) {
       if (cooldowns.has(message.author.id)) return message.reply("Sorry you still have a cooldown! Please wait");
       cooldowns.add(message.author.id);
-      command.run(message, args, guild)
+      try {
+        await command.run(message, args, guild, member)
+      } catch (e) {
+        (this.bot.channels.get("630282271169052692") as TextChannel)!.send(e.toString());
+      };
 
       setTimeout(() => {
         cooldowns.delete(message.author.id);
@@ -73,6 +78,9 @@ export class Handler {
   }
   getCommand(name: string): Command | undefined {
     return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)!) || undefined;
+  }
+  getCat(name: string) {
+    return this.bot.commands.filter((command) => command.category === name);
   }
   getAllCommands() {
     return {

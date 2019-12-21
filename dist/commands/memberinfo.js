@@ -15,10 +15,10 @@ const util_1 = require("../util");
 class Cmd extends Command_1.Command {
     constructor(bot) {
         super(bot, {
-            name: "memberinfo",
+            name: "userinfo",
             category: "Information",
             cooldown: 5000,
-            aliases: ["mi", "ui", "meminfo"],
+            aliases: ["whois", "ui"],
             description: "!ui @user"
         });
     }

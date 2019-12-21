@@ -6,3 +6,4 @@ export * from "./Queue";
 export * from "./VorteClient";
 export * from "./VorteEmbed";
 export * from "./VorteGuild";
+export * from "./VorteMember";

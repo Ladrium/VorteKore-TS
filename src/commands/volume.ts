@@ -6,7 +6,7 @@ export class Cmd extends Command {
   constructor(bot: VorteClient) {
     super(bot, {
       name: "volume",
-      aliases: ["v"],
+      aliases: ["vol"],
       category: "Music",
       cooldown: 0
     });
@@ -23,5 +23,6 @@ export class Cmd extends Command {
     if (isNaN(volume) || volume.includes("-") || volume.includes(".") || volume > 100 || volume < 1) return message.reply("Please return a valid number between 1-100");
     volume = parseInt(volume);
     player.volume(volume);
+    message.channel.send(`Set the Volume to: \`${volume}\``)
   }
 }

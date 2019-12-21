@@ -60,7 +60,7 @@ class Handler {
         this.loadEvents = this.loadEvents.bind(this);
         this.loadCommands = this.loadCommands.bind(this);
     }
-    runCommand(message) {
+    runCommand(message, member) {
         return __awaiter(this, void 0, void 0, function* () {
             if (message.author.bot || !message.guild)
                 return;
@@ -76,7 +76,13 @@ class Handler {
                 if (cooldowns.has(message.author.id))
                     return message.reply("Sorry you still have a cooldown! Please wait");
                 cooldowns.add(message.author.id);
-                command.run(message, args, guild);
+                try {
+                    yield command.run(message, args, guild, member);
+                }
+                catch (e) {
+                    this.bot.channels.get("630282271169052692").send(e.toString());
+                }
+                ;
                 setTimeout(() => {
                     cooldowns.delete(message.author.id);
                 }, command.cooldown);

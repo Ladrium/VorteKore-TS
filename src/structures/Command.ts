@@ -1,7 +1,6 @@
 import { IData } from "../interfaces/IData";
-import { VorteClient } from "./VorteClient";
 import { Message } from "discord.js";
-import { VorteGuild } from "./VorteGuild";
+import { VorteGuild, VorteMember, VorteClient } from "./";
 
 export class Command {
   bot: VorteClient;
@@ -22,7 +21,7 @@ export class Command {
     this.example = data.example;
     this.cooldown = data.cooldown || 0;
   }
-  run(message: Message, args: string[] | string, guild: VorteGuild) {
+  run(message: Message, args: string[] | string, guild: VorteGuild, member: VorteMember) {
     console.log("This command isnt added yet!");
   }
 }

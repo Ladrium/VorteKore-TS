@@ -25,9 +25,11 @@
     "discord.js": "github:discordjs/discord.js",
     "discord.js-lavalink": "^2.2.3",
     "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
     "eslint": "^6.5.1",
     "mongoose": "^5.7.6",
-    "ms": "^2.1.2"
+    "ms": "^2.1.2",
+    "simple-youtube-api": "^5.2.1"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1"

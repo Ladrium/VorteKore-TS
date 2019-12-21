@@ -4,3 +4,4 @@ declare var process: {
     URI: string
   }
 }
+declare module "simple-youtube-api";

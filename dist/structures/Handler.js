@@ -93,6 +93,9 @@ class Handler {
     getCommand(name) {
         return this.bot.commands.get(name) || this.bot.commands.get(this.bot.aliases.get(name)) || undefined;
     }
+    getCat(name) {
+        return this.bot.commands.filter((command) => command.category === name);
+    }
     getAllCommands() {
         return {
             commands: this.bot.commands.map((x) => x),

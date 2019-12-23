@@ -27,6 +27,7 @@
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "eslint": "^6.5.1",
+    "express-session": "^1.17.0",
     "mongoose": "^5.7.6",
     "ms": "^2.1.2",
     "simple-youtube-api": "^5.2.1"

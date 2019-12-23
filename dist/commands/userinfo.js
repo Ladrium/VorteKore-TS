@@ -22,11 +22,12 @@ class Cmd extends Command_1.Command {
             description: "!ui @user"
         });
     }
-    run(message, [mem], guild, thisMember) {
+    run(message, [mem], guild) {
         return __awaiter(this, void 0, void 0, function* () {
             const member = (yield util_1.findMember(message, mem)) || message.member;
             if (!member)
                 return message.channel.send(`Unable to find that member!`);
+            const thisMember = yield new structures_1.VorteMember(member.id, message.guild.id)._init();
             const infoEmbed = new structures_1.VorteEmbed(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
      **>** Joined At: ${member.joinedAt}
      **>** Created At: ${member.user.createdAt}

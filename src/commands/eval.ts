@@ -1,5 +1,5 @@
 import { Command } from "../structures/Command";
-import { VorteClient, VorteEmbed, VorteGuild } from "../structures";
+import { VorteClient, VorteEmbed, VorteGuild, VorteMember } from "../structures";
 import { Message } from "discord.js";
 export class Cmd extends Command {
   constructor(bot: VorteClient) {

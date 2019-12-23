@@ -18,6 +18,7 @@ class Cmd extends structures_1.Command {
     constructor(bot) {
         super(bot, {
             name: "leaderboard",
+            aliases: ["lb"],
             category: "Economy",
             cooldown: 500
         });
@@ -25,7 +26,7 @@ class Cmd extends structures_1.Command {
     run(message, [page], guild) {
         return __awaiter(this, void 0, void 0, function* () {
             let members = yield member_1.default.find({ guildID: message.guild.id });
-            members = members.sort((a, b) => b.xp - a.xp)
+            members = members.sort((a, b) => b.xp - a.xp);
             let str = "";
             if (!page || isNaN(page) || page.includes("-"))
                 page = 1;

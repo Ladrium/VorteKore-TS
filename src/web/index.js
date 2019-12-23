@@ -1,13 +1,3 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 const express = require("express");
 const app = express();
 const session = require("express-session");
@@ -15,6 +5,7 @@ const Member = require("../models/member");
 const fetch = require("node-fetch");
 const { Permissions } = require("discord.js");
 const { VorteGuild } = require("../structures/index");
+
 module.exports = function startServer(bot) {
     app.use(express.static(require("path").join(__dirname, "/../../views")));
     app.use(session({
@@ -23,21 +14,21 @@ module.exports = function startServer(bot) {
         resave: false,
         saveUninitialized: true
     }));
-    app.set("views", __dirname + "/../../views");
+
+    app.set("views", __dirname + "/../../views")
     app.set("view engine", "ejs");
-    app.get("/", (req, res) => __awaiter(this, void 0, void 0, function* () {
+
+    app.get("/", async (req, res) => {
         let user = req.session.user || false;
         res.render("public", { guilds: false, user, bot });
-    }));
+    });
     app.get("/guilds:id", (req, res) => {
         const guild = bot.guilds.get(req.params.id);
-        if (!guild)
-            res.redirect("/");
+        if (!guild) res.redirect("/");
         const Guild = new VorteGuild();
     });
-    app.get("/callback", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        if (!req.query.code)
-            return res.redirect("/");
+    app.get("/callback", async (req, res) => {
+        if (!req.query.code) return res.redirect("/");
         let params = new URLSearchParams();
         params.append('client_id', "634766962378932224");
         params.append('client_secret', 'v6OKjC7jHMrzU8b5mddk__Y3ihs4zTr0');
@@ -45,46 +36,47 @@ module.exports = function startServer(bot) {
         params.append('code', req.query.code);
         params.append('redirect_uri', 'http://localhost:3000/callback');
         params.append('scope', 'identify guilds');
-        const response = yield fetch("https://discordapp.com/api/v6/oauth2/token", {
+
+        const response = await fetch("https://discordapp.com/api/v6/oauth2/token", {
             method: "POST",
             body: params,
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
-        }).then((res) => res.json());
-        if (response.error)
-            return res.redirect("/");
+        }).then((res) => res.json())
+        if (response.error) return res.redirect("/");
         let access_token = response.access_token;
         req.session.access_token = access_token;
-        const user = yield fetch("https://discordapp.com/api/users/@me", {
+        const user = await fetch("https://discordapp.com/api/users/@me", {
             method: "GET",
             headers: { Authorization: `Bearer ${access_token}` }
         }).then((res) => res.json());
         req.session.user = user;
-        let guilds = yield fetch("https://discordapp.com/api/users/@me/guilds", {
+        let guilds = await fetch("https://discordapp.com/api/users/@me/guilds", {
             method: "GET",
             headers: { Authorization: `Bearer ${access_token}` }
         }).then((res) => res.json());
+
         guilds = guilds.filter((guild) => {
             const perms = new Permissions(guild.permissions);
             return perms.has("MANAGE_GUILD", { checkAdmin: true });
         });
         res.render("public", { guilds, user, bot });
-    }));
+    });
     app.get("/logout", (req, res) => {
         req.session.destroy();
         res.redirect("/");
     });
-    app.get("/login", (req, res) => res.redirect("https://discordapp.com/api/oauth2/authorize?client_id=634766962378932224&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback&response_type=code&scope=identify%20guilds"));
+    app.get("/login", (req, res) => res.redirect("https://discordapp.com/api/oauth2/authorize?client_id=634766962378932224&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback&response_type=code&scope=identify%20guilds"))
     app.get("/commands/:command", (req, res) => {
         let user = req.session.user || false;
         const commands = bot.commands.filter((x) => x.category.toLowerCase() === req.params.command);
         res.render("public/commands", { command: req.params.command, user, commands, bot });
     });
-    app.get("/leaderboard/:page", (req, res) => __awaiter(this, void 0, void 0, function* () {
+    app.get("/leaderboard/:page", async (req, res) => {
         let user = req.session.user || false;
         let page = req.params.page;
-        let members = yield Member.find();
+        let members = await Member.find();
         members.sort((a, b) => b.xp - a.xp);
         let toPush = [];
         page = Math.round(page);
@@ -92,26 +84,28 @@ module.exports = function startServer(bot) {
             try {
                 let user = bot.users.get(members[i].id);
                 let username = user ? user.username : "Unknown";
-                toPush.push({ member: members[i], username });
-            }
-            catch (e) { }
+                toPush.push({ member: members[i], username })
+            } catch (e) { }
         }
         res.render("public/leaderboard", { info: toPush, bot, user });
-    }));
-    app.get("/leaderboard", (req, res) => __awaiter(this, void 0, void 0, function* () {
+    });
+    app.get("/leaderboard", async (req, res) => {
         let user = req.session.user || false;
-        let members = yield Member.find();
+
+        let members = await Member.find();
         members = members.sort((a, b) => b.xp - a.xp);
         members = members.slice(0, 10);
         let toPush = [];
+
         members.forEach((member) => {
             let user = bot.users.get(member.id);
             let username = user ? user.username : "Unknown";
             toPush.push({ member, username });
         });
         res.render("public/leaderboard", { info: toPush, bot, user });
-    }));
+    });
     app.listen(3000, () => {
         console.log("Server listening on port 3000");
     });
+
 };

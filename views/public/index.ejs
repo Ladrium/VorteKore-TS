@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include inc/head %>
+
+<body>
+    <section class="hero is-fullheight">
+        <div class="align-middle">
+            <%- include inc/nav %>
+
+            <% if(guilds) {%>
+            <h3>Select a server!</h3>
+            <div class="colums is-multiline center">
+                <% guilds.forEach((guild) => { %>
+                <div class="column">
+                    <figure class="image is-128x128">
+                        <% if(guild.icon) {%>
+
+                        <a href="/guilds/<%= guild.id %>"><img class="is-rounded is-hoverable"
+                                src="https://cdn.discordapp.com/icons/<%= guild.id %>/<%= guild.icon %>"></a>
+                        <% } else {%>
+
+                        <a href="/guilds/<%= guild.id %>"><img title="<%= guild.name %>"
+                                style="border: 2px solid black;" class="is-rounded is-hoverable"
+                                src="https://i.imgur.com/EuNEjGk.png"></a>
+                        <% } %>
+
+                    </figure>
+                </div>
+
+                <% }) %>
+                <% } %>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .hero {
+            background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
+            }
+        }
+    </style>
+</body>
+
+
+</html>

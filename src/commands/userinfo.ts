@@ -13,9 +13,10 @@ export class Cmd extends Command {
       description: "!ui @user"
     })
   }
-  async run(message: Message, [mem]: any, guild: VorteGuild, thisMember: VorteMember) {
+  async run(message: Message, [mem]: any, guild: VorteGuild) {
     const member = await findMember(message, mem) || message.member;
     if (!member) return message.channel.send(`Unable to find that member!`);
+    const thisMember = await new VorteMember(member.id, message.guild!.id)._init();
     const infoEmbed = new VorteEmbed(message).baseEmbed().setDescription(
       `**>** Name: ${member!.user.tag}
      **>** Joined At: ${member!.joinedAt}

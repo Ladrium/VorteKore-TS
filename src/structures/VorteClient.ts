@@ -4,12 +4,14 @@ import { Mute } from "./Mute";
 import { Queue } from "./Queue";
 import { Player } from "./Player";
 import { Command } from "./Command";
+import DBLAPI = require("dblapi.js");
 
 export class VorteClient extends Client {
   commands: Collection<string, Command>;
   aliases: Collection<string, string>;
   handler?: Handler;
   player?: Player;
+  dbl?: DBLAPI;
   constructor(options?: ClientOptions) {
     super(options);
     this.commands = new Collection();
@@ -19,6 +21,7 @@ export class VorteClient extends Client {
       console.log(`${this.user!.username} is ready to rumble!`);
       this.player = new Player(this);
       this.player._init();
+      this.dbl!.postStats(this.guilds.size);
 
       setInterval(async () => {
         const mutes = await Mute.getAll();

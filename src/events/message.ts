@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { VorteClient, VorteMember } from "../structures";
+import { VorteClient, VorteMember, VorteEmbed } from "../structures";
 
 const recently = new Set();
 
@@ -16,7 +16,8 @@ export = async (bot: VorteClient, message: Message) => {
         member.add("xp", xp(25, 2));
         if (member.xp > 2 * (75 * member.level)) {
           member.add("level", 1);
-          message.channel.send(`Level Up! New Level: **${member.level}**`);
+          if(message.guild.id !== "264445053596991498")
+          message.channel.send(new VorteEmbed(message).baseEmbed().setFooter(`Level Up! New Level: **${member.level}**`));
         }
       }
       member.save();

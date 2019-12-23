@@ -23,7 +23,8 @@ module.exports = (bot, message) => __awaiter(void 0, void 0, void 0, function* (
                 member.add("xp", xp(25, 2));
                 if (member.xp > 2 * (75 * member.level)) {
                     member.add("level", 1);
-                    message.channel.send(`Level Up! New Level: **${member.level}**`);
+                    if (message.guild.id !== "264445053596991498")
+                        message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setFooter(`Level Up! New Level: **${member.level}**`));
                 }
             }
             member.save();

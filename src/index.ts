@@ -1,10 +1,10 @@
 import { Handler } from "./structures/Handler";
-import { VorteClient } from "./structures/VorteClient";
+import { VorteClient } from "./structures";
 import { config } from 'dotenv';
 import mongoose from "mongoose";
 import DBL from "dblapi.js";
 
-import startServer from "../web/index.js";
+import startServer from "./web/index.js";
 
 config({
   path: `${__dirname}/../.env`
@@ -22,7 +22,7 @@ const bot = new VorteClient();
 bot.handler = new Handler(bot);
 startServer(bot);
 
-const dbl = new DBL("", bot)
+bot.dbl = new DBL(process.env.DBLTOKEN!, bot);
 
 bot.handler.loadCommands();
 bot.handler.loadEvents();

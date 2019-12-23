@@ -1,9 +1,6 @@
-export interface IData {
-  /**
-* Command name
-* @type {string} Command name
-*/
-  name: string;
+import { VorteModuleOptions } from "../structures/Module";
+
+export interface ICommandOptions extends VorteModuleOptions {
   /**
    * Alias(es)
    * @type {string[]} Command aliases

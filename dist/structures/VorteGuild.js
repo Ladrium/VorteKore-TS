@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const guild_1 = __importDefault(require("../models/guild"));
 class VorteGuild {
     constructor(g) {
-        this.guild;
         this.g = g;
         this._load();
     }

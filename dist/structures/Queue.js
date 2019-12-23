@@ -1,35 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const queues = [];
 class Queue {
-    constructor(guild) {
-        this.guild = guild;
-        this.queue = [];
+    constructor(player) {
+        this.player = player;
+        this.next = [];
     }
-    _init() {
-        queues.push(this);
-        return this;
-    }
-    addSong(data) {
-        this.queue.push(data.tracks[0]);
+    addSong(tracks) {
+        this.next.push(tracks[0]);
     }
     removeSong(position = 0) {
-        if (!this.queue[position])
+        if (!this.next[position])
             return;
         if (position === 0) {
-            this.queue.shift();
+            this.next.shift();
             return;
         }
-        this.queue = this.queue.splice(position, 1);
+        this.next = this.next.splice(position, 1);
     }
     nextSong() {
-        return this.queue[0] || null;
-    }
-    static getQueue(guild) {
-        return queues.find((queue) => queue.guild.id === guild.id) || undefined;
-    }
-    delete() {
-        queues.splice(queues.findIndex((x) => x.guild.id === this.guild.id), 1);
+        return this.next[0] || null;
     }
 }
 exports.Queue = Queue;

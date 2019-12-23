@@ -17,7 +17,10 @@ class Mute {
     constructor(userID, guildID) {
         this.userID = userID;
         this.guildID = guildID;
-        this.mute;
+    }
+    setTime(time) {
+        this.mute.time = time;
+        this.mute.save().catch(console.error);
     }
     _load() {
         this.mute = new mutes_1.default({
@@ -43,10 +46,6 @@ class Mute {
             const thisMute = yield mutes_1.default.findOne({ userID: userID, guildID: guildID });
             return thisMute || null;
         });
-    }
-    setTime(time) {
-        this.mute.time = time;
-        this.mute.save().catch(console.error);
     }
 }
 exports.Mute = Mute;

@@ -1,27 +1,39 @@
-import { IData } from "../interfaces/IData";
 import { Message } from "discord.js";
-import { VorteGuild, VorteMember, VorteClient } from "./";
+import { ICommandOptions } from "../interfaces/IData";
+import { VorteGuild, VorteMember } from "./";
+import { VorteModule } from "./Module";
 
-export class Command {
-  bot: VorteClient;
-  name: string;
-  aliases: string[];
-  category: string;
-  usage: string;
-  description: string | undefined;
-  example: string | undefined;
-  cooldown: number;
-  constructor(bot: VorteClient, data: IData) {
-    this.bot = bot;
-    this.name = data.name;
-    this.aliases = data.aliases || [];
-    this.category = data.category || "Main";
-    this.usage = data.usage || this.name;
-    this.description = data.description;
-    this.example = data.example;
-    this.cooldown = data.cooldown || 0;
+export class Command extends VorteModule {
+  public aliases: string[];
+  public category: string;
+  public usage: string;
+  public description: string | undefined;
+  public example: string | undefined;
+  public cooldown: number;
+
+  public constructor(
+    name: string,
+    {
+      aliases = [],
+      category = "Main",
+      cooldown = 0,
+      description = "",
+      disabled,
+      example = "",
+      usage = ""
+    }: ICommandOptions
+  ) {
+    super(name, { disabled, category })
+    
+    this.aliases = aliases;
+    this.category = category;
+    this.usage = usage;
+    this.description = description;
+    this.example = example;
+    this.cooldown = cooldown;
   }
-  run(message: Message, args: string[] | string, guild: VorteGuild, member: VorteMember) {
+
+  public run(message: Message, args: string[] | string, guild: VorteGuild, member: VorteMember) {
     console.log("This command isnt added yet!");
   }
 }

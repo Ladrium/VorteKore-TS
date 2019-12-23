@@ -8,14 +8,16 @@ class VorteEmbed {
     baseEmbed() {
         return new discord_js_1.MessageEmbed()
             .setAuthor(this.message.author.username, this.message.author.displayAvatarURL())
-            .setFooter(this.message.client.user.username, this.message.client.user.displayAvatarURL())
-            .setColor("#f54b02");
+            .setFooter(`VorteKore | ChaosPhoe`)
+            .setColor("#4b62fa");
     }
     errorEmbed(error) {
-        return this.baseEmbed()
-            .setTitle("ERROR")
-            .setDescription(error)
-            .setColor("#ff0000");
+        const embed = this.baseEmbed()
+            .setTitle("Oops!")
+            .setColor("#ff4255");
+        if (error)
+            embed.setDescription(`Sorry, I ran into an error!\n\`\`\`js\n${error}\`\`\``);
+        return embed;
     }
 }
 exports.VorteEmbed = VorteEmbed;

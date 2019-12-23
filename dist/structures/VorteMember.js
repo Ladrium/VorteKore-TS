@@ -15,9 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const member_1 = __importDefault(require("../models/member"));
 class VorteMember {
     constructor(id, guildID) {
-        this.member;
         this.id = id;
-        this.guildid = guildID;
+        this.guildID = guildID;
         this._init();
     }
     _init() {
@@ -26,7 +25,7 @@ class VorteMember {
             if (!member)
                 member = new member_1.default({
                     id: this.id,
-                    guildID: this.guildid,
+                    guildID: this.guildID,
                     coins: 50,
                     xp: 0,
                     level: 0

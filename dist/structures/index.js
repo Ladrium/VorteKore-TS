@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./Command"));
 __export(require("./Handler"));
 __export(require("./Mute"));
-__export(require("./Player"));
+__export(require("./VortePlayer"));
 __export(require("./Queue"));
 __export(require("./VorteClient"));
 __export(require("./VorteEmbed"));

@@ -1,20 +1,20 @@
 import Member from "../models/member";
 
 export class VorteMember {
-  member: any;
-  id: string;
-  guildid: string;
-  constructor(id: string, guildID: string) {
-    this.member;
-    this.id = id;
-    this.guildid = guildID;
+  public member: any;
+  
+  public  constructor(
+    public id: string, 
+    public guildID: string) 
+  {
     this._init();
   }
-  async _init() {
+
+  public async _init() {
     let member = await Member.findOne({ id: this.id })
     if (!member) member = new Member({
       id: this.id,
-      guildID: this.guildid,
+      guildID: this.guildID,
       coins: 50,
       xp: 0,
       level: 0
@@ -22,22 +22,28 @@ export class VorteMember {
     this.member = member;
     return this;
   };
-  get coins() {
+
+  public  get coins() {
     return this.member.coins;
   }
-  get xp() {
+
+  public get xp() {
     return this.member.xp;
   }
-  get level() {
+
+  public get level() {
     return this.member.level;
   }
-  add(locale: string, amount: number) {
+
+  public add(locale: string, amount: number) {
     this.member[locale] += amount;
   }
-  set(locale: string, toSet: number) {
+
+  public set(locale: string, toSet: number) {
     this.member[locale] = toSet;
   }
-  save() {
+
+  public save() {
     this.member.save().catch(console.error);
   }
 };

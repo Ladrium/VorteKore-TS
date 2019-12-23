@@ -1,20 +1,23 @@
-import { MessageEmbed, MessageEmbedOptions, Message } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 
 export class VorteEmbed {
-  message: Message;
-  constructor(message: Message) {
-    this.message = message;
-  }
-  baseEmbed() {
+  constructor(
+    public message: Message
+  ) {}  
+
+  public baseEmbed(): MessageEmbed {
     return new MessageEmbed()
       .setAuthor(this.message.author.username, this.message.author.displayAvatarURL())
-      .setFooter(this.message.client.user!.username, this.message.client.user!.displayAvatarURL())
-      .setColor("#f54b02");
+      .setFooter(`VorteKore | ChaosPhoe`)
+      .setColor("#4b62fa");
   }
-  errorEmbed(error: string) {
-    return this.baseEmbed()
-      .setTitle("ERROR")
-      .setDescription(error)
-      .setColor("#ff0000")
+
+  public errorEmbed(error?: string): MessageEmbed {
+    const embed = this.baseEmbed()
+      .setTitle("Oops!")
+      .setColor("#ff4255")
+    if (error) 
+      embed.setDescription(`Sorry, I ran into an error!\n\`\`\`js\n${error}\`\`\``);
+    return embed;
   }
 }

@@ -2,18 +2,17 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "outDir": "dist",
+    "outDir": "dist/",
     "removeComments": true,
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "noImplicitThis": true,
-    "allowJs": true
+    "allowJs": true,
+    "declaration": false,
+    "disableSizeLimit": true
   },
-  "include": [
-    "src", "web"
-  ],
   "typedocOptions": {
     "name": "discordutility",
     "readme": "README.md",

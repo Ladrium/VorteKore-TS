@@ -69,3 +69,33 @@ export function formatTime(ms: number) {
     s: seconds < 10 ? "0" + seconds : seconds
   }
 };
+
+export interface PaginateResults {
+  items: any[];
+  page: number;
+  maxPage: number;
+  pageLength: number;
+}
+
+export function paginate(items: any[], page = 1, pageLength = 10): PaginateResults {
+  const maxPage = Math.ceil(items.length / pageLength);
+  if (page < 1) page = 1;
+  if (page > maxPage) page = maxPage;
+  const startIndex = (page - 1) * pageLength;
+
+  return {
+    items: items.length > pageLength ? items.slice(startIndex, startIndex + pageLength) : items,
+    page,
+    maxPage,
+    pageLength
+  };
+}
+
+export function Installed(id: string): boolean {
+  try {
+    require(id);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

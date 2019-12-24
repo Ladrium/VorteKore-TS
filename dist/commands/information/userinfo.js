@@ -10,9 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
-const Command_1 = require("../../lib/classes/Command");
 const util_1 = require("../../util");
-class default_1 extends Command_1.Command {
+class default_1 extends lib_1.Command {
     constructor() {
         super("userinfo", {
             category: "Information",
@@ -21,11 +20,12 @@ class default_1 extends Command_1.Command {
             description: "!ui @user"
         });
     }
-    run(message, [mem], guild, thisMember) {
+    run(message, [mem], guild) {
         return __awaiter(this, void 0, void 0, function* () {
             const member = (yield util_1.findMember(message, mem)) || message.member;
             if (!member)
                 return message.channel.send(`Unable to find that member!`);
+            const thisMember = yield new lib_1.VorteMember(member.id, message.guild.id);
             const infoEmbed = new lib_1.VorteEmbed(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
      **>** Joined At: ${member.joinedAt}
      **>** Created At: ${member.user.createdAt}

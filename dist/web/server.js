@@ -41,7 +41,7 @@ function addRoutes(bot) {
         let user = req.session.user || false;
         res.render("public", { guilds: false, user, bot });
     });
-    exports.app.get("/guilds:id", (req, res) => {
+    exports.app.get("/guilds/:id", (req, res) => {
         const guild = bot.guilds.get(req.params.id);
         if (!guild)
             return res.redirect("/");

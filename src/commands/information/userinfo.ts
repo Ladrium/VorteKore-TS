@@ -1,6 +1,5 @@
 import { Message } from "discord.js";
-import { VorteEmbed, VorteGuild, VorteMember } from "../../lib";
-import { Command } from "../../lib/classes/Command";
+import { VorteEmbed, VorteGuild, VorteMember, Command } from "../../lib";
 import { findMember } from "../../util";
 
 export default class extends Command {
@@ -12,9 +11,10 @@ export default class extends Command {
       description: "!ui @user"
     })
   }
-  async run(message: Message, [mem]: any, guild: VorteGuild, thisMember: VorteMember) {
+  async run(message: Message, [mem]: any, guild: VorteGuild) {
     const member = await findMember(message, mem) || message.member;
     if (!member) return message.channel.send(`Unable to find that member!`);
+    const thisMember = await new VorteMember(member.id, message.guild!.id);
     const infoEmbed = new VorteEmbed(message).baseEmbed().setDescription(
       `**>** Name: ${member!.user.tag}
      **>** Joined At: ${member!.joinedAt}

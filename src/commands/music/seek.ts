@@ -1,0 +1,31 @@
+import { Command } from "../../lib/classes/Command";
+import { VorteClient } from "../../lib/VorteClient";
+import { Message } from "discord.js";
+import { checkDJ, checkPermissions } from "../../util";
+import { VorteMessage, VortePlayer } from "../../lib";
+
+export default class extends Command {
+  public constructor() {
+    super("seek", {
+      category: "Music",
+      cooldown: 0,
+      example: "!seek 5s"
+    });
+  }
+  
+  public async run(message: VorteMessage, [time]: string[]) {
+    const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
+
+    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
+
+    const match = time.match(/(.*)s/)!;
+    if (!match || !match[1]) return message.sem("Please provide a time to skip in (provide it in seconds, Example: !seek 5s)");
+
+    let number = parseInt(match[1]);
+    if (isNaN(number) || match[1].includes("-")) return message.sem("Provide a correct time to seek to (Example: !seek 5s)");
+    
+    number = number * 1000;
+    player.seek(number);
+  }
+}

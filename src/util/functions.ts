@@ -1,6 +1,7 @@
 import { GuildMember, BitFieldResolvable, PermissionString, Message } from "discord.js";
 import fetch from "node-fetch";
-import { VorteGuild } from "../structures/VorteGuild";
+import { VorteGuild, VortePlayer } from "../lib";
+import { TrackInfo } from "discord.js-andesite";
 
 export function checkPermissions(guildMember: GuildMember, permissions: BitFieldResolvable<PermissionString> = "ADMINISTRATOR"): boolean {
   const guild = new VorteGuild(guildMember.guild);
@@ -52,7 +53,7 @@ export const get = async <T>(url: string, options?: any) => {
 
   return { data, error }
 }
-export function formatTime(ms: number) {
+export function _formatTime(ms: number) {
   let day, hour, minute, seconds;
   seconds = Math.floor(ms / 1000);
   minute = Math.floor(seconds / 60);
@@ -69,3 +70,71 @@ export function formatTime(ms: number) {
     s: seconds < 10 ? "0" + seconds : seconds
   }
 };
+
+export interface PaginateResults<T> {
+  items: T[];
+  page: number;
+  maxPage: number;
+  pageLength: number;
+}
+
+export function paginate<T>(items: T[], page = 1, pageLength = 10): PaginateResults<T> {
+  const maxPage = Math.ceil(items.length / pageLength);
+  if (page < 1) page = 1;
+  if (page > maxPage) page = maxPage;
+  const startIndex = (page - 1) * pageLength;
+
+  return {
+    items: items.length > pageLength ? items.slice(startIndex, startIndex + pageLength) : items,
+    page,
+    maxPage,
+    pageLength
+  };
+}
+
+export function Installed(id: string): boolean {
+  try {
+    require(id);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+export function shuffle<T extends any[]>(array: T): T {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+export function progressBar(percent: number, length = 8) {
+  let str = "";
+  for (let i = 0; i < length; i++) {
+    if (i == Math.round(percent * length)) str += "\uD83D\uDD18";
+    else str += "▬";
+  }
+  return str;
+}
+
+export function getVolumeIcon(volume: number) {
+  if (volume == 0) return "\uD83D\uDD07";
+  else if (volume < 33) return "\uD83D\uDD08";
+  else if (volume < 67) return "\uD83D\uDD09";
+  else return "\uD83D\uDD0A";
+}
+
+export function formatTime(duration: number) {
+  const minutes = Math.floor(duration / 60000);
+  const seconds = ((duration % 60000) / 1000).toFixed(0);
+  // @ts-ignore
+  return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+}
+
+export function playerEmbed(player: VortePlayer, current: TrackInfo) {
+  return (player.paused ? "\u23F8" : "\u25B6") + " " +
+    progressBar(player.position / current.info.length) +
+  `\`[${formatTime(player.position)}/${formatTime(current.info.length)}]\`` +
+    getVolumeIcon(player.volume);
+}

@@ -1,40 +1,15 @@
-export interface IData {
-  /**
-* Command name
-* @type {string} Command name
-*/
-  name: string;
-  /**
-   * Alias(es)
-   * @type {string[]} Command aliases
-   */
+import { VorteModuleOptions, VorteMessage } from "../lib";
+import { PermissionFlags } from "discord.js";
+
+export type Permissions = PermissionFlags | PermissionFlags[];
+export type PermissionGetter = (message: VorteMessage) => Permissions | string | string[] | undefined;
+
+export interface ICommandOptions extends VorteModuleOptions {
   aliases?: string[];
-
-  /**
-   * Description
-   * @type {string}
-   */
   description?: string;
-
-  /**
-   * Usage
-   * @type {string}
-   */
   usage?: string;
-
-  /**
-   * Category
-   * @type {string}
-   */
-  category: string;
-  /**
-* Example
-* @type {string}
-*/
   example?: string;
-  /**
-* Cooldown
-* @type {number}
-*/
-  cooldown: number;
+  cooldown?: number;
+  userPermissions?: Permissions | PermissionGetter;
+  botPermissions?: Permissions | PermissionGetter;
 }

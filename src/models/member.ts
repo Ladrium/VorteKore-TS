@@ -7,4 +7,4 @@ const memberSchema = new Schema({
   xp: Number,
   level: Number
 });
-export = model("member", memberSchema);
+export const member = model("member", memberSchema);

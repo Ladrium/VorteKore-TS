@@ -3,14 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Handler_1 = require("./structures/Handler");
-const structures_1 = require("./structures");
+require("./lib/classes/Message");
+const Handler_1 = require("./lib/classes/Handler");
+const VorteClient_1 = require("./lib/VorteClient");
 const dotenv_1 = require("dotenv");
 const mongoose_1 = __importDefault(require("mongoose"));
-const dblapi_js_1 = __importDefault(require("dblapi.js"));
-const index_js_1 = __importDefault(require("./web/index.js"));
+const server_1 = require("./web/server");
+const path_1 = require("path");
 dotenv_1.config({
-    path: `${__dirname}/../.env`
+    path: path_1.join(process.cwd(), ".env")
 });
 mongoose_1.default.connect(process.env.URI, {
     useNewUrlParser: true,
@@ -19,10 +20,16 @@ mongoose_1.default.connect(process.env.URI, {
     if (err)
         console.log(err);
 });
-const bot = new structures_1.VorteClient();
+let dbl;
+const bot = new VorteClient_1.VorteClient();
 bot.handler = new Handler_1.Handler(bot);
-index_js_1.default(bot);
-bot.dbl = new dblapi_js_1.default(process.env.DBLTOKEN, bot);
+server_1.startServer(bot);
 bot.handler.loadCommands();
 bot.handler.loadEvents();
 bot.login(process.env.TOKEN);
+process.on("SIGINT", () => {
+    if (bot.andesite.userId)
+        for (const [id, { node }] of bot.andesite.players)
+            node.leave(id);
+    process.exit(0);
+});

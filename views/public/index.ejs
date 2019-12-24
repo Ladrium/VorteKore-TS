@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include inc/head %>
+<%- include ("inc/head") %>
 
 <body>
     <section class="hero is-fullheight">
         <div class="align-middle">
-            <%- include inc/nav %>
+            <%- include("inc/nav") %>
 
             <% if(guilds) {%>
             <h3>Select a server!</h3>
@@ -15,11 +15,11 @@
                     <figure class="image is-128x128">
                         <% if(guild.icon) {%>
 
-                        <a href="/guilds/<%= guild.id %>"><img class="is-rounded is-hoverable"
+                        <a href="<%= guild.joined ? `/guilds/${guild.id}` : invite %>"><img class="is-rounded is-hoverable"
                                 src="https://cdn.discordapp.com/icons/<%= guild.id %>/<%= guild.icon %>"></a>
                         <% } else {%>
 
-                        <a href="/guilds/<%= guild.id %>"><img title="<%= guild.name %>"
+                        <a href="<%= guild.joined ? `/guilds/${guild.id}` : invite %>"><img title="<%= guild.name %>"
                                 style="border: 2px solid black;" class="is-rounded is-hoverable"
                                 src="https://i.imgur.com/EuNEjGk.png"></a>
                         <% } %>

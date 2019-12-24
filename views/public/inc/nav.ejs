@@ -17,7 +17,9 @@
             <a class="navbar-item" href="/">
                 Home
             </a>
-
+            <a class="navbar-item" href="/guilds">
+                Guilds
+            </a>
             <a class="navbar-item" href="/leaderboard">
                 Leaderboard
             </a>
@@ -54,7 +56,7 @@
                         <div class="dropdown-trigger">
                           <button class="button" aria-haspopup="true" aria-controls="dropdown-menu3">
                             <span class="icon is-small">
-                                <img src="https://cdn.discordapp.com/avatars/<%=user.id%>/<%=user.avatar%>" class="is-rounded" style="border-radius: 50%;">
+                                <img src="https://cdn.discordapp.com/avatars/<%=user.id%>/<%=user.avatar%>" class="is-rounded">
                             </span>
                           </button>
                         </div>
@@ -73,7 +75,7 @@
                 <% } else {%>
                 <div class="buttons">
                     <a class="button is-light"
-                        href="https://discordapp.com/api/oauth2/authorize?client_id=634766962378932224&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fcallback&response_type=code&scope=identify%20guilds">
+                        href="/login">
                         Login
                     </a>
                 </div>

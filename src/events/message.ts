@@ -1,12 +1,12 @@
 import { Message } from "discord.js";
-import { VorteClient, VorteMember, VorteEmbed } from "../structures";
+import { VorteClient, VorteMember, VorteEmbed, VorteMessage } from "../lib";
 
 const recently = new Set();
 
 const coins = (max: number, min: number): number => Math.floor(Math.random() * max) + min;
 const xp = (max: number, min: number): number => Math.floor(Math.random() * max) + min;
 
-export = async (bot: VorteClient, message: Message) => {
+export = async (bot: VorteClient, message: VorteMessage) => {
   if (message.author.bot || !message.guild) return;
   const member = await new VorteMember(message.author.id, message.guild.id)._init();
   if (!recently.has(message.author.id)) {

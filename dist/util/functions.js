@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const VorteGuild_1 = require("../structures/VorteGuild");
+const lib_1 = require("../lib");
 function checkPermissions(guildMember, permissions = "ADMINISTRATOR") {
-    const guild = new VorteGuild_1.VorteGuild(guildMember.guild);
+    const guild = new lib_1.VorteGuild(guildMember.guild);
     return guildMember.hasPermission(permissions, {
         checkAdmin: true,
         checkOwner: true
@@ -71,7 +71,7 @@ exports.get = (url, options) => __awaiter(void 0, void 0, void 0, function* () {
         .catch((error) => error = error);
     return { data, error };
 });
-function formatTime(ms) {
+function _formatTime(ms) {
     let day, hour, minute, seconds;
     seconds = Math.floor(ms / 1000);
     minute = Math.floor(seconds / 60);
@@ -87,5 +87,73 @@ function formatTime(ms) {
         s: seconds < 10 ? "0" + seconds : seconds
     };
 }
-exports.formatTime = formatTime;
+exports._formatTime = _formatTime;
 ;
+function paginate(items, page = 1, pageLength = 10) {
+    const maxPage = Math.ceil(items.length / pageLength);
+    if (page < 1)
+        page = 1;
+    if (page > maxPage)
+        page = maxPage;
+    const startIndex = (page - 1) * pageLength;
+    return {
+        items: items.length > pageLength ? items.slice(startIndex, startIndex + pageLength) : items,
+        page,
+        maxPage,
+        pageLength
+    };
+}
+exports.paginate = paginate;
+function Installed(id) {
+    try {
+        require(id);
+        return true;
+    }
+    catch (error) {
+        return false;
+    }
+}
+exports.Installed = Installed;
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+exports.shuffle = shuffle;
+function progressBar(percent, length = 8) {
+    let str = "";
+    for (let i = 0; i < length; i++) {
+        if (i == Math.round(percent * length))
+            str += "\uD83D\uDD18";
+        else
+            str += "▬";
+    }
+    return str;
+}
+exports.progressBar = progressBar;
+function getVolumeIcon(volume) {
+    if (volume == 0)
+        return "\uD83D\uDD07";
+    else if (volume < 33)
+        return "\uD83D\uDD08";
+    else if (volume < 67)
+        return "\uD83D\uDD09";
+    else
+        return "\uD83D\uDD0A";
+}
+exports.getVolumeIcon = getVolumeIcon;
+function formatTime(duration) {
+    const minutes = Math.floor(duration / 60000);
+    const seconds = ((duration % 60000) / 1000).toFixed(0);
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+}
+exports.formatTime = formatTime;
+function playerEmbed(player, current) {
+    return (player.paused ? "\u23F8" : "\u25B6") + " " +
+        progressBar(player.position / current.info.length) +
+        `\`[${formatTime(player.position)}/${formatTime(current.info.length)}]\`` +
+        getVolumeIcon(player.volume);
+}
+exports.playerEmbed = playerEmbed;

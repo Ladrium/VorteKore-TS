@@ -8,14 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const structures_1 = require("../structures");
+const lib_1 = require("../lib");
 const recently = new Set();
 const coins = (max, min) => Math.floor(Math.random() * max) + min;
 const xp = (max, min) => Math.floor(Math.random() * max) + min;
 module.exports = (bot, message) => __awaiter(void 0, void 0, void 0, function* () {
     if (message.author.bot || !message.guild)
         return;
-    const member = yield new structures_1.VorteMember(message.author.id, message.guild.id)._init();
+    const member = yield new lib_1.VorteMember(message.author.id, message.guild.id)._init();
     if (!recently.has(message.author.id)) {
         if (Math.random() > 0.50) {
             member.add("coins", coins(50, 5));
@@ -24,7 +24,7 @@ module.exports = (bot, message) => __awaiter(void 0, void 0, void 0, function* (
                 if (member.xp > 2 * (75 * member.level)) {
                     member.add("level", 1);
                     if (message.guild.id !== "264445053596991498")
-                        message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setFooter(`Level Up! New Level: **${member.level}**`));
+                        message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setFooter(`Level Up! New Level: **${member.level}**`));
                 }
             }
             member.save();

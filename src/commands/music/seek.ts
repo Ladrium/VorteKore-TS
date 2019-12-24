@@ -1,7 +1,8 @@
-import { Command } from "../../structures/Command";
-import { VorteClient } from "../../structures/VorteClient";
+import { Command } from "../../lib/classes/Command";
+import { VorteClient } from "../../lib/VorteClient";
 import { Message } from "discord.js";
 import { checkDJ, checkPermissions } from "../../util";
+import { VorteMessage, VortePlayer } from "../../lib";
 
 export default class extends Command {
   public constructor() {
@@ -12,17 +13,17 @@ export default class extends Command {
     });
   }
   
-  public async run({ guild, member, reply, channel }: Message, [time]: string) {
-    if (!checkDJ(member!) && !checkPermissions(member!, "ADMINISTRATOR")) return channel.send("You don't have permissions for this command!");
+  public async run(message: VorteMessage, [time]: string[]) {
+    const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
 
-    const player = this.bot.andesite!.players!.get(guild!.id)!;
-    if (!player || !player.playing) return channel.send("The bot isn't playing any music yet!");
+    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
 
     const match = time.match(/(.*)s/)!;
-    if (!match || !match[1]) return channel.send("Please provide a time to skip in (provide it in seconds, Example: !seek 5s)");
+    if (!match || !match[1]) return message.sem("Please provide a time to skip in (provide it in seconds, Example: !seek 5s)");
 
     let number = parseInt(match[1]);
-    if (isNaN(number) || match[1].includes("-")) return channel.send("Provide a correct time to seek to (Example: !seek 5s)");
+    if (isNaN(number) || match[1].includes("-")) return message.sem("Provide a correct time to seek to (Example: !seek 5s)");
     
     number = number * 1000;
     player.seek(number);

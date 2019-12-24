@@ -1,5 +1,4 @@
-import { VorteGuild } from "../../structures";
-import { Event } from "../../structures/Event";
+import { VorteGuild, Event } from "../../lib";
 import { TextChannel, GuildMember } from "discord.js";
 import { formatString } from "../../util";
 

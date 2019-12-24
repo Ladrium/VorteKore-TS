@@ -1,4 +1,4 @@
-import { Command, VorteClient, VorteEmbed } from "../../structures";
+import { Command, VorteClient, VorteEmbed, VorteMessage, VortePlayer } from "../../lib";
 import { Message } from "discord.js";
 import { checkDJ, checkPermissions } from "../../util";
 
@@ -7,19 +7,20 @@ export default class extends Command {
     super("volume", {
       aliases: ["vol"],
       category: "Music",
-      cooldown: 0
+      cooldown: 0,
+      userPermissions(message: VorteMessage) {
+        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj"))
+          return "DJ";
+        return;
+      }
     });
   }
   
-  public async run(message: Message, [volume]: any) {
-    if (!checkDJ(message.member!) && !checkPermissions(message.member!)) return message.reply("Not enough permissions!");
-    if (!message.guild!.me!.voice) return message.reply("I'm not playing anything!");
-    if (!message.member!.voice || message.member!.voice.channelID !== message.guild!.me!.voice.channelID)
-      return message.reply("You need to be in the same voice channel as the bot!");
+  public async run(message: VorteMessage, [volume]: any) {
+    const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
+    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player.in(message.member!)) return message.sem("Please join my voice channel.")
 
-    const player = this.bot!.andesite!.players!.get(message.guild!.id);
-    if (!player || !player.playing) return message.reply("Not playing anything right now!");
-    
     if (isNaN(volume) || volume.includes("-") || volume.includes(".") || volume > 100 || volume < 1) return message.reply("Please return a valid number between 1-100");
     volume = parseInt(volume);
     await player.setVolume(volume);

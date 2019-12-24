@@ -1,6 +1,7 @@
-import { Command } from "../../structures/Command";
-import { VorteClient, VorteEmbed } from "../../structures";
+import { Command } from "../../lib/classes/Command";
+import { VorteClient, VorteEmbed, VorteGuild } from "../../lib";
 import { Message } from "discord.js";
+import ms = require("ms");
 
 export default class extends Command {
   public constructor() {
@@ -10,29 +11,24 @@ export default class extends Command {
     });
   }
 
-  public run(message: Message, args: string[]) {
-    let command: Command | undefined;
-    if (args[0]) command = this.bot.handler!.getCommand(args[0]);
+  public run(message: Message, args: string[], { prefix }: VorteGuild) {
     const helpEmbed = new VorteEmbed(message).baseEmbed()
-      .setTitle("Help")
-    if (!command) {
-      const commands = this.bot.handler!.getAllCommands().commands;
-      const categories: string[] = [];
-      commands.forEach((cmd: Command) => {
-        if (!categories.includes(cmd.category)) categories.push(cmd.category);
-      });
-      categories.forEach((cat: string) => {
-        const cmds = commands.filter((cmd: Command) => cmd.category === cat);
-        helpEmbed.addField(cat, cmds.map((x) => `\`\`${x.name}\`\``).join(",\n"), true)
-      });
-    } else {
-      let info = "";
-      Object.keys(command).forEach((x: any) => {
-        if (x === "bot") return;
-        if (x === "name") return helpEmbed.setTitle(`Help: ${x}`)
-        if (x === "aliases") return command![x as "aliases"][0] ? info += `aliases: ${command![x as "aliases"].map((y) => `\`\`${y}\`\``).join(", ")}\n` : null;
-        if (command![x as "category" | "cooldown" | "description" | "usage"]) info += `${x}: ${command![x as "category" | "cooldown" | "description" | "usage"]}\n`;
-      });
+
+    if (!args[0] || !this.bot.commands.some(v => v.name.ignoreCase(args[0]) || v.aliases.some(a => a.ignoreCase(args[0])))) {
+      helpEmbed.setAuthor("All Commands", message.author.displayAvatarURL());
+      for (const category of this.handler.cateories) {
+        const commands = this.handler.getCategory(category);
+        if (commands.size)
+          helpEmbed.addField(category, commands.map(c => `\`${c.name}\``).join(",\n"), true)
+      }
+    } else { 
+      let info = "", command = this.handler.getCommand(args[0])!;
+      info += `**Category**: ${command.category}\n`;
+      info += `**Description**: ${command.description || "None"}\n`;
+      info += `**Cooldown**: ${ms(command.cooldown)}\n`;
+      info += `**Aliases**: ${command.aliases.length ? command.aliases.map(a => `\`${a}\``).join(", ") : "None"}`
+
+      helpEmbed.setAuthor(`${prefix}${command.name} ${command.usage}`, message.author.displayAvatarURL())
       helpEmbed.setDescription(info)
     }
     message.channel.send(helpEmbed);

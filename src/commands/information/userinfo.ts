@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
-import { VorteEmbed, VorteGuild, VorteMember } from "../../structures";
-import { Command } from "../../structures/Command";
+import { VorteEmbed, VorteGuild, VorteMember } from "../../lib";
+import { Command } from "../../lib/classes/Command";
 import { findMember } from "../../util";
 
 export default class extends Command {

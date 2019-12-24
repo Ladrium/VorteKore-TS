@@ -1,24 +1,21 @@
-import { Command } from "../../structures/Command";
-import { VorteClient } from "../../structures/VorteClient";
-import { Message } from "discord.js";
-import { VorteGuild } from "../../structures/VorteGuild";
+import { Command, VorteMessage, VortePlayer } from "../../lib";
 
 export default class extends Command {
   public constructor() {
     super("pause", {
-      aliases: ["stop"],
       category: "Music",
-      cooldown: 0
+      description: "Pauses the player if not already resumed."
     });
   }
 
-  public async run({ guild, member, reply, channel }: Message, query: string[], gui: VorteGuild) {
-    const player = this.bot.andesite.players!.get(guild!.id);
+  public async run(message: VorteMessage) {
+    const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
 
-    if (!player) return reply(` There's nothing being played`);
-    if (player.paused) return reply(` Nothing is being played, use  ${gui.prefix}resume to resume or ${gui.prefix}play <query> to play`)
+    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
+    if (player.paused) return message.sem(`I'm already paused... :p`);
 
-    await player.pause()
-    channel.send(`Successfully paused the music`)
+    await player.pause();
+    return message.sem(`Successfully paused the player!`);
   }
 }

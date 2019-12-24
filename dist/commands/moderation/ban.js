@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Command_1 = require("../../structures/Command");
+const lib_1 = require("../../lib");
 const util_1 = require("../../util");
-class default_1 extends Command_1.Command {
+class default_1 extends lib_1.Command {
     constructor() {
         super("ban", {
             category: "Moderation",
@@ -15,19 +14,19 @@ class default_1 extends Command_1.Command {
     }
     run(message, [mem, ...reason], guild) {
         if (!util_1.checkPermissions(message.member, "BAN_MEMBERS"))
-            return message.channel.send(new structures_1.VorteEmbed(message).errorEmbed("Missing Permissions!"));
+            return message.channel.send(new lib_1.VorteEmbed(message).errorEmbed("Missing Permissions!"));
         message.delete();
         if (!mem)
-            return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban"));
+            return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban"));
         const member = message.mentions.members.first() || message.guild.members.find((r) => {
             return r.displayName === mem;
         }) || message.guild.members.get(mem);
         if (!member)
             return message.channel.send("Couldn't find that user!");
         if (message.author.id === member.user.id)
-            return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("You can't ban yourself"));
+            return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("You can't ban yourself"));
         if (message.member.roles.highest <= member.roles.highest)
-            return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("The user has higher role than you."));
+            return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("The user has higher role than you."));
         reason = reason[0] ? reason.join(" ") : "No reason";
         member.ban({ reason: reason });
         message.channel.send("Succesfully banned the user.");
@@ -36,7 +35,7 @@ class default_1 extends Command_1.Command {
             return;
         guild.increaseCase();
         const logChannel = member.guild.channels.get(channel.id);
-        logChannel.send(new structures_1.VorteEmbed(message)
+        logChannel.send(new lib_1.VorteEmbed(message)
             .baseEmbed()
             .setTimestamp()
             .setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `)

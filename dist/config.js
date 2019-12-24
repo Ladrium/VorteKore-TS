@@ -4,6 +4,7 @@ exports.nodes = [
     {
         host: "localhost",
         port: 5000,
-        name: "main"
+        name: "main",
+        auth: "youshall"
     }
 ];

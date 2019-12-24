@@ -8,48 +8,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const ms_1 = __importDefault(require("ms"));
-const structures_1 = require("../../structures");
-const Command_1 = require("../../structures/Command");
-class default_1 extends Command_1.Command {
+const lib_1 = require("../../lib");
+class default_1 extends lib_1.Command {
     constructor() {
         super("play", {
             category: "Music",
-            cooldown: 2000
+            cooldown: 2000,
+            usage: "<query>",
+            description: "Plays a song in your voide channel."
         });
     }
-    run(message, args) {
+    run(message, [...query]) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { reply, channel, guild, member } = message;
-            if (!args[0])
-                return reply("No query to search for provided!");
-            if (!member.voice)
-                return reply("You need to be in a VoiceChannel this command!");
-            if (guild.me.voice && guild.me.voice.channel && guild.me.voice.channelID !== member.voice.channelID)
-                return reply("You need to be in the same VoiceChannel as me to use this command!");
-            let player = this.bot.andesite.players.get(guild.id);
+            let player = this.bot.andesite.players.get(message.guild.id);
+            if (!player && !message.member.voice.channel)
+                return message.sem("Please join a voice channel.");
+            if (player && !player.in(message.member))
+                return message.sem("Please join the voice channel I'm in.", { type: "error" });
+            if (!query.length)
+                return message.sem("No query to search for provided!", { type: "error" });
             if (!player)
                 player = this.bot.andesite.nodes.ideal.first().join({
                     channelId: message.member.voice.channelID,
                     guildId: message.guild.id
-                });
-            const { loadType, severity, cause, tracks } = yield this.bot.andesite.search(args.join(" "));
-            if (!tracks && ["LOAD_FAILED", "NO_MATCHES"].includes(loadType))
-                return reply("Couldn't find that song!");
-            const info = tracks[0].info;
-            const musicEmbed = new structures_1.VorteEmbed(message).baseEmbed()
-                .setAuthor(`Added to the Queue.`, message.author.displayAvatarURL())
-                .setDescription(`**[${info.title}](${info.uri})**\n*${ms_1.default(info.length)} long*`);
-            channel.send(musicEmbed);
-            if (!player.playing) {
-                yield player.play(tracks[0].track);
-                player.on("end", (data) => player.ended.bind(player, data, message));
+                }).useMessage(message);
+            let res = yield this.bot.andesite.search(query.join(" "), player.node), msg;
+            if (['TRACK_LOADED', 'SEARCH_RESULT'].includes(res.loadType)) {
+                yield player.queue.add([res.tracks[0]], message.author.id);
+                msg = `[${res.tracks[0].info.title}](${res.tracks[0].info.uri})`;
             }
-            ;
+            else if (res.loadType === 'PLAYLIST_LOADED') {
+                yield player.queue.add(res.tracks, message.author.id);
+                msg = res.playlistInfo.name;
+            }
+            else
+                return message.sem("Sorry, I couldn't find what you were looking for.", { type: "error" });
+            if (!player.playing && !player.paused)
+                yield player.queue.start();
+            return message.sem(`Queued up **${msg}** :)`);
         });
     }
     ;

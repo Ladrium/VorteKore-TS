@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { Command } from "../../structures";
+import { Command } from "../../lib";
 
 export default class extends Command {
   constructor() {

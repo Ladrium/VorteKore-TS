@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-class default_1 extends structures_1.Command {
+const lib_1 = require("../../lib");
+class default_1 extends lib_1.Command {
     constructor() {
         super("invite", {
             category: "Information",

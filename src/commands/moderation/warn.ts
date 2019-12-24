@@ -1,12 +1,12 @@
-import { Command } from "../../structures/Command";
-import { VorteClient, VorteGuild, VorteEmbed } from "../../structures";
+import { Command } from "../../lib/classes/Command";
+import { VorteClient, VorteGuild, VorteEmbed } from "../../lib";
 import { Message, TextChannel } from "discord.js";
 import { checkPermissions } from "../../util";
 
 export default class extends Command {
   constructor() {
     super("warn", {
-      category: "Information",
+      category: "Moderation",
       cooldown: 5000,
       description: "Warns a member",
       usage: "!warn @user reason",

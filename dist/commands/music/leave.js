@@ -9,9 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Command_1 = require("../../structures/Command");
-class default_1 extends Command_1.Command {
+const lib_1 = require("../../lib");
+class default_1 extends lib_1.Command {
     constructor() {
         super("leave", {
             aliases: ["stop"],
@@ -23,9 +22,12 @@ class default_1 extends Command_1.Command {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.andesite.players.get(message.guild.id);
             if (!player)
-                return message.reply(" Bot is not playing music");
+                return message.sem("The bot isn't in a voice channel.");
+            if (!player.in(message.member))
+                return message.sem("Please join the voice channel I'm in.", { type: "error" });
             yield player.stop();
-            return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Successfully left the channel"));
+            yield player.node.leave(player.guildId);
+            return message.sem("Successfully left the voice channel.");
         });
     }
 }

@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Command_1 = require("../../structures/Command");
-const structures_1 = require("../../structures");
+const Command_1 = require("../../lib/classes/Command");
+const lib_1 = require("../../lib");
 const node_fetch_1 = __importDefault(require("node-fetch"));
 class default_1 extends Command_1.Command {
     constructor() {
@@ -28,7 +28,7 @@ class default_1 extends Command_1.Command {
     run(message) {
         return __awaiter(this, void 0, void 0, function* () {
             const { image } = yield node_fetch_1.default("https://api.chaosphoe.xyz/meme").then(res => res.json());
-            const memeEmbed = new structures_1.VorteEmbed(message)
+            const memeEmbed = new lib_1.VorteEmbed(message)
                 .baseEmbed()
                 .setImage(image);
             message.channel.send(memeEmbed);

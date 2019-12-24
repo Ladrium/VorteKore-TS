@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Command_1 = require("../../structures/Command");
-const structures_1 = require("../../structures");
+const Command_1 = require("../../lib/classes/Command");
+const lib_1 = require("../../lib");
 const node_fetch_1 = __importDefault(require("node-fetch"));
 class default_1 extends Command_1.Command {
     constructor() {
@@ -27,7 +27,7 @@ class default_1 extends Command_1.Command {
     run(message, [...image]) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!image[0])
-                return message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a query to search."));
+                return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a query to search."));
             let link = `https://imgur.com/r/${image.join(" ")}/hot.json`;
             const { data } = yield node_fetch_1.default(link).then(res => res.json());
             link = data[Math.floor(Math.random() * data.length)];
@@ -36,7 +36,7 @@ class default_1 extends Command_1.Command {
             link = `https://i.imgur.com/${link.hash}${link.ext}`;
             while (!link)
                 data[Math.floor(Math.random() * data.length)];
-            const emb = new structures_1.VorteEmbed(message).baseEmbed()
+            const emb = new lib_1.VorteEmbed(message).baseEmbed()
                 .setColor("#000000")
                 .setImage(link);
             if (link.title)

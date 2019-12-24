@@ -1,32 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include ("inc/head") %>
+<%- include inc/head %>
 
-<body class="bg-secondary">
-    <%- include ("inc/nav") %>
-    <table class="table table-dark table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">Command</th>
-      <th scope="col">Description</th>
-      <th scope="col">Usage</th>
-      <th scope="col">Example</th>
-      <th scope="col">Aliases</th>
-    </tr>
-  </thead>
-  <tbody>
-      Leonardo ist cool
-    <% commands.forEach((command) => { %>
-    <tr>
-      <th scope="row"> <%= command.name %> </th>
-      <td><%= command.description || "No Description" %></td>
-      <td><%= command.usage %></td>
-      <td><%= command.example || "No Example" %></td>
-      <td><%= command.aliases.join(", ") || "No Aliases" %></td>
-    </tr>
-    <% }) %>
-  </tbody>
-</table>
-</body>pö7iu
+<body>
+  <section class="hero is-fullheight">
+    <div class="align-middle">
+      <%- include inc/nav %>
+      <table class="table">
+        <thead>
+          <tr class="has-background-primary">
+            <th>Command</th>
+            <th>Description</th>
+            <th>Usage</th>
+            <th>Example</th>
+            <th>Aliases</th>
+          </tr>
+        </thead>
+        <% commands.forEach((command) => { %>
+        <tr>
+          <tbody class="has-background-light">
+            <th scope="row"> <%= command.name %> </th>
+            <td><%= command.description || "No Description" %></td>
+            <td><%= command.usage %></td>
+            <td><%= command.example || "No Example" %></td>
+            <td><%= command.aliases.join(", ") || "No Aliases" %></td>
+        </tr>
+        <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <style>
+    .hero {
+      background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
+    }
+
+    @media (max-width: 1024px) {
+      .hero {
+        background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
+      }
+    }
+  </style>
+</body>
 
 </html>

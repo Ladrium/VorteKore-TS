@@ -9,10 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Event_1 = require("../../structures/Event");
+const lib_1 = require("../../lib");
 const util_1 = require("../../util");
-class default_1 extends Event_1.Event {
+class default_1 extends lib_1.Event {
     constructor() {
         super("new-member", {
             category: "guild",
@@ -21,7 +20,7 @@ class default_1 extends Event_1.Event {
     }
     run(member) {
         return __awaiter(this, void 0, void 0, function* () {
-            const guild = yield new structures_1.VorteGuild(member.guild);
+            const guild = yield new lib_1.VorteGuild(member.guild);
             const { channel, enabled, message } = guild.welcome;
             if (!enabled)
                 return;

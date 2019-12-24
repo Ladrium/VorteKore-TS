@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Event_1 = require("../../structures/Event");
-class default_1 extends Event_1.Event {
+const lib_1 = require("../../lib");
+const lib_2 = require("../../lib");
+class default_1 extends lib_2.Event {
     constructor() {
         super("guild-created", {
             category: "guild",
@@ -20,7 +20,7 @@ class default_1 extends Event_1.Event {
     }
     run(guild) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield new structures_1.VorteGuild(guild);
+            yield new lib_1.VorteGuild(guild);
         });
     }
     ;

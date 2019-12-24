@@ -9,27 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const util_1 = require("../../util");
-class default_1 extends structures_1.Command {
+const lib_1 = require("../../lib");
+class default_1 extends lib_1.Command {
     constructor() {
         super("volume", {
             aliases: ["vol"],
             category: "Music",
-            cooldown: 0
+            cooldown: 0,
+            userPermissions(message) {
+                if (!message.member.roles.some((role) => role.name.toLowerCase() === "dj"))
+                    return "DJ";
+                return;
+            }
         });
     }
     run(message, [volume]) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!util_1.checkDJ(message.member) && !util_1.checkPermissions(message.member))
-                return message.reply("Not enough permissions!");
-            if (!message.guild.me.voice)
-                return message.reply("I'm not playing anything!");
-            if (!message.member.voice || message.member.voice.channelID !== message.guild.me.voice.channelID)
-                return message.reply("You need to be in the same voice channel as the bot!");
             const player = this.bot.andesite.players.get(message.guild.id);
-            if (!player || !player.playing)
-                return message.reply("Not playing anything right now!");
+            if (!player)
+                return message.sem("The bot isn't in a voice channel.");
+            if (!player.in(message.member))
+                return message.sem("Please join my voice channel.");
             if (isNaN(volume) || volume.includes("-") || volume.includes(".") || volume > 100 || volume < 1)
                 return message.reply("Please return a valid number between 1-100");
             volume = parseInt(volume);

@@ -1,6 +1,5 @@
 import { Message, TextChannel } from "discord.js";
-import { VorteEmbed, VorteGuild } from "../../structures";
-import { Command } from "../../structures/Command";
+import { VorteEmbed, VorteGuild, Command } from "../../lib";
 import { checkPermissions } from "../../util";
 
 export default class extends Command {

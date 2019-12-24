@@ -1,5 +1,5 @@
-import { Command } from "../../structures/Command";
-import { VorteClient, VorteEmbed } from "../../structures";
+import { Command } from "../../lib/classes/Command";
+import { VorteClient, VorteEmbed } from "../../lib";
 import { Message, MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
 

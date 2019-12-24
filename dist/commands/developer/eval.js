@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Command_1 = require("../../structures/Command");
+const lib_1 = require("../../lib");
+const Command_1 = require("../../lib/classes/Command");
 class default_1 extends Command_1.Command {
     constructor() {
         super("eval", {
@@ -35,7 +35,7 @@ class default_1 extends Command_1.Command {
                         depth: 0,
                     });
                 }
-                embed = new structures_1.VorteEmbed(message)
+                embed = new lib_1.VorteEmbed(message)
                     .baseEmbed()
                     .setTitle("Evaluation")
                     .addField("Input", `\`\`\`js\n${codein}\`\`\``)
@@ -43,7 +43,7 @@ class default_1 extends Command_1.Command {
                     .addField("Type", `\`\`\`js\n${ctype}\`\`\``);
             }
             catch (e) {
-                embed = new structures_1.VorteEmbed(message)
+                embed = new lib_1.VorteEmbed(message)
                     .baseEmbed()
                     .setTitle("Error")
                     .setColor("#ff0000")

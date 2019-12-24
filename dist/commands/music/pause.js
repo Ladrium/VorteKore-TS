@@ -9,24 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Command_1 = require("../../structures/Command");
-class default_1 extends Command_1.Command {
+const lib_1 = require("../../lib");
+class default_1 extends lib_1.Command {
     constructor() {
         super("pause", {
-            aliases: ["stop"],
             category: "Music",
-            cooldown: 0
+            description: "Pauses the player if not already resumed."
         });
     }
-    run({ guild, member, reply, channel }, query, gui) {
+    run(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            const player = this.bot.andesite.players.get(guild.id);
+            const player = this.bot.andesite.players.get(message.guild.id);
             if (!player)
-                return reply(` There's nothing being played`);
+                return message.sem("The bot isn't in a voice channel.");
+            if (!player.in(message.member))
+                return message.sem("Please join the voice channel I'm in.", { type: "error" });
             if (player.paused)
-                return reply(` Nothing is being played, use  ${gui.prefix}resume to resume or ${gui.prefix}play <query> to play`);
+                return message.sem(`I'm already paused... :p`);
             yield player.pause();
-            channel.send(`Successfully paused the music`);
+            return message.sem(`Successfully paused the player!`);
         });
     }
 }

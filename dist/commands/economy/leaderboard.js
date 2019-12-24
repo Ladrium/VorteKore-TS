@@ -8,14 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const member_1 = __importDefault(require("../../models/member"));
-const structures_1 = require("../../structures");
+const lib_1 = require("../../lib");
 const util_1 = require("../../util");
-class default_1 extends structures_1.Command {
+const member_1 = require("../../models/member");
+class default_1 extends lib_1.Command {
     constructor() {
         super("leaderboard", {
             aliases: ["lb"],
@@ -25,7 +22,7 @@ class default_1 extends structures_1.Command {
     }
     run(message, [page = 1]) {
         return __awaiter(this, void 0, void 0, function* () {
-            let members = (yield member_1.default.find({ guildID: message.guild.id }));
+            let members = (yield member_1.member.find({ guildID: message.guild.id }));
             members = members.sort((a, b) => b.xp - a.xp);
             if (page > members.length)
                 page = 1;
@@ -35,7 +32,7 @@ class default_1 extends structures_1.Command {
                 str += `[XP ${String(member.xp).padStart(xpPadding)} LVL ${String(member.level).padStart(levelPadding)}] : "${user.username}"\n`;
             }
             str += `Page : ${page}`;
-            const leaderboardEmbed = new structures_1.VorteEmbed(message)
+            const leaderboardEmbed = new lib_1.VorteEmbed(message)
                 .baseEmbed()
                 .setAuthor("Leaderboard", message.author.displayAvatarURL())
                 .setDescription("\`\`\`prolog\n" + str + "\`\`\`");

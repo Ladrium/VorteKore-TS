@@ -1,41 +1,42 @@
 import { Message } from "discord.js";
 import ms from "ms";
-import { VorteEmbed, VortePlayer } from "../../structures";
-import { Command } from "../../structures/Command";
+import { VorteEmbed, VortePlayer, Command } from "../../lib";
+import { VorteMessage } from "../../lib/classes/Message";
 
 
 export default class extends Command {
   public constructor() {
     super("play", {
       category: "Music",
-      cooldown: 2000
+      cooldown: 2000,
+      usage: "<query>",
+      description: "Plays a song in your voide channel."
     })
   }
 
-  public async run(message: Message, args: string[]) {
-    const { reply, channel, guild, member } = message;
-    if (!args[0]) return reply("No query to search for provided!");
-    if (!member!.voice) return reply("You need to be in a VoiceChannel this command!");
-    if (guild!.me!.voice && guild!.me!.voice.channel && guild!.me!.voice.channelID !== member!.voice.channelID) return reply("You need to be in the same VoiceChannel as me to use this command!");
+  public async run(message: VorteMessage, [ ...query ]: string[]) {
+    let player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
+    
+    if (!player && !message.member!.voice.channel) return message.sem("Please join a voice channel.");
+    if (player && !player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
+    if (!query.length) return message.sem("No query to search for provided!", { type: "error" });
 
-    let player = this.bot.andesite!.players!.get(guild!.id);
-    if (!player) player = <VortePlayer> this.bot.andesite.nodes.ideal.first()!.join({
+    if (!player) player = <VortePlayer> this.bot.andesite.nodes.ideal.first()!.join<VortePlayer>({
       channelId: message.member!.voice.channelID!,
       guildId: message.guild!.id
-    });
+    }).useMessage(message);
 
-    const { loadType, severity, cause, tracks } = await this.bot.andesite!.search(args.join(" "));
-    if (!tracks && ["LOAD_FAILED", "NO_MATCHES"].includes(loadType)) return reply("Couldn't find that song!");
+    let res = await this.bot.andesite.search(query.join(" "), player.node), msg;
+    if (['TRACK_LOADED', 'SEARCH_RESULT'].includes(res.loadType)) {
+      await player.queue.add([ res.tracks![0] ], message.author.id);
+      msg = `[${res.tracks![0].info.title}](${res.tracks![0].info.uri})`;
+    } else if (res.loadType === 'PLAYLIST_LOADED') {
+      await player.queue.add(res.tracks!, message.author.id);
+      msg = res.playlistInfo!.name;
+    } else return message.sem("Sorry, I couldn't find what you were looking for.", { type: "error" });
 
-    const info = tracks![0].info;
-    const musicEmbed = new VorteEmbed(message).baseEmbed()
-      .setAuthor(`Added to the Queue.`, message.author.displayAvatarURL())
-      .setDescription(`**[${info.title}](${info.uri})**\n*${ms(info.length)} long*`);
-
-    channel.send(musicEmbed);
-    if (!player!.playing) {
-      await player!.play(tracks![0].track)
-      player!.on("end", (data: object) => player!.ended.bind(player, data, message));
-    };
+    if (!player.playing && !player.paused) await player.queue.start();
+    
+    return message.sem(`Queued up **${msg}** :)`);
   };
 }

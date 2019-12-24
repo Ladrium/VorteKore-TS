@@ -9,9 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Event_1 = require("../../structures/Event");
-class default_1 extends Event_1.Event {
+const lib_1 = require("../../lib");
+class default_1 extends lib_1.Event {
     constructor() {
         super("message-deleted", {
             category: "guild",
@@ -20,7 +19,7 @@ class default_1 extends Event_1.Event {
     }
     run(oldmsg, newmsg, bot = this.bot) {
         return __awaiter(this, void 0, void 0, function* () {
-            const guild = yield new structures_1.VorteGuild(oldmsg.guild);
+            const guild = yield new lib_1.VorteGuild(oldmsg.guild);
             if (!oldmsg || !newmsg || oldmsg.content === newmsg.content)
                 return;
             const { channel, enabled } = guild.getLog("editMessage");
@@ -32,7 +31,7 @@ class default_1 extends Event_1.Event {
             const ch = oldmsg.guild.channels.get(channel);
             if (!ch)
                 return;
-            ch.send(new structures_1.VorteEmbed(newmsg)
+            ch.send(new lib_1.VorteEmbed(newmsg)
                 .baseEmbed()
                 .setTitle(`Event: Message Update [Case ID: ${guild.case}]\n`)
                 .addField(`Old Message:`, oldcon)

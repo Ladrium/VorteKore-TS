@@ -1,6 +1,5 @@
 import { Message } from "discord.js";
-import { VorteMember } from "../../structures";
-import { Event } from "../../structures/Event";
+import { VorteMember, Event, VorteMessage } from "../../lib";
 
 export default class extends Event {
   private coins = (max: number, min: number): number => Math.floor(Math.random() * max) + min;
@@ -13,7 +12,7 @@ export default class extends Event {
     });
   }
 
-  async run(message: Message, bot = this.bot) {
+  async run(message: VorteMessage, bot = this.bot) {
     if (message.author.bot || !message.guild) return;
     const member = await new VorteMember(message.author.id, message.guild.id)._init();
     if (!this.recently.has(message.author.id)) {
@@ -23,7 +22,7 @@ export default class extends Event {
           member.add("xp", this.xp(25, 2));
           if (member.xp > 2 * (75 * member.level)) {
             member.add("level", 1);
-            message.channel.send(`Level Up! New Level: **${member.level}**`);
+            message.sem(`Congrats! Your new level is **${member.level}**`);
           }
         }
         member.save();

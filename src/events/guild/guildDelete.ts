@@ -1,6 +1,5 @@
 import { Guild } from "discord.js";
-import { VorteGuild } from "../../structures";
-import { Event } from "../../structures/Event";
+import { VorteGuild, Event } from "../../lib";
 
 export default class extends Event {
   public constructor() {

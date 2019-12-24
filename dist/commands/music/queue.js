@@ -9,29 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Command_1 = require("../../structures/Command");
-class default_1 extends Command_1.Command {
+const lib_1 = require("../../lib");
+const util_1 = require("../../util");
+const ms = require("ms");
+class default_1 extends lib_1.Command {
     constructor() {
         super("queue", {
             category: "Music",
-            cooldown: 0,
-            example: "!queue"
+            example: "!queue",
+            description: "Shows the current and next up songs."
         });
     }
-    run(message, [time]) {
+    run(message, [page], guild) {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.andesite.players.get(message.guild.id);
-            if (!player || !player.playing)
-                return message.channel.send("The bot isn't playing any music yet!");
-            const queue = this.bot.queues.get(message.guild.id);
-            if (!queue.next[0])
-                return message.reply("Nothing queued right now!");
-            const queueEmbed = new structures_1.VorteEmbed(message).baseEmbed()
-                .setTitle("Queue")
-                .addField("Now Playing", `**[${queue.next[0].info.title}](${queue.next[0].info.uri})**`);
-            if (queue.next[1])
-                queueEmbed.setDescription(queue.next.slice(1, 10).map((song, i) => `${i + 1}. **[${song.info.title}](${song.info.uri})**`));
+            if (!player)
+                return message.sem("The bot isn't in a voice channel.");
+            if (!player.queue.np.song)
+                return message.sem(`Hmmmm... the queue is empty, you should some more songs with \`${guild.prefix}play\``);
+            let total = player.queue.next.reduce((prev, song) => prev + song.info.length, 0), paginated = util_1.paginate(player.queue.next, parseInt(page || "1")), index = (paginated.page - 1) * 10, upNext = "";
+            paginated.items.length
+                ? upNext += paginated.items.map(song => `${++index}. **[${song.info.title.trunc(30, true)}](${song.info.uri})** *[<@${song.requester}> ${ms(song.info.length)}]*\n`)
+                : upNext = `Hmmmm... pretty empty, you should add some more songs with \`${guild.prefix}play\``;
+            if (paginated.maxPage > 1)
+                upNext += '"Use queue <page> to view a specific page."';
+            const np = player.queue.np.song, queueEmbed = new lib_1.VorteEmbed(message).baseEmbed()
+                .setDescription(upNext)
+                .addField(`\u200B`, `**Now Playing:**\n**[${np.info.title}](${np.info.uri})** *[<@${np.requester}>]*`)
+                .setFooter(paginated.items.length ? `Queue Length: ${ms(total)} | VorteKore` : `VorteKore | ChaosPhoe`);
             message.channel.send(queueEmbed);
         });
     }

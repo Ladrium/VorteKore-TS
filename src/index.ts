@@ -1,5 +1,6 @@
-import { Handler } from "./structures/Handler";
-import { VorteClient } from "./structures/VorteClient";
+import "./lib/classes/Message";
+import { Handler } from "./lib/classes/Handler";
+import { VorteClient } from "./lib/VorteClient";
 import { config } from 'dotenv';
 import mongoose from "mongoose";
 
@@ -23,9 +24,6 @@ let dbl;
 const bot = new VorteClient();
 bot.handler = new Handler(bot);
 startServer(bot);
-
-if (Installed("dblapi.js"))
-  dbl = new (require("dblapi.js"))(process.env.DBL, bot)
 
 bot.handler.loadCommands();
 bot.handler.loadEvents();

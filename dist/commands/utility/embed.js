@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Command_1 = require("../../structures/Command");
-const structures_1 = require("../../structures");
+const Command_1 = require("../../lib/classes/Command");
+const lib_1 = require("../../lib");
 const util_1 = require("../../util");
 class default_1 extends Command_1.Command {
     constructor() {
@@ -21,7 +21,7 @@ class default_1 extends Command_1.Command {
         if (!message.deletable)
             return message.channel.send("Dont have permission to delete the message");
         message.delete();
-        message.channel.send(new structures_1.VorteEmbed(message).baseEmbed().setTitle(emb[0]).setDescription(emb[1]).setFooter(message.author.tag, message.author.displayAvatarURL()));
+        message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setTitle(emb[0]).setDescription(emb[1]).setFooter(message.author.tag, message.author.displayAvatarURL()));
     }
 }
 exports.default = default_1;

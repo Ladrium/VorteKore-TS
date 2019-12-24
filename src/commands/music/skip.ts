@@ -1,27 +1,28 @@
 import { Message } from "discord.js";
-import { Command } from "../../structures/Command";
+import { Command } from "../../lib/classes/Command";
 import { checkDJ, checkPermissions } from "../../util";
+import { VorteMessage, VortePlayer } from "../../lib";
+import message from "../../events/guild/message";
 
 export default class extends Command {
   public constructor() {
     super("skip", {
       category: "Music",
-      cooldown: 0
+      cooldown: 0,
+      userPermissions(message: VorteMessage) {
+        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj"))
+          return "DJ";
+        return;
+      }
     })
   }
 
-  public async run({ guild, member, reply, channel }: Message, query: string[]) {
-    if (!checkDJ(member!) && !checkPermissions(member!, "ADMINISTRATOR")) return channel.send("You don't have permissions for this command!");
+  public async run(message: VorteMessage, query: string[]) {
+    const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
+    
+    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player.in(message.member!)) return message.sem("Please join my voice channel.")
 
-    const player = this.bot.andesite!.players!.get(guild!.id);
-    const queue = this.bot.queues.get(guild!.id)!;
-
-    if (!player || !player.playing) return channel.send("The bot isn't playing any music yet!")
-    queue.next = queue.next.slice(1);
-
-    if (!queue.next[0]) return player.node.leave(player.guildId);
-
-    player.play(queue.next[0].track)
-    channel.send(`Skipped the song, Now Playing: \`${queue.next[0].info.title}\``)
+    await player.emit("end", {});
   }
-}
+}                                                         

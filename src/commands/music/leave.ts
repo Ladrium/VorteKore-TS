@@ -1,6 +1,4 @@
-import { Message } from "discord.js";
-import { VorteEmbed } from "../../structures";
-import { Command } from "../../structures/Command";
+import { Command, VorteMessage, VortePlayer } from "../../lib";
 
 export default class extends Command {
   public constructor() {
@@ -11,12 +9,14 @@ export default class extends Command {
     });
   }
   
-  public async run(message: Message, query: string[]) {
-    const player = this.bot.andesite!.players.get(message.guild!.id)!;
+  public async run(message: VorteMessage, query: string[]) {
+    const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
 
-    if (!player) return message.reply(" Bot is not playing music");
+    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
 
     await player.stop();
-    return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Successfully left the channel"));
+    await player.node.leave(player.guildId);
+    return message.sem("Successfully left the voice channel.");
   }
 }

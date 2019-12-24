@@ -1,5 +1,5 @@
-import { Command } from "../../structures/Command";
-import { VorteClient, VorteEmbed, VorteGuild } from "../../structures";
+import { Command } from "../../lib/classes/Command";
+import { VorteClient, VorteEmbed, VorteGuild } from "../../lib";
 import { Message } from "discord.js";
 import { checkPermissions, findRole } from "../../util";
 

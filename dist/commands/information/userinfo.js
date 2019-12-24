@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const structures_1 = require("../../structures");
-const Command_1 = require("../../structures/Command");
+const lib_1 = require("../../lib");
+const Command_1 = require("../../lib/classes/Command");
 const util_1 = require("../../util");
 class default_1 extends Command_1.Command {
     constructor() {
@@ -26,7 +26,7 @@ class default_1 extends Command_1.Command {
             const member = (yield util_1.findMember(message, mem)) || message.member;
             if (!member)
                 return message.channel.send(`Unable to find that member!`);
-            const infoEmbed = new structures_1.VorteEmbed(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
+            const infoEmbed = new lib_1.VorteEmbed(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
      **>** Joined At: ${member.joinedAt}
      **>** Created At: ${member.user.createdAt}
      **>** Presence: ${member.presence.status}

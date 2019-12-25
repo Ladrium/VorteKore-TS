@@ -10,15 +10,14 @@ export function checkPermissions(guildMember: GuildMember, permissions: BitField
     checkOwner: true
   }) || guild.guild.autoRoles.some((role: string) => guildMember.roles.has(role)) || guildMember.id === "464499620093886486";
 }
-export function checkDJ(guildMember: GuildMember) {
-  return guildMember.roles.some((role) => role.name.toLowerCase() === "dj");
-}
+
 export function findRole(message: Message, role: string) {
   return message.mentions.roles.first() || message.guild!.roles.find((r) => {
     const name = r.name.toLowerCase()
     return name === role || name.toLowerCase().startsWith(role);
   })
 };
+
 export function formatString(message: string, member: GuildMember) {
   const obj = {
     "{{mention}}": member.toString(),
@@ -29,6 +28,7 @@ export function formatString(message: string, member: GuildMember) {
   const string = message.replace(new RegExp(Object.keys(obj).join("|")), (m) => obj[m as "{{mention}}"])
   return string;
 }
+
 export async function findMember(message: Message, toFind: string) {
   let member;
   if (message.mentions && message.mentions.members!.size == 0 && message.mentions.users.size > 0) {
@@ -42,17 +42,17 @@ export async function findMember(message: Message, toFind: string) {
   }
   return member;
 }
-export const get = async <T>(url: string, options?: any) => {
-  let data: any = null;
-  let error: string | null = null;
 
-  await fetch(url, options!)
-    .then((res: any) => res.json())
-    .then((json: any) => data = json)
-    .catch((error: Error) => error = error)
-
-  return { data, error }
+export const get = async <T>(url: string, options?: any): Promise<{ data?: T, error?: Error }> => {
+  return new Promise(resolve => {
+    return fetch(url, options!)
+      .then(
+        async res => resolve({ data: await res.json() }),
+        error => resolve({ error })
+      );
+  });
 }
+
 export function _formatTime(ms: number) {
   let day, hour, minute, seconds;
   seconds = Math.floor(ms / 1000);
@@ -135,6 +135,12 @@ export function formatTime(duration: number) {
 export function playerEmbed(player: VortePlayer, current: TrackInfo) {
   return (player.paused ? "\u23F8" : "\u25B6") + " " +
     progressBar(player.position / current.info.length) +
-  `\`[${formatTime(player.position)}/${formatTime(current.info.length)}]\`` +
+    `\`[${formatTime(player.position)}/${formatTime(current.info.length)}]\`` +
     getVolumeIcon(player.volume);
+}
+
+export function isPromise(value: any): boolean {
+  return value
+    && typeof value.then === 'function'
+    && typeof value.catch === 'function';
 }

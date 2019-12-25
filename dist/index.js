@@ -3,13 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./lib/classes/Message");
-const Handler_1 = require("./lib/classes/Handler");
-const VorteClient_1 = require("./lib/VorteClient");
 const dotenv_1 = require("dotenv");
 const mongoose_1 = __importDefault(require("mongoose"));
-const server_1 = require("./web/server");
 const path_1 = require("path");
+require("./lib/classes/Message");
+const VorteClient_1 = require("./lib/VorteClient");
+const server_1 = require("./web/server");
 dotenv_1.config({
     path: path_1.join(process.cwd(), ".env")
 });
@@ -20,9 +19,7 @@ mongoose_1.default.connect(process.env.URI, {
     if (err)
         console.log(err);
 });
-let dbl;
 const bot = new VorteClient_1.VorteClient();
-bot.handler = new Handler_1.Handler(bot);
 server_1.startServer(bot);
 bot.handler.loadCommands();
 bot.handler.loadEvents();

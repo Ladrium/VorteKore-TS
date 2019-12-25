@@ -1,20 +1,18 @@
-import { Message } from "discord.js";
-import { Command, QueuedSong, VorteEmbed, VorteGuild, VorteMessage, VortePlayer } from "../../lib";
+import { Command, VorteEmbed, VorteGuild, VorteMessage, VortePlayer } from "../../lib";
 import { paginate } from "../../util";
 import ms = require("ms");
-import play from "./play";
-import { Z_ASCII } from "zlib";
 
 export default class extends Command {
   public constructor() {
     super("queue", {
       category: "Music",
       example: "!queue",
-      description: "Shows the current and next up songs."
+      description: "Shows the current and next up songs.",
+      channel: "guild"
     });
   }
   
-  public async run(message: VorteMessage, [ page ]: [ string ], guild: VorteGuild) {
+  public async run(message: VorteMessage, [ page ]: [ string ], guild: VorteGuild = message.getGuild()!) {
     const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
     if (!player) return message.sem("The bot isn't in a voice channel.");
     if (!player.queue.np.song) return message.sem(`Hmmmm... the queue is empty, you should some more songs with \`${guild.prefix}play\``);

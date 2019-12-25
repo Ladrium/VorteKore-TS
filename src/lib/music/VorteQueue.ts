@@ -1,5 +1,5 @@
-import {EventEmitter} from "events";
-import {AndesitePlayer, TrackInfo} from "discord.js-andesite";
+import { EventEmitter } from "events";
+import { AndesitePlayer, TrackInfo } from "discord.js-andesite";
 import { shuffle } from "../../util";
 import { VortePlayer } from "./VortePlayer";
 import { QueueHook } from "../../util/QueueHook";
@@ -72,7 +72,7 @@ export class VorteQueue extends EventEmitter {
     if (to >= this.next.length) {
       let k = to - this.next.length + 1;
       while (k--) {
-        this.next.push(<any> undefined);
+        this.next.push(<any>undefined);
       }
     }
 

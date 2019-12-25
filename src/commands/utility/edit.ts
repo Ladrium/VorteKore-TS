@@ -10,12 +10,13 @@ export default class extends Command {
       cooldown: 0,
       description: "Edits an embed",
       usage: "!edit MessageID Title | Description",
-      example: "!edit 648491057318723584 This is the title | This is the Description"
+      example: "!edit 648491057318723584 This is the title | This is the Description",
+      channel: "guild",
+      userPermissions: "ADMINISTRATOR"
     });
   }
 
-  public run(message: VorteMessage, args: string[]) {
-    if (!checkPermissions(message.member!, "ADMINISTRATOR")) return message.sem("You dont have permissions.");
+  public async run(message: VorteMessage, args: string[]) {
     if (!args[0]) return message.sem("Please provide message id to edit the message.");
       
     const d = args.slice(1).join(" ").split(" | ");

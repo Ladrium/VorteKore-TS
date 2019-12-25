@@ -1,9 +1,9 @@
-import { VorteClient, VorteGuild, VorteMember } from "../lib";
-import session from "express-session";
-import express from "express";
 import { Permissions } from "discord.js";
+import express from "express";
+import session from "express-session";
+import fetch from "node-fetch";
+import { VorteClient, VorteGuild } from "../lib";
 import { member } from "../models/member";
-import fetch from "node-fetch"
 
 export const app = express();
 

@@ -12,12 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lib_1 = require("../lib");
-const express_session_1 = __importDefault(require("express-session"));
-const express_1 = __importDefault(require("express"));
 const discord_js_1 = require("discord.js");
-const member_1 = require("../models/member");
+const express_1 = __importDefault(require("express"));
+const express_session_1 = __importDefault(require("express-session"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
+const lib_1 = require("../lib");
+const member_1 = require("../models/member");
 exports.app = express_1.default();
 function startServer(bot) {
     exports.app.use(express_1.default.static(require("path").join(process.cwd(), "views")));

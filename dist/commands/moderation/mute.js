@@ -15,31 +15,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ms_1 = __importDefault(require("ms"));
 const lib_1 = require("../../lib");
 const Command_1 = require("../../lib/classes/Command");
-const util_1 = require("../../util");
 class default_1 extends Command_1.Command {
     constructor() {
         super("mute", {
             category: "Moderation",
-            cooldown: 0,
             description: "Mutes a member",
-            example: "!mute @user 10m"
+            usage: "<member> <duration>",
+            example: "!mute @user 10m",
+            userPermissions: ["MUTE_MEMBERS"],
+            channel: "guild"
         });
     }
-    run(message, args, guild) {
+    run(message, args, guild = message.getGuild()) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!util_1.checkPermissions(message.member, "MANAGE_ROLES"))
-                return message.channel.send(new lib_1.VorteEmbed(message).errorEmbed("Missing Permissions!"));
-            message.delete();
-            if (!args[0])
-                return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a user to mute"));
-            if (!args[1])
-                return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a time."));
+            if (message.deletable)
+                yield message.delete();
+            if (!(args[0] && args[1]))
+                return message.sem("Please provide a mute duration and member.", { type: "error" });
             const member = message.mentions.members.first() || message.guild.members.find(r => r.displayName === args[0] || r.id === args[0]);
             if (!member)
-                return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("Invalid member provided"));
+                return message.sem("Invalid member provided");
             const time = ms_1.default(args[1]);
             if (!time)
-                return message.channel.send(new lib_1.VorteEmbed(message).baseEmbed().setDescription("Please provide a valid time"));
+                return message.sem("Please provide a valid time");
             const muteRole = message.guild.roles.find((x) => x.name.toLowerCase() === "muted") ||
                 (yield message.guild.roles.create({
                     data: {
@@ -47,18 +45,28 @@ class default_1 extends Command_1.Command {
                         color: "#1f1e1c"
                     }
                 }));
-            member.roles.add(muteRole);
-            const mute = new lib_1.Mute(member.id, message.guild.id);
-            mute._load().setTime(time);
-            message.channel.send("Successfully muted the user");
+            try {
+                yield member.roles.add(muteRole);
+                const mute = new lib_1.Mute(member.id, message.guild.id);
+                mute._load().setTime(time);
+                message.sem("Successfully muted that member.");
+            }
+            catch (error) {
+                console.error(`mute command`, error);
+                return message.sem(`Sorry, I ran into an error. Please contact the developers too see if they can help!`);
+            }
             const { channel, enabled } = guild.getLog("mute");
+            guild.increaseCase();
             if (!enabled)
                 return;
-            guild.increaseCase();
             message.guild.channels.get(channel.id).send(new lib_1.VorteEmbed(message)
                 .baseEmbed()
                 .setTitle(`Moderation: Mute [Case ID: ${guild.case}]`)
-                .setDescription(`**>** Muted: ${member.user.tag}\n**>** Muted By: ${message.author.tag}\n**>** Time: ${time}`));
+                .setDescription([
+                `**>** Staff: ${message.author.tag} (${message.author.id})`,
+                `**>** Muted: ${member.user.tag}`,
+                `**>** Time: ${time}`
+            ].join("\n")));
         });
     }
 }

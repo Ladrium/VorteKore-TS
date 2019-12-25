@@ -13,8 +13,10 @@ export default class extends Event {
     const guild = new VorteGuild(deletedMessage.guild!)
     const { channel, enabled } = guild.getLog("deleteMessage")
     if (!enabled) return;
+    
     const chan = deletedMessage.guild!.channels.get(channel) as TextChannel;
     guild.increaseCase();
+
     chan.send(
       new VorteEmbed(deletedMessage)
         .baseEmbed()

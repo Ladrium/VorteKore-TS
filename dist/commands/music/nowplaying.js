@@ -17,6 +17,7 @@ class default_1 extends lib_1.Command {
             aliases: ["np"],
             description: "Sends the current playing song.",
             category: "Music",
+            channel: "guild"
         });
     }
     run(message) {

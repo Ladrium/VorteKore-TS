@@ -19,7 +19,7 @@ class default_1 extends lib_1.Command {
     }
     run(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            message.reply("Use this link to invite the bot: <http://bit.ly/2EmfskO>");
+            message.sem("Use this link to invite the bot: <http://bit.ly/2EmfskO>");
         });
     }
 }

@@ -1,15 +1,12 @@
 import { Command } from "../../lib/classes/Command";
-import { VorteClient } from "../../lib/VorteClient";
-import { Message } from "discord.js";
-import { checkDJ, checkPermissions } from "../../util";
 import { VorteMessage, VortePlayer } from "../../lib";
 
 export default class extends Command {
   public constructor() {
     super("seek", {
       category: "Music",
-      cooldown: 0,
-      example: "!seek 5s"
+      example: "!seek 5s",
+      channel: "guild"
     });
   }
   

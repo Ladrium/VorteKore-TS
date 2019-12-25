@@ -1,58 +1,112 @@
-import { Message } from "discord.js";
+import Collection from "@discordjs/collection";
+import { GuildChannel } from "discord.js";
+import { EventEmitter } from "events";
 import { readdirSync, statSync } from "fs";
 import { join } from "path";
-import { Command } from "./Command";
-import { VorteClient } from "../VorteClient";
-import { VorteEmbed } from "./VorteEmbed";
+import { developers } from "../../config";
 import { VorteGuild } from "../database/VorteGuild";
 import { VorteMember } from "../database/VorteMember";
-import { EventEmitter } from "events";
+import { VorteClient } from "../VorteClient";
+import { Command } from "./Command";
 import { VorteMessage } from "./Message";
+import { VorteEmbed } from "./VorteEmbed";
 import ms = require("ms");
-import Collection from "@discordjs/collection";
 
-
-export class Handler {
+export class Handler extends EventEmitter {
   constructor(
     public bot: VorteClient
   ) {
+    super()
     this.loadEvents = this.loadEvents.bind(this);
     this.loadCommands = this.loadCommands.bind(this);
   }
 
-  async runCommand(message: VorteMessage, member: VorteMember) {
-    if (message.author.bot || !message.guild) return;
-    if (!message.member) Object.defineProperty(message, "member", await message.guild.members.fetch(message.author));
+  async runCommand(message: VorteMessage, member?: VorteMember) {
+    if (message.author.bot) return;
+    if (message.guild && !message.member)
+      Object.defineProperty(message, "member", { value: await message.guild.members.fetch(message.author) });
 
-    const guild = new VorteGuild(message.guild!);
-    if (!message.content.startsWith(guild.prefix)) return;
+    let prefix = message.guild ? new VorteGuild(message.guild).prefix : "!";
+    if (!message.content.startsWith(prefix)) return;
 
-    const args = message.content.slice(guild.prefix.length).trim().split(/ +/g);
-    const cmd = args.shift();
-    const command = this.bot.commands.get(cmd!) || this.bot.commands.get(this.bot.aliases.get(cmd!)!) || null;
+    const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = this.bot.commands.find(c => c.name.ignoreCase(cmd) || c.aliases.includes(cmd.toLowerCase()));
+    if (!command || !await this.runChecks(message, command)) return;
 
-    if (command) {
-      const cooldown = command.currentCooldowns.get(message.author.id);
-      if (cooldown) 
-        return message.sem(`Sorry, you have at least ${ms(Date.now() - cooldown)} left on your cooldown :(`, { type: "error" });
-
-      command.currentCooldowns.set(message.author.id, Date.now());
-
-      try {
-        await command.run(message, args, guild, member);
-      } catch (e) {
-        console.log(e);
-        message.channel.send(new VorteEmbed(message)
-          .errorEmbed(process.execArgv.includes("--debug") ? e : undefined)
-          .setDescription("Sorry, I ran into an error."))
-      };
-
-      setTimeout(() => {
-        command.currentCooldowns.delete(message.author.id);
-      }, command.cooldown);
+    try {
+      await command.run(message, args);
+    } catch (e) {
+      console.log(e);
+      message.channel.send(new VorteEmbed(message)
+        .errorEmbed(process.execArgv.includes("--debug") ? e : undefined)
+        .setDescription("Sorry, I ran into an error."))
     };
+
+    setTimeout(() => {
+      command.currentCooldowns.delete(message.author.id);
+    }, command.cooldown);
   }
+
+  private async runChecks(message: VorteMessage, command: Command) {
+    const cooldown = command.currentCooldowns.get(message.author.id);
+    if (cooldown) {
+      this.emit("commandBlocked" , message, command, "cooldown", cooldown);
+      return false;
+    }
+    command.currentCooldowns.set(message.author.id, Date.now());
+
+    if (command.devOnly && !developers.includes(message.author.id)) {
+      this.emit("commandBlocked", message, command, "dev");
+      return false;
+    }
+
+    if (command.channel === "guild" && !message.guild) {
+      this.emit("commandBlocked", message, command, "guild");
+      return false;
+    }
+
+    if (command.channel === "dm" && message.guild) {
+      this.emit("commandBlocked", message, command, "dm");
+      return false;
+    }
+
+    if (command.botPermissions) {
+      if (typeof command.botPermissions === "function") {
+        let botPerms = await command.botPermissions(message);
+        if (botPerms != null) {
+          this.emit("missingPermissions", message, command, botPerms, "bot");
+          return false;
+        }
+      } else if (message.guild) {
+        const botPerms = (<GuildChannel>message.channel).permissionsFor(this.bot.user!)!.missing(command.botPermissions);
+        if (botPerms.length) {
+          this.emit("missingPermissions", message, command, botPerms, "bot");
+          return false;
+        }
+      }
+    }
+
+    if (command.userPermissions) {
+      if (typeof command.userPermissions === "function") {
+        let botPerms = await command.userPermissions(message);
+        if (botPerms != null) {
+          this.emit("missingPermissions", message, command, botPerms, "member");
+          return false;
+        }
+      } else if (message.guild) {
+        const botPerms = (<GuildChannel>message.channel).permissionsFor(message.author!)!.missing(command.userPermissions);
+        if (botPerms.length) {
+          this.emit("missingPermissions", message, command, botPerms, "member");
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
   loadEvents = (): boolean | void => {
+    const start = Date.now();
     console.log("----------------------------------------------");
     for (const file of Handler.walk(join(__dirname, "../..", "events"))) {
       const evtClass = (_ => _.default || _.Evt || _)(require(file));
@@ -61,7 +115,7 @@ export class Handler {
       evt._onLoad(this);
       const emitters: {
         [key: string]: EventEmitter
-      } = { client: this.bot, process, andesite: this.bot.andesite };
+      } = { client: this.bot, process, andesite: this.bot.andesite, handler: this };
 
       ((typeof evt.emitter === "function" && evt.emitter instanceof EventEmitter)
         ? evt.emitter
@@ -69,10 +123,11 @@ export class Handler {
 
       console.log(`\u001b[32m[EVT ✅ ]\u001b[0m => Successfully loaded \u001b[34m${evt.category}\u001b[0m:${evt.name}`);
     }
-    console.log("\u001b[32m[EVT ✅ ]\u001b[0m => Loaded all Events!");
+    console.log(`\u001b[32m[EVT ✅ ]\u001b[0m => Loaded all Events in ${ms(Date.now() - start)}!`);
   }
 
   loadCommands = (): void | boolean => {
+    const start = Date.now();
     console.log("----------------------------------------------");
     for (const file of Handler.walk(join(__dirname, "../..", "commands"))) {
       try {
@@ -88,7 +143,7 @@ export class Handler {
         console.log(`\u001b[31m[CMD ❌ ]\u001b[0m => ${file} has an error: ${e.toString()}`);
       }
     }
-    console.log("\u001b[32m[CMD ✅ ]\u001b[0m => Loaded all commands!");
+    console.log(`\u001b[32m[CMD ✅ ]\u001b[0m => Loaded all commands in ${ms(Date.now() - start)}!`);
   }
 
   public get cateories(): string[] {

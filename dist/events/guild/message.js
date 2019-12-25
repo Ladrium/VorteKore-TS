@@ -20,27 +20,30 @@ class default_1 extends lib_1.Event {
         this.xp = (max, min) => Math.floor(Math.random() * max) + min;
         this.recently = new Set();
     }
-    run(message, bot = this.bot) {
+    run(message) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (message.author.bot || !message.guild)
+            if (message.author.bot)
                 return;
-            const member = yield new lib_1.VorteMember(message.author.id, message.guild.id)._init();
-            if (!this.recently.has(message.author.id)) {
-                if (Math.random() > 0.50) {
-                    member.add("coins", this.coins(50, 5));
-                    if (Math.random() > 0.60) {
-                        member.add("xp", this.xp(25, 2));
-                        if (member.xp > 2 * (75 * member.level)) {
-                            member.add("level", 1);
-                            message.sem(`Congrats! Your new level is **${member.level}**`);
+            if (message.guild) {
+                const member = yield new lib_1.VorteMember(message.author.id, message.guild.id)._init();
+                if (!this.recently.has(message.author.id)) {
+                    if (Math.random() > 0.50) {
+                        member.add("coins", this.coins(50, 5));
+                        if (Math.random() > 0.60) {
+                            member.add("xp", this.xp(25, 2));
+                            if (member.xp > 2 * (75 * member.level)) {
+                                member.add("level", 1);
+                                if (message.guild.id !== "264445053596991498")
+                                    message.sem(`Congrats 🎉! You're now level ${member.level}`);
+                            }
                         }
+                        member.save();
+                        this.recently.add(message.author.id);
+                        setTimeout(() => this.recently.delete(message.author.id), 25000);
                     }
-                    member.save();
-                    this.recently.add(message.author.id);
-                    setTimeout(() => this.recently.delete(message.author.id), 25000);
                 }
             }
-            this.handler.runCommand(message, member);
+            return this.handler.runCommand(message);
         });
     }
     ;

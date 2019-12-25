@@ -1,5 +1,4 @@
-import { Message } from "discord.js";
-import { Command } from "../../lib";
+import { Command, VorteMessage } from "../../lib";
 
 export default class extends Command {
   constructor() {
@@ -9,7 +8,7 @@ export default class extends Command {
     });
   }
   
-  async run(message: Message) {
-    message.reply("Use this link to invite the bot: <http://bit.ly/2EmfskO>")
+  async run(message: VorteMessage) {
+    message.sem("Use this link to invite the bot: <http://bit.ly/2EmfskO>")
   }
 }

@@ -15,12 +15,12 @@ class default_1 extends lib_1.Command {
         super("volume", {
             aliases: ["vol"],
             category: "Music",
-            cooldown: 0,
             userPermissions(message) {
                 if (!message.member.roles.some((role) => role.name.toLowerCase() === "dj"))
                     return "DJ";
                 return;
-            }
+            },
+            channel: "guild"
         });
     }
     run(message, [volume]) {

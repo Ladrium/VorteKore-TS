@@ -1,8 +1,5 @@
-import { Message } from "discord.js";
-import ms from "ms";
-import { VorteEmbed, VortePlayer, Command } from "../../lib";
+import { Command, VortePlayer } from "../../lib";
 import { VorteMessage } from "../../lib/classes/Message";
-
 
 export default class extends Command {
   public constructor() {
@@ -10,7 +7,8 @@ export default class extends Command {
       category: "Music",
       cooldown: 2000,
       usage: "<query>",
-      description: "Plays a song in your voide channel."
+      description: "Plays a song in your voide channel.",
+      channel: "guild"
     })
   }
 

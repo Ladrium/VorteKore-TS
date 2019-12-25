@@ -1,7 +1,6 @@
 
-import { GuildChannel, Message, TextChannel } from "discord.js";
-import { Command, VorteEmbed, VorteGuild } from "../../lib";
-import { checkPermissions } from "../../util";
+import { GuildChannel, TextChannel } from "discord.js";
+import { Command, VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
 import ms = require("ms");
 
 export default class extends Command {
@@ -11,17 +10,19 @@ export default class extends Command {
       aliases: ["ld"],
       cooldown: 5000,
       description: "Lockdowns a channel",
-      example: "!lockdown 10m time to sleep"
+      example: "!lockdown 10m time to sleep",
+      userPermissions: ["MANAGE_CHANNELS"],
+      botPermissions: ["MANAGE_CHANNELS"],
+      channel: "guild",
+      usage: "<duration> [reason]"
     });
   }
 
-  public run(message: Message, args: string[], guild: VorteGuild) {
-    if (!checkPermissions(message.member!, "MANAGE_CHANNELS")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
-
+  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
     const chan = message.channel as GuildChannel;
 
-    if (!args[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a reason to lockdown this channel."));
-    if (args[0].toLowerCase() === 'release' || 'unlock' || 'remove') {
+    if (!args[0]) return message.sem("Please provide a reason to lockdown this channel.", { type: "error" });
+    if (['release', 'unlock', 'remove'].includes(args[0])) {
       chan.overwritePermissions({
         permissionOverwrites: [
           {
@@ -29,12 +30,13 @@ export default class extends Command {
             allow: ['SEND_MESSAGES']
           }
         ]
-      })
+      });
     } else {
       const time = ms(args[0]);
-      if (!time) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Unable to resolve the time"));
+      if (!time) return message.sem("Unable to resolve the time");
+
       const reason = args.slice(2).join(" ");
-      chan.overwritePermissions({
+      await chan.overwritePermissions({
         permissionOverwrites: [
           {
             id: message.guild!.id,
@@ -42,7 +44,7 @@ export default class extends Command {
           }
         ],
         reason: reason ? reason : `No reason provided - ${message.author.tag}`
-      })
+      });
       setTimeout(() => {
         chan.overwritePermissions({
           permissionOverwrites: [
@@ -53,13 +55,22 @@ export default class extends Command {
           ],
           reason: reason ? reason : `No reason provided - ${message.author.tag}`
         });
-        message.channel.send("Successfully unlocked the channel.")
+        message.sem("Successfully unlocked the channel.");
       }, time);
+
       const { channel, enabled } = guild.getLog("lockdown");
+      guild.increaseCase();
       if (!enabled) return;
-      guild.increaseCase()
+
       const cha = message.guild!.channels.get(channel.id) as TextChannel;
-      cha.send('Succesfully locked the channel')
+      cha.send(new VorteEmbed(message).baseEmbed()
+        .setAuthor(`Moderation: Channel Lockdown (Case ID: ${guild.case})`, message.author.displayAvatarURL())
+        .setDescription([
+          `**>** Staff: ${message.author.tag} (${message.author.id})`,
+          `**>** Channel: ${chan} (${channel.id})`,
+          `**>** Reason: ${reason === undefined ? `No reason provided` : reason}`
+        ].join("\n"))
+      );
     }
   }
 };

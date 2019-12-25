@@ -14,8 +14,8 @@ class default_1 extends Command_1.Command {
     constructor() {
         super("seek", {
             category: "Music",
-            cooldown: 0,
-            example: "!seek 5s"
+            example: "!seek 5s",
+            channel: "guild"
         });
     }
     run(message, [time]) {

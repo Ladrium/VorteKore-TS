@@ -1,6 +1,5 @@
-import { Command, VorteClient, VorteEmbed, VorteQueue, VorteMessage, VortePlayer } from "../../lib";
-import { Message } from "discord.js";
-import { _formatTime, playerEmbed } from "../../util";
+import { Command, VorteEmbed, VorteMessage, VortePlayer } from "../../lib";
+import { playerEmbed } from "../../util";
 
 export default class extends Command {
   public constructor() {
@@ -8,6 +7,7 @@ export default class extends Command {
       aliases: ["np"],
       description: "Sends the current playing song.",
       category: "Music",
+      channel: "guild"
     });
   }
   

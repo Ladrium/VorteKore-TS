@@ -14,7 +14,7 @@ export class Event extends VorteModule {
 	public emitter: string | EventEmitter;
 	public event: string;
 
-	public constructor (
+	public constructor(
 		name: string,
 		{
 			category,

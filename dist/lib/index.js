@@ -8,6 +8,7 @@ __export(require("./classes/Event"));
 __export(require("./classes/Handler"));
 __export(require("./classes/Module"));
 __export(require("./classes/VorteEmbed"));
+__export(require("./classes/Decorator"));
 __export(require("./database/Mute"));
 __export(require("./database/VorteGuild"));
 __export(require("./database/VorteMember"));

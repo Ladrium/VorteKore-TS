@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const Handler_1 = require("./classes/Handler");
 const Mute_1 = require("./database/Mute");
 const discord_js_andesite_1 = require("discord.js-andesite");
 const config_1 = require("../config");
@@ -23,6 +24,7 @@ class VorteClient extends discord_js_1.Client {
         super(options);
         this.commands = new discord_js_1.Collection();
         this.aliases = new discord_js_1.Collection();
+        this.handler = new Handler_1.Handler(this);
         this.andesite = new discord_js_andesite_1.Manager(this, {
             nodes: config_1.nodes,
             player: _1.VortePlayer,

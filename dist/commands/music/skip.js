@@ -14,12 +14,12 @@ class default_1 extends Command_1.Command {
     constructor() {
         super("skip", {
             category: "Music",
-            cooldown: 0,
             userPermissions(message) {
                 if (!message.member.roles.some((role) => role.name.toLowerCase() === "dj"))
                     return "DJ";
                 return;
-            }
+            },
+            channel: "guild"
         });
     }
     run(message, query) {

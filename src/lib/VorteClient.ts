@@ -10,8 +10,8 @@ import DBL from "dblapi.js";
 export class VorteClient extends Client {
   public commands: Collection<string, Command> = new Collection();
   public aliases: Collection<string, string> = new Collection();
-  public handler?: Handler;
-  public andesite: Manager = new Manager(this, { 
+  public handler: Handler = new Handler(this);
+  public andesite: Manager = new Manager(this, {
     nodes,
     player: VortePlayer,
     restTimeout: 20000
@@ -24,7 +24,7 @@ export class VorteClient extends Client {
     this.on("ready", () => {
       console.log(`${this.user!.username} is ready to rumble!`);
       this.andesite.init(this.user!.id);
-      this.dbl.postStats(this.guilds.size);
+      this.dbl.postStats(this.guilds.size); 
 
       setInterval(async () => {
         const mutes = await Mute.getAll();
@@ -35,7 +35,7 @@ export class VorteClient extends Client {
 
             const member = guild.members.get(x.userID) || await guild.members.fetch(x.userID) || null;
             if (!member) return Mute.deleteOne(x.guildID, x.userID);
-            
+
             const muteRole = guild.roles.find((x) => x.name.toLowerCase() === "muted");
             member.roles.remove(muteRole!).catch(null);
             return Mute.deleteOne(x.guildID, x.userID);

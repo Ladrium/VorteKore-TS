@@ -3,7 +3,7 @@ import { Message, MessageEmbed } from "discord.js";
 export class VorteEmbed {
   constructor(
     public message: Message
-  ) {}  
+  ) { }
 
   public baseEmbed(): MessageEmbed {
     return new MessageEmbed()
@@ -14,9 +14,9 @@ export class VorteEmbed {
 
   public errorEmbed(error?: string): MessageEmbed {
     const embed = this.baseEmbed()
-      .setTitle("Oops!")
+      .setAuthor("Oops!", this.message.author.displayAvatarURL())
       .setColor("#ff4255")
-    if (error) 
+    if (error)
       embed.setDescription(`Sorry, I ran into an error!\n\`\`\`js\n${error}\`\`\``);
     return embed;
   }

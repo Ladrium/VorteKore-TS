@@ -15,7 +15,7 @@ class default_1 extends lib_1.Command {
         super("leave", {
             aliases: ["stop"],
             category: "Music",
-            cooldown: 0
+            channel: "guild"
         });
     }
     run(message, query) {

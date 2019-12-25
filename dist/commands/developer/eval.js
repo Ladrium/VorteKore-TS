@@ -17,14 +17,13 @@ class default_1 extends lib_1.Command {
             cooldown: 0,
             description: "Nothing lol",
             example: "!eval <code>",
-            usage: "!ban <code>"
+            usage: "!ban <code>",
+            devOnly: true
         });
     }
-    run(message, args, guild) {
+    run(message, args) {
         return __awaiter(this, void 0, void 0, function* () {
             let embed;
-            if (!["464499620093886486", "413620315508178955"].includes(message.author.id))
-                return;
             try {
                 const codein = args.join(" ");
                 let code = yield eval(codein);

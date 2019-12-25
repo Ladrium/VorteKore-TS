@@ -2,11 +2,10 @@ import { member } from "../../models/member";
 
 export class VorteMember {
   public member: any;
-  
-  public  constructor(
-    public id: string, 
-    public guildID: string) 
-  {
+
+  public constructor(
+    public id: string,
+    public guildID: string) {
     this._init();
   }
 
@@ -23,7 +22,7 @@ export class VorteMember {
     return this;
   };
 
-  public  get coins() {
+  public get coins() {
     return this.member.coins;
   }
 

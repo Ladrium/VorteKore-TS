@@ -6,5 +6,4 @@ const Mute = new Schema({
   time: Number,
 });
 
-
 export default model("mutes", Mute);

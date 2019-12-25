@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
-import { Command, VorteClient, VorteEmbed, VorteGuild, VorteMember } from "../../lib";
-import { paginate } from "../../util";
+import { Command, VorteEmbed, VorteMember } from "../../lib";
 import { member } from "../../models/member";
+import { paginate } from "../../util";
 
 export default class extends Command {
   public constructor() {
@@ -12,13 +12,11 @@ export default class extends Command {
     })
   }
 
-  public async run(message: Message, [page = 1]: any) {
+  public async run(message: Message, [selected = 1]: any) {
     let members: any[] = (await member.find({ guildID: message.guild!.id }));
     members = members.sort((a: { xp: number; }, b: { xp: number; }) => b.xp - a.xp);
 
-    if (page > members.length) page = 1;
-
-    let { items } = paginate(members, page, 10),
+    let { items, page } = paginate(members, selected),
       str = "";
 
     for (const member of items) {

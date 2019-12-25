@@ -13,7 +13,7 @@ class VorteEmbed {
     }
     errorEmbed(error) {
         const embed = this.baseEmbed()
-            .setTitle("Oops!")
+            .setAuthor("Oops!", this.message.author.displayAvatarURL())
             .setColor("#ff4255");
         if (error)
             embed.setDescription(`Sorry, I ran into an error!\n\`\`\`js\n${error}\`\`\``);

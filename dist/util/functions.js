@@ -22,10 +22,6 @@ function checkPermissions(guildMember, permissions = "ADMINISTRATOR") {
     }) || guild.guild.autoRoles.some((role) => guildMember.roles.has(role)) || guildMember.id === "464499620093886486";
 }
 exports.checkPermissions = checkPermissions;
-function checkDJ(guildMember) {
-    return guildMember.roles.some((role) => role.name.toLowerCase() === "dj");
-}
-exports.checkDJ = checkDJ;
 function findRole(message, role) {
     return message.mentions.roles.first() || message.guild.roles.find((r) => {
         const name = r.name.toLowerCase();
@@ -63,13 +59,10 @@ function findMember(message, toFind) {
 }
 exports.findMember = findMember;
 exports.get = (url, options) => __awaiter(void 0, void 0, void 0, function* () {
-    let data = null;
-    let error = null;
-    yield node_fetch_1.default(url, options)
-        .then((res) => res.json())
-        .then((json) => data = json)
-        .catch((error) => error = error);
-    return { data, error };
+    return new Promise(resolve => {
+        return node_fetch_1.default(url, options)
+            .then((res) => __awaiter(void 0, void 0, void 0, function* () { return resolve({ data: yield res.json() }); }), error => resolve({ error }));
+    });
 });
 function _formatTime(ms) {
     let day, hour, minute, seconds;
@@ -157,3 +150,9 @@ function playerEmbed(player, current) {
         getVolumeIcon(player.volume);
 }
 exports.playerEmbed = playerEmbed;
+function isPromise(value) {
+    return value
+        && typeof value.then === 'function'
+        && typeof value.catch === 'function';
+}
+exports.isPromise = isPromise;

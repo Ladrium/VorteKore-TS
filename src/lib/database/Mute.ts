@@ -3,10 +3,10 @@ export class Mute {
   public mute: any;
 
   public constructor(
-    public userID: string, 
+    public userID: string,
     public guildID: string
-  ) {}
- 
+  ) { }
+
   public setTime(time: number): void {
     this.mute.time = time;
     this.mute.save().catch(console.error);

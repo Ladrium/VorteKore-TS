@@ -4,6 +4,7 @@ export * from "./classes/Handler";
 export * from "./classes/Module";
 export * from "./classes/VorteEmbed";
 export * from "./classes/Message";
+export * from "./classes/Decorator";
 
 export * from "./database/Mute";
 export * from "./database/VorteGuild";

@@ -5,7 +5,7 @@ export default class extends Command {
     super("leave", {
       aliases: ["stop"],
       category: "Music",
-      cooldown: 0
+      channel: "guild"
     });
   }
   

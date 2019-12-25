@@ -12,6 +12,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_js_1 = require("discord.js");
+const VorteGuild_1 = require("../database/VorteGuild");
+const VorteMember_1 = require("../database/VorteMember");
 const VorteEmbed_1 = require("./VorteEmbed");
 discord_js_1.Structures.extend("Message", (msg) => class VorteMessage extends msg {
     sem(content, _a = {}) {
@@ -20,5 +22,17 @@ discord_js_1.Structures.extend("Message", (msg) => class VorteMessage extends ms
         let e = type === "normal" ? _.baseEmbed() : _.errorEmbed();
         e.setDescription(content);
         return this.channel.send(e);
+    }
+    getMember(member = this.member) {
+        if (!this.guild)
+            return null;
+        return new VorteMember_1.VorteMember(typeof member === "string"
+            ? member
+            : member.id, this.guild.id);
+    }
+    getGuild() {
+        if (!this.guild)
+            return null;
+        return new VorteGuild_1.VorteGuild(this.guild);
     }
 });

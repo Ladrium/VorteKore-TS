@@ -1,5 +1,5 @@
-import { Message, TextChannel } from "discord.js";
-import { VorteEmbed, VorteGuild } from "../../lib";
+import { TextChannel } from "discord.js";
+import { VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
 import { Command } from "../../lib/classes/Command";
 import { checkPermissions } from "../../util";
 
@@ -7,13 +7,13 @@ export default class extends Command {
   public constructor() {
     super("role", {
       category: "Moderation",
-      cooldown: 0,
       usage: "!role <add|remove> @member role",
-      example: "!role remove @Chaos_Phoe#0001 Contributor"
+      example: "!role remove @Chaos_Phoe#0001 Contributor",
+      channel: "guild"
     });
   }
-  
-  public async run(message: Message, args: string[], guild: VorteGuild) {
+
+  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
     if (!checkPermissions(message.member!, "MANAGE_ROLES")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
     if (!args[0]) return message.channel.send(new VorteEmbed(message).errorEmbed("Provide if you want to add or remove the role!"));
     if (!args[1]) return message.channel.send(new VorteEmbed(message).errorEmbed("Provide a member to add/remove the role to!"));

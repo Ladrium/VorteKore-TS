@@ -1,6 +1,5 @@
-import { Hook } from "../lib/music/Hook";
-import { VorteQueue, NowPlaying, VorteEmbed } from "../lib";
-import { listen } from "../lib/music/Decorator";
+import { listen, NowPlaying, VorteQueue } from "../lib";
+import { Hook } from "../lib/classes/Hook";
 
 export class QueueHook extends Hook {
   public emitter!: VorteQueue;

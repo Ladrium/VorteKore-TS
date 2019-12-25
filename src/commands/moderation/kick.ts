@@ -1,43 +1,53 @@
 import { Message, TextChannel } from "discord.js";
-import { Command, VorteEmbed, VorteGuild } from "../../lib";
+import { Command, VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
 import { checkPermissions } from "../../util";
 
 export default class extends Command {
   constructor() {
     super("kick", {
       category: "Moderation",
-      cooldown: 0,
       description: "Kicks a member",
-      example: "!ban @user mass pinging"
+      example: "!ban @2D mass pinging",
+      userPermissions: ["KICK_MEMBERS"],
+      channel: "guild",
+      usage: "<member> [reason]"
     })
   }
-  run(message: Message, [mem, ...reason]: any, guild: VorteGuild) {
-    if (!checkPermissions(message.member!, "KICK_MEMBERS")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
+  public async run(message: VorteMessage, [mem, ...reason]: any, guild: VorteGuild = message.getGuild()!) {
+    if (message.deletable) await message.delete();
 
-    message.delete()
-    if (!mem) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to ban"));
+    if (!mem) return message.sem("Please provide a user to ban");
     const member = message.mentions.members!.first() || message.guild!.members.find((r: { displayName: string; }) => {
       return r.displayName === mem;
     }) || message.guild!.members.get(mem);
+
     if (!member) return message.channel.send("Couldn't find that user!");
-    if (message.author.id === member.user.id) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("You can't ban yourself"));
-    if (message.member!.roles.highest <= member.roles.highest) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("The user has higher role than you."))
+    if (message.author.id === member.user.id) return message.sem("You can't ban yourself");
+    if (message.member!.roles.highest <= member.roles.highest) return message.sem("The user has higher role than you.")
+
     reason = reason[0] ? reason.join(" ") : "No Reason";
-    member.kick(reason);
-    message.channel.send("Succesfully kicked the user.")
-    
-    const { channel, enabled } = guild.getLog("ban")
-    
-    if (!enabled) return;
+
+    try {
+      await member.kick(reason);
+      message.sem("Succesfully kicked the member.");
+    } catch (error) {
+      console.error(`kick command`, error);
+      return message.sem(`Sorry, we ran into an error.`, { type: "error" });
+    }
+
+    const { channel, enabled } = guild.getLog("ban");
     guild.increaseCase();
+    if (!enabled) return;
+
     const logChannel = member.guild.channels.get(channel.id) as TextChannel;
     logChannel.send(
-      new VorteEmbed(message).baseEmbed().setTimestamp().setTitle(`Moderation: Member Kick [Case ID: ${guild.case}] `).setDescription(
-        `**>**Executor: ${message.author.tag} (${message.author.id})
-        **>**Kicked: ${member.user.tag} (${member.user.id})
-        **>**Reason: ${reason ? reason : "No reason"}
-        `
-      )
-    )
+      new VorteEmbed(message).baseEmbed().setTimestamp()
+        .setAuthor(`Moderation: Channel Lockdown (Case ID: ${guild.case})`, message.author.displayAvatarURL())
+        .setDescription([
+          `**>** Staff: ${message.author.tag} (${message.author.id})`,
+          `**>** Kicked: ${member.user.tag} (${member.user.id})`,
+          `**>** Reason: ${reason ? reason : "No reason"}`
+        ].join("\n"))
+    );
   }
 };

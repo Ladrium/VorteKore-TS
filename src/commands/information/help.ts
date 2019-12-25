@@ -1,6 +1,5 @@
+import { VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
 import { Command } from "../../lib/classes/Command";
-import { VorteClient, VorteEmbed, VorteGuild } from "../../lib";
-import { Message } from "discord.js";
 import ms = require("ms");
 
 export default class extends Command {
@@ -11,7 +10,7 @@ export default class extends Command {
     });
   }
 
-  public run(message: Message, args: string[], { prefix }: VorteGuild) {
+  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
     const helpEmbed = new VorteEmbed(message).baseEmbed()
 
     if (!args[0] || !this.bot.commands.some(v => v.name.ignoreCase(args[0]) || v.aliases.some(a => a.ignoreCase(args[0])))) {
@@ -28,7 +27,7 @@ export default class extends Command {
       info += `**Cooldown**: ${ms(command.cooldown)}\n`;
       info += `**Aliases**: ${command.aliases.length ? command.aliases.map(a => `\`${a}\``).join(", ") : "None"}`
 
-      helpEmbed.setAuthor(`${prefix}${command.name} ${command.usage}`, message.author.displayAvatarURL())
+      helpEmbed.setAuthor(`${guild ? guild.prefix : "!"}${command.name} ${command.usage}`, message.author.displayAvatarURL())
       helpEmbed.setDescription(info)
     }
     message.channel.send(helpEmbed);

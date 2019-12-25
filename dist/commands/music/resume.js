@@ -14,7 +14,8 @@ class default_1 extends lib_1.Command {
     constructor() {
         super("resume", {
             category: "Music",
-            description: "Resumes the player if not already paused."
+            description: "Resumes the player if not already paused.",
+            channel: "guild"
         });
     }
     run(message) {

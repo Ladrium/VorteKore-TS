@@ -16,7 +16,8 @@ class default_1 extends lib_1.Command {
             category: "Music",
             cooldown: 2000,
             usage: "<query>",
-            description: "Plays a song in your voide channel."
+            description: "Plays a song in your voide channel.",
+            channel: "guild"
         });
     }
     run(message, [...query]) {

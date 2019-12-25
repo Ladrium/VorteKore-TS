@@ -1,6 +1,5 @@
-import { Message } from "discord.js";
 import ms from "ms";
-import { Command, VorteEmbed, VorteGuild } from "../../lib";
+import { Command, VorteEmbed, VorteMessage } from "../../lib";
 
 export default class extends Command {
   public constructor() {
@@ -11,13 +10,21 @@ export default class extends Command {
     });
   }
 
-  public run(message: Message, []: any, guild: VorteGuild) {
-    const time = ms(this.bot.uptime!, { long: true })
+  public async run(message: VorteMessage) {
     const emb = new VorteEmbed(message).baseEmbed()
-      .setTitle(`${this.bot.user!.username} Bot Info`)
-      .setDescription(`Hello, I'm ${this.bot.user!.username}!, I am a public bot. If you wish to check out the commands I have, please do ${guild.prefix}help. If you want to invite this bot to your server, Please do: ${guild.prefix}invite`)
-      .addField("\u200B", `**Guild Count**: ${this.bot.guilds.size}\n**Total Users**: ${this.bot.users.size}\n**Total Commands**: ${this.bot.commands.size}\n**Uptime:** ${time}\n\n[Invite bot to your server](http://bit.ly/VorteKore)`);
+      .setAuthor(`${this.bot.user!.username} Bot Info`, this.bot.user!.displayAvatarURL())
+      .setDescription(`Hello, I'm ${this.bot.user!.username}!, I am a public bot. If you wish to check out the commands I have, please do \`!help\`.`)
+      .addField("\u200B", this.buildStats());
+    return message.channel.send(emb);
+  }
 
-    message.channel.send(emb);
+  private buildStats() {
+    let time = ms(this.bot.uptime!, { long: true }), fieldValue = "";    
+    fieldValue += `**Guild Count**: ${this.bot.guilds.size}\n`;
+    fieldValue += `**Total Users**: ${this.bot.users.size}\n`;
+    fieldValue += `**Total Commands**: ${this.bot.commands.size}\n`;
+    fieldValue += `**Uptime:** ${time}\n`;
+    fieldValue += `\n[Invite](http://bit.ly/VorteKore) • [Repository](https://github.com/ChaosPhoe/VorteKore-TS) • [Vote](https://top.gg/bot/634766962378932224)`;
+    return fieldValue
   }
 }

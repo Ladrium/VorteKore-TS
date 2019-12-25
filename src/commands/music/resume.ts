@@ -4,7 +4,8 @@ export default class extends Command {
   public constructor() {
     super("resume", {
       category: "Music",
-      description: "Resumes the player if not already paused."
+      description: "Resumes the player if not already paused.",
+      channel: "guild"
     });
   }
 

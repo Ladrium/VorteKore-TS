@@ -1,4 +1,4 @@
-import {getAllListeners, listen} from "./Decorator";
+import { getAllListeners, listen } from "./Decorator";
 
 /**
  * A class that helps with events and such.
@@ -17,7 +17,7 @@ export class Hook {
   public constructor(
     emitter: NodeJS.EventEmitter
   ) {
-    Object.defineProperty(this, "emitter", {value: emitter});
+    Object.defineProperty(this, "emitter", { value: emitter });
     this._listen();
   }
 
@@ -28,7 +28,7 @@ export class Hook {
    */
   public register(fn: Function, event: string) {
     if (this.emitter.listenerCount(event)) return;
-    listen(event)(this, fn.name, {value: fn});
+    listen(event)(this, fn.name, { value: fn });
     this.emitter.addListener(event, fn.bind(this));
   }
 

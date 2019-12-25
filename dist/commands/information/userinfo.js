@@ -17,24 +17,26 @@ class default_1 extends lib_1.Command {
             category: "Information",
             cooldown: 5000,
             aliases: ["whois", "ui"],
-            description: "!ui @user"
+            description: "!ui @user",
+            channel: "guild"
         });
     }
-    run(message, [mem], guild) {
+    run(message, [mem], thisMember = message.getMember()) {
         return __awaiter(this, void 0, void 0, function* () {
             const member = (yield util_1.findMember(message, mem)) || message.member;
             if (!member)
                 return message.channel.send(`Unable to find that member!`);
-            const thisMember = yield new lib_1.VorteMember(member.id, message.guild.id)._init();
-            const infoEmbed = new lib_1.VorteEmbed(message).baseEmbed().setDescription(`**>** Name: ${member.user.tag}
-     **>** Joined At: ${member.joinedAt}
-     **>** Created At: ${member.user.createdAt}
-     **>** Presence: ${member.presence.status}
-     **>** Hoist Role: ${member.roles.hoist}
-     **>** Roles: ${member.roles.array().toString().replace('@everyone', '')}
-     **>** Level: ${thisMember.level}
-     **>** XP: ${thisMember.xp}/${2 * 75 * thisMember.level}
-     **>** Coins: ${thisMember.coins}`)
+            const infoEmbed = new lib_1.VorteEmbed(message).baseEmbed().setDescription([
+                `**>** Name: ${member.user.tag}`,
+                `**>** Joined At: ${member.joinedAt}`,
+                `**>** Created At: ${member.user.createdAt}`,
+                `**>** Presence: ${member.presence.status}`,
+                `**>** Hoist Role: ${member.roles.hoist}`,
+                `**>** Roles: ${member.roles.array().toString().replace('@everyone', '')}`,
+                `**>** Level: ${thisMember.level}`,
+                `**>** XP: ${thisMember.xp}/${2 * 75 * thisMember.level}`,
+                `**>** Coins: ${thisMember.coins}`
+            ].join("\n"))
                 .setThumbnail(member.user.displayAvatarURL());
             message.channel.send(infoEmbed);
         });

@@ -1,6 +1,5 @@
+import { VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
 import { Command } from "../../lib/classes/Command";
-import { VorteClient, VorteEmbed, VorteGuild } from "../../lib";
-import { Message } from "discord.js";
 import { checkPermissions, findRole } from "../../util";
 
 export default class extends Command {
@@ -13,7 +12,7 @@ export default class extends Command {
     })
   }
 
-  public run(message: Message, args: string[], guild: VorteGuild) {
+  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
     if (!args[0]) return message.channel.send(
       new VorteEmbed(message)
         .baseEmbed()

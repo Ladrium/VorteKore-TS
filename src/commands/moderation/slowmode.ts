@@ -1,22 +1,24 @@
-import { GuildChannel, Message, TextChannel } from "discord.js";
-import { VorteEmbed, VorteGuild } from "../../lib";
+import { GuildChannel, TextChannel } from "discord.js";
+import { VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
 import { Command } from "../../lib/classes/Command";
-import { checkPermissions } from "../../util";
 
 export default class extends Command {
   public constructor() {
     super("slowmode", {
       category: "Moderation",
       cooldown: 3000,
-      usage: "To remove the slowmode: !slowmode <remove|release|rel>\nTo add the slowmode: !slowmode <time> (reason)"
+      usage: "To remove the slowmode: !slowmode <remove|release|rel>\nTo add the slowmode: !slowmode <time> (reason)",
+      channel: "guild",
+      userPermissions: [ "MANAGE_MESSAGES" ]
     });
   }
 
-  public run(message: Message, args: string[], guild: VorteGuild) {
+  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
     const chan = message.channel as GuildChannel;
-    if (!checkPermissions(message.member!, "MANAGE_CHANNELS")) return message.channel.send(new VorteEmbed(message).errorEmbed("Missing Permissions!"));
-    if (!args[0]) return new VorteEmbed(message).baseEmbed().setDescription("Please provide a valid number");
-    if (args[0].toLowerCase() === "remove" || "release" || "rel") {
+
+    if (!args[0]) return message.sem("Please provide a valid number", { type: "error" });
+
+    if (["remove" || "release" || "rel"].includes(args[0])) {
       message.channel.send("Succesffully removed the slowmode")
       return chan.edit({
         rateLimitPerUser: 0

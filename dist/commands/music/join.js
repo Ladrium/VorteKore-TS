@@ -15,13 +15,14 @@ class default_1 extends lib_1.Command {
         super("join", {
             category: "Music",
             cooldown: 2000,
-            description: "Joins your voice channel."
+            description: "Joins your voice channel.",
+            channel: "guild"
         });
     }
-    run(message, _args, { prefix }) {
+    run(message, _a, guild = message.getGuild()) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.bot.andesite.players.has(message.guild.id))
-                return message.sem(`Use \`${prefix}play\` to queue a song.`);
+                return message.sem(`Use \`${guild.prefix}play\` to queue a song.`);
             if (!message.member.voice.channel)
                 return message.sem("Please join a voice channel.");
             this.bot.andesite.nodes.ideal.first().join({

@@ -10,12 +10,13 @@ export default class extends Command {
       category: "Utility",
       cooldown: 1000,
       description: "Creates an embed with provided title and description",
-      usage: "!embed title | description",
-      example: "!embed Cool guy | I know i am really cool"
+      usage: "<title> | <description>",
+      example: "!embed Cool guy | I know i am really cool",
+      userPermissions: [ "ADMINISTRATOR" ]
     });
   }
-  run(message: Message, args: string[]) {
-    if (!checkPermissions(message.member!, "ADMINISTRATOR")) return message.channel.send("You dont have permissions.");
+
+  public async run(message: Message, args: string[]) {
 
     const emb = args.join(" ").split(" | ");
 

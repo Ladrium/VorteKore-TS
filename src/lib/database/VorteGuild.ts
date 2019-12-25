@@ -62,7 +62,7 @@ export class VorteGuild {
     this.guild.save().catch(console.error);
     return this;
   }
-  
+
   public removeRole(locale: string, role: string): this {
     if (locale == "ar") locale = "autoRoles";
     else if (locale == "staff") locale = "staffRoles";
@@ -72,7 +72,7 @@ export class VorteGuild {
     this.guild.save().catch(console.error);
     return this;
   }
-  
+
   public setLog(log: string, query: string | boolean): void {
     if (log === "channel") this.guild.logs.channel = query;
     else {
@@ -89,7 +89,7 @@ export class VorteGuild {
     this.guild[locale][toSet] = query;
     this.guild.save().catch(console.error);
   }
-  
+
   public getLog(log: string) {
     return {
       enabled: this.guild.logs[log] ? this.guild.logs[log] : false,
@@ -108,7 +108,7 @@ export class VorteGuild {
   public get case() {
     return this.guild.case;
   }
-  
+
   public get welcome() {
     return {
       enabled: this.guild.welcome.enabled,
@@ -116,7 +116,7 @@ export class VorteGuild {
       channel: this.guild.welcome.channel
     }
   }
-  
+
   public get leave() {
     return {
       enabled: this.guild.leave.enabled,

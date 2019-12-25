@@ -1,18 +1,16 @@
-import { Command, VorteClient, VorteEmbed, VorteMessage, VortePlayer } from "../../lib";
-import { Message } from "discord.js";
-import { checkDJ, checkPermissions } from "../../util";
+import { Command, VorteMessage, VortePlayer } from "../../lib";
 
 export default class extends Command {
   public constructor() {
     super("volume", {
       aliases: ["vol"],
       category: "Music",
-      cooldown: 0,
       userPermissions(message: VorteMessage) {
         if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj"))
           return "DJ";
         return;
-      }
+      },
+      channel: "guild"
     });
   }
   

@@ -15,8 +15,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Hook_1 = require("../lib/music/Hook");
-const Decorator_1 = require("../lib/music/Decorator");
+const lib_1 = require("../lib");
+const Hook_1 = require("../lib/classes/Hook");
 class QueueHook extends Hook_1.Hook {
     next({ song }, { player } = this.emitter) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,9 +31,9 @@ class QueueHook extends Hook_1.Hook {
     }
 }
 __decorate([
-    Decorator_1.listen("next")
+    lib_1.listen("next")
 ], QueueHook.prototype, "next", null);
 __decorate([
-    Decorator_1.listen("finish")
+    lib_1.listen("finish")
 ], QueueHook.prototype, "finish", null);
 exports.QueueHook = QueueHook;

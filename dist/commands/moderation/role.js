@@ -16,12 +16,12 @@ class default_1 extends Command_1.Command {
     constructor() {
         super("role", {
             category: "Moderation",
-            cooldown: 0,
             usage: "!role <add|remove> @member role",
-            example: "!role remove @Chaos_Phoe#0001 Contributor"
+            example: "!role remove @Chaos_Phoe#0001 Contributor",
+            channel: "guild"
         });
     }
-    run(message, args, guild) {
+    run(message, args, guild = message.getGuild()) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!util_1.checkPermissions(message.member, "MANAGE_ROLES"))
                 return message.channel.send(new lib_1.VorteEmbed(message).errorEmbed("Missing Permissions!"));

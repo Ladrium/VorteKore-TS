@@ -17,10 +17,11 @@ class default_1 extends lib_1.Command {
         super("queue", {
             category: "Music",
             example: "!queue",
-            description: "Shows the current and next up songs."
+            description: "Shows the current and next up songs.",
+            channel: "guild"
         });
     }
-    run(message, [page], guild) {
+    run(message, [page], guild = message.getGuild()) {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.andesite.players.get(message.guild.id);
             if (!player)

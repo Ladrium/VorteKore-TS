@@ -1,5 +1,5 @@
-import { VorteClient, VorteEmbed, VorteGuild, VorteMember, Command } from "../../lib";
 import { Message } from "discord.js";
+import { Command, VorteEmbed } from "../../lib";
 
 export default class extends Command {
   public constructor() {
@@ -8,13 +8,13 @@ export default class extends Command {
       cooldown: 0,
       description: "Nothing lol",
       example: "!eval <code>",
-      usage: "!ban <code>"
+      usage: "!ban <code>",
+      devOnly: true
     });
   }
 
-  public async run(message: Message, args: string[], guild: VorteGuild) {
+  public async run(message: Message, args: string[]) {
     let embed;
-    if (!["464499620093886486", "413620315508178955"].includes(message.author.id)) return;
     try {
       const codein = args.join(" ");
       let code = await eval(codein);

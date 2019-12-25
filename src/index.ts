@@ -5,7 +5,6 @@ import "./lib/classes/Message";
 import { VorteClient } from "./lib/VorteClient";
 import { startServer } from "./web/server";
 
-
 config({
   path: join(process.cwd(), ".env")
 });

@@ -124,14 +124,14 @@ class Handler extends events_1.EventEmitter {
             if (command.userPermissions) {
                 if (typeof command.userPermissions === "function") {
                     let botPerms = yield command.userPermissions(message);
-                    if (botPerms != null) {
+                    if (botPerms != null && !config_1.developers.includes(message.author.id)) {
                         this.emit("missingPermissions", message, command, botPerms, "member");
                         return false;
                     }
                 }
                 else if (message.guild) {
                     const botPerms = message.channel.permissionsFor(message.author).missing(command.userPermissions);
-                    if (botPerms.length) {
+                    if (botPerms.length && !config_1.developers.includes(message.author.id)) {
                         this.emit("missingPermissions", message, command, botPerms, "member");
                         return false;
                     }

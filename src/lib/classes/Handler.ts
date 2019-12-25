@@ -90,13 +90,13 @@ export class Handler extends EventEmitter {
     if (command.userPermissions) {
       if (typeof command.userPermissions === "function") {
         let botPerms = await command.userPermissions(message);
-        if (botPerms != null) {
+        if (botPerms != null && !developers.includes(message.author.id)) {
           this.emit("missingPermissions", message, command, botPerms, "member");
           return false;
         }
       } else if (message.guild) {
         const botPerms = (<GuildChannel>message.channel).permissionsFor(message.author!)!.missing(command.userPermissions);
-        if (botPerms.length) {
+        if (botPerms.length && !developers.includes(message.author.id)) {
           this.emit("missingPermissions", message, command, botPerms, "member");
           return false;
         }

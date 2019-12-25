@@ -24,6 +24,7 @@ export class VorteClient extends Client {
     this.on("ready", () => {
       console.log(`${this.user!.username} is ready to rumble!`);
       this.andesite.init(this.user!.id);
+      this.dbl.postStats(this.guilds.size);
 
       setInterval(async () => {
         const mutes = await Mute.getAll();

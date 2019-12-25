@@ -15,7 +15,6 @@ export default class extends Command {
 			description: "Moves the bot to another voice channel.",
 			example: "!move 613347362705768469",
 			usage: "<voice channel id>"
-
     });
   }
   
@@ -27,7 +26,7 @@ export default class extends Command {
 		if (!channel) return message.sem("Provide a voice channel to move to.", { type: "error" });
 
 		const chan = message.guild!.channels.get(channel);
-		if (!(chan instanceof VoiceChannel)) return message.sem("Please provide a voice channel id.");
+		if (!chan || !(chan instanceof VoiceChannel)) return message.sem("Please provide a valid voice channel id.");
 
 		await player.moveVoiceChannel(chan.id);
 		return message.sem(`Successfully moved to ${chan}!`);

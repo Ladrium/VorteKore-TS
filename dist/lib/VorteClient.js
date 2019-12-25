@@ -35,6 +35,7 @@ class VorteClient extends discord_js_1.Client {
         this.on("ready", () => {
             console.log(`${this.user.username} is ready to rumble!`);
             this.andesite.init(this.user.id);
+            this.dbl.postStats(this.guilds.size);
             setInterval(() => __awaiter(this, void 0, void 0, function* () {
                 const mutes = yield Mute_1.Mute.getAll();
                 mutes.forEach((x) => __awaiter(this, void 0, void 0, function* () {

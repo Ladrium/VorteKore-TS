@@ -6,7 +6,7 @@ import { VorteClient } from "./lib/VorteClient";
 import { startServer } from "./web/server";
 
 config({
-  path: join(process.cwd(), ".env")
+  path: join("../", ".env")
 });
 
 mongoose.connect(process.env.URI!, {

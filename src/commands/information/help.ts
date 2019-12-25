@@ -25,7 +25,8 @@ export default class extends Command {
       info += `**Category**: ${command.category}\n`;
       info += `**Description**: ${command.description || "None"}\n`;
       info += `**Cooldown**: ${ms(command.cooldown)}\n`;
-      info += `**Aliases**: ${command.aliases.length ? command.aliases.map(a => `\`${a}\``).join(", ") : "None"}`
+      info += `**Aliases**: ${command.aliases.length ? command.aliases.map(a => `\`${a}\``).join(", ") : "None"}\n`
+      info += `**Example**: ${command.example || "None"}`;
 
       helpEmbed.setAuthor(`${guild ? guild.prefix : "!"}${command.name} ${command.usage}`, message.author.displayAvatarURL())
       helpEmbed.setDescription(info)

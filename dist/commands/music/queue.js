@@ -30,7 +30,7 @@ class default_1 extends lib_1.Command {
                 return message.sem(`Hmmmm... the queue is empty, you should some more songs with \`${guild.prefix}play\``);
             let total = player.queue.next.reduce((prev, song) => prev + song.info.length, 0), paginated = util_1.paginate(player.queue.next, parseInt(page || "1")), index = (paginated.page - 1) * 10, upNext = "";
             paginated.items.length
-                ? upNext += paginated.items.map(song => `${++index}. **[${song.info.title.trunc(30, true)}](${song.info.uri})** *[<@${song.requester}> ${ms(song.info.length)}]*\n`)
+                ? upNext += paginated.items.map(song => `${++index}. **[${song.info.title.trunc(30, true)}](${song.info.uri})** *[<@${song.requester}> ${ms(song.info.length)}]*`).join("\n")
                 : upNext = `Hmmmm... pretty empty, you should add some more songs with \`${guild.prefix}play\``;
             if (paginated.maxPage > 1)
                 upNext += '"Use queue <page> to view a specific page."';

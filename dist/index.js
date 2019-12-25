@@ -10,7 +10,7 @@ require("./lib/classes/Message");
 const VorteClient_1 = require("./lib/VorteClient");
 const server_1 = require("./web/server");
 dotenv_1.config({
-    path: path_1.join(process.cwd(), ".env")
+    path: path_1.join("../", ".env")
 });
 mongoose_1.default.connect(process.env.URI, {
     useNewUrlParser: true,

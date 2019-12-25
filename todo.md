@@ -29,7 +29,9 @@ A list of things we should do or things we should be doing *cough cough @ChaosPh
 	- [ ] Panda?
 	- [ ] Birb
 - [ ]	Work on website (@ChaosPhoe & maybe @LolWastedJS)
-	- fuck this list...
+	- [ ] Dashboard
+	- [ ] Credits
+	- [ ] User Information
 - [ ] Bot List stuff
 	- [ ] DBL
 		- [x] Statistics

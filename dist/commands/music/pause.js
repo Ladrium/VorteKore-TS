@@ -14,6 +14,7 @@ class default_1 extends lib_1.Command {
     constructor() {
         super("pause", {
             category: "Music",
+            cooldown: 5000,
             description: "Pauses the player if not already resumed.",
             channel: "guild"
         });

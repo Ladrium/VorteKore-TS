@@ -91,7 +91,8 @@ class Handler extends events_1.EventEmitter {
                 this.emit("commandBlocked", message, command, "cooldown", cooldown);
                 return false;
             }
-            command.currentCooldowns.set(message.author.id, Date.now());
+            if (!config_1.developers.includes(message.author.id))
+                command.currentCooldowns.set(message.author.id, Date.now());
             if (command.devOnly && !config_1.developers.includes(message.author.id)) {
                 this.emit("commandBlocked", message, command, "dev");
                 return false;

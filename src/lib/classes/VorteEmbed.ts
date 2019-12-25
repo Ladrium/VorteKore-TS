@@ -8,7 +8,8 @@ export class VorteEmbed {
   public baseEmbed(): MessageEmbed {
     return new MessageEmbed()
       .setAuthor(this.message.author.username, this.message.author.displayAvatarURL())
-      .setFooter(`VorteKore | ChaosPhoe`)
+      .setTimestamp()
+      .setFooter(`VorteKore`)
       .setColor("#4b62fa");
   }
 

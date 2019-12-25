@@ -4,6 +4,7 @@ export default class extends Command {
 	public constructor() {
 		super("repeat", {
 			category: "Music",
+			cooldown: 2000,
 			example: "!repeat queue; !repeat song",
 			description: "Repeats the queue or song.",
 			channel: "guild"

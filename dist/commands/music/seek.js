@@ -15,6 +15,7 @@ class default_1 extends Command_1.Command {
         super("seek", {
             category: "Music",
             example: "!seek 5s",
+            cooldown: 2000,
             channel: "guild"
         });
     }

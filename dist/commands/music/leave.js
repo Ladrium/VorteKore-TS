@@ -10,11 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
+const config_1 = require("../../config");
 class default_1 extends lib_1.Command {
     constructor() {
         super("leave", {
             aliases: ["stop"],
             category: "Music",
+            userPermissions(message) {
+                if (!message.member.roles.some((role) => role.name.toLowerCase() === "dj") || !config_1.developers.includes(message.author.id))
+                    return "DJ";
+                return;
+            },
             channel: "guild"
         });
     }

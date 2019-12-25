@@ -6,6 +6,7 @@ export default class extends Command {
     super("seek", {
       category: "Music",
       example: "!seek 5s",
+      cooldown: 2000,
       channel: "guild"
     });
   }

@@ -50,10 +50,11 @@ export class Handler extends EventEmitter {
   private async runChecks(message: VorteMessage, command: Command) {
     const cooldown = command.currentCooldowns.get(message.author.id);
     if (cooldown) {
-      this.emit("commandBlocked" , message, command, "cooldown", cooldown);
+      this.emit("commandBlocked", message, command, "cooldown", cooldown);
       return false;
     }
-    command.currentCooldowns.set(message.author.id, Date.now());
+    if (!developers.includes(message.author.id))
+      command.currentCooldowns.set(message.author.id, Date.now());
 
     if (command.devOnly && !developers.includes(message.author.id)) {
       this.emit("commandBlocked", message, command, "dev");

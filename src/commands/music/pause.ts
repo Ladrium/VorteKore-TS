@@ -4,6 +4,7 @@ export default class extends Command {
   public constructor() {
     super("pause", {
       category: "Music",
+      cooldown: 5000,
       description: "Pauses the player if not already resumed.",
       channel: "guild"
     });

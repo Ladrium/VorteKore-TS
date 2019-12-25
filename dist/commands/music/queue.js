@@ -33,7 +33,7 @@ class default_1 extends lib_1.Command {
                 ? upNext += paginated.items.map(song => `${++index}. **[${song.info.title.trunc(30, true)}](${song.info.uri})** *[<@${song.requester}> ${ms(song.info.length)}]*`).join("\n")
                 : upNext = `Hmmmm... pretty empty, you should add some more songs with \`${guild.prefix}play\``;
             if (paginated.maxPage > 1)
-                upNext += '"Use queue <page> to view a specific page."';
+                upNext += '\n"Use queue <page> to view a specific page."';
             const np = player.queue.np.song, queueEmbed = new lib_1.VorteEmbed(message).baseEmbed()
                 .setDescription(upNext)
                 .addField(`\u200B`, `**Now Playing:**\n**[${np.info.title}](${np.info.uri})** *[<@${np.requester}>]*`)

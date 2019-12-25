@@ -1,5 +1,6 @@
 import { Command, VorteMessage, VortePlayer } from "../../lib";
 import { VoiceChannel } from "discord.js";
+import { developers } from "../../config";
 
 export default class extends Command {
   public constructor() {
@@ -7,10 +8,11 @@ export default class extends Command {
       aliases: ["move-vc", "movevc", "moveto"],
 			category: "Music",
 			userPermissions(message: VorteMessage) {
-        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj"))
+        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj") || !developers.includes(message.author.id))
           return "DJ";
         return;
       },
+      cooldown: 5000,
 			channel: "guild",
 			description: "Moves the bot to another voice channel.",
 			example: "!move 613347362705768469",

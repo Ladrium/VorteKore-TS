@@ -1,4 +1,5 @@
 import { Command, VorteMessage, VortePlayer } from "../../lib";
+import { developers } from "../../config";
 
 export default class extends Command {
   public constructor() {
@@ -6,11 +7,12 @@ export default class extends Command {
       aliases: ["vol"],
       category: "Music",
       userPermissions(message: VorteMessage) {
-        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj"))
+        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj") || !developers.includes(message.author.id))
           return "DJ";
         return;
       },
-      channel: "guild"
+      channel: "guild",
+      cooldown: 5000
     });
   }
   

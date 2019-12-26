@@ -19,7 +19,6 @@ export default class extends Command {
 
     if (!mem) return message.sem("Please provide a user to ban");
 
-
     const member = message.mentions.members!.first() || message.guild!.members.find((r: { displayName: string; }) => {
       return r.displayName === mem;
     }) || message.guild!.members.get(mem);

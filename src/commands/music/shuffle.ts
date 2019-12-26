@@ -20,10 +20,9 @@ export default class extends Command {
 
     if (!player) return message.sem("The bot isn't in a voice channel.");
     if (!player.in(message.member!)) return message.sem("Please join my voice channel.")
-
     if (!player.queue.np) return message.sem("Nothing is playing", { type: "error" });
     
-    player.queue.shuffle();
-    message.sem("Shuffled the Queue!");
+    await player.queue.shuffle();
+    return message.sem("Shuffled the Queue!");
   }
 }                                                         

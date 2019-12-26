@@ -27,7 +27,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "mongoose": "^5.7.6",
-    "ms": "^2.1.2"
+    "ms": "^2.1.2",
+    "pako": "^1.0.10"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",

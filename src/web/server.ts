@@ -138,10 +138,14 @@ function addRoutes(bot: VorteClient) {
 
 		const user = await bot.users.fetch(req.body.user);
 		const logs = <TextChannel> bot.channels.get("613347362705768465");
-		logs.send(new MessageEmbed()
+		const embed = new MessageEmbed()
 			.setColor("#4b62fa")
 			.setAuthor(user.tag, user.displayAvatarURL())
-			.setDescription(`Thanks ${user} for voting! You can vote again in 12 hours.\n*prizes coming in eco update.*`));
+			.setDescription(`Thanks ${user.tag} for voting! You can vote again in 12 hours.\n*prizes coming in eco update.*`)
+		
+		await user.send(embed).catch(() => console.error("failed sending dm for vote"));
+		await logs.send(embed);
+		
 		return res.status(200).json({ message: "thanks!" });
 	});
 }

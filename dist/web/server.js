@@ -135,10 +135,12 @@ function addRoutes(bot) {
             return res.status(200).json({ message: "thanks!" });
         const user = yield bot.users.fetch(req.body.user);
         const logs = bot.channels.get("613347362705768465");
-        logs.send(new discord_js_1.MessageEmbed()
+        const embed = new discord_js_1.MessageEmbed()
             .setColor("#4b62fa")
             .setAuthor(user.tag, user.displayAvatarURL())
-            .setDescription(`Thanks ${user} for voting! You can vote again in 12 hours.\n*prizes coming in eco update.*`));
+            .setDescription(`Thanks ${user.tag} for voting! You can vote again in 12 hours.\n*prizes coming in eco update.*`);
+        yield user.send(embed).catch(() => console.error("failed sending dm for vote"));
+        yield logs.send(embed);
         return res.status(200).json({ message: "thanks!" });
     }));
 }

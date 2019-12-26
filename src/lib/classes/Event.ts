@@ -1,5 +1,6 @@
 import { VorteModule, VorteModuleOptions } from "./Module";
 import { EventEmitter } from "events";
+import Logger from "@ayana/logger";
 
 export type EventType = "on" | "off" | "once";
 export interface EventOptions extends VorteModuleOptions {
@@ -10,6 +11,9 @@ export interface EventOptions extends VorteModuleOptions {
 
 export class Event extends VorteModule {
 
+	static logger: Logger = Logger.get(Event);
+
+	public logger: Logger = Event.logger;
 	public type: EventType;
 	public emitter: string | EventEmitter;
 	public event: string;

@@ -1,10 +1,11 @@
+import "./util/Formatter";
 import { config } from 'dotenv';
 import mongoose from "mongoose";
 import { join } from "path";
+import { VortePlayer } from './lib';
 import "./lib/classes/Message";
 import { VorteClient } from "./lib/VorteClient";
-import { startServer, app } from "./web/server";
-import { VortePlayer } from './lib';
+import { startServer } from "./web/server";
 
 config({
   path: join(__dirname, "../", ".env")

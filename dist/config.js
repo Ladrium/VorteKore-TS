@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nodes = [{
         auth: "youshallnotpass",
-        host: "localhost",
+        host: "92.222.201.243",
         name: "Production",
         port: 5000
     }];

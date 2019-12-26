@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
 const fs_1 = require("fs");
@@ -15,46 +18,12 @@ const path_1 = require("path");
 const config_1 = require("../../config");
 const VorteGuild_1 = require("../database/VorteGuild");
 const VorteEmbed_1 = require("./VorteEmbed");
-const ms = require("ms");
+const logger_1 = __importDefault(require("@ayana/logger"));
 class Handler extends events_1.EventEmitter {
     constructor(bot) {
         super();
         this.bot = bot;
-        this.loadEvents = () => {
-            const start = Date.now();
-            console.log("----------------------------------------------");
-            for (const file of Handler.walk(path_1.join(__dirname, "../..", "events"))) {
-                const evtClass = (_ => _.default || _.Evt || _)(require(file));
-                const evt = new evtClass();
-                evt._onLoad(this);
-                const emitters = { client: this.bot, process, andesite: this.bot.andesite, handler: this };
-                ((typeof evt.emitter === "function" && evt.emitter instanceof events_1.EventEmitter)
-                    ? evt.emitter
-                    : emitters[evt.emitter])[evt.type](evt.event, evt.run.bind(evt));
-                console.log(`\u001b[32m[EVT ✅ ]\u001b[0m => Successfully loaded \u001b[34m${evt.category}\u001b[0m:${evt.name}`);
-            }
-            console.log(`\u001b[32m[EVT ✅ ]\u001b[0m => Loaded all Events in ${ms(Date.now() - start)}!`);
-        };
-        this.loadCommands = () => {
-            const start = Date.now();
-            console.log("----------------------------------------------");
-            for (const file of Handler.walk(path_1.join(__dirname, "../..", "commands"))) {
-                try {
-                    const cmdClass = (_ => _.default || _.Cmd || _)(require(file));
-                    const cmd = new cmdClass(this.bot);
-                    cmd._onLoad(this);
-                    this.bot.commands.set(cmd.name, cmd);
-                    cmd.aliases.forEach((alias) => this.bot.aliases.set(alias, cmd.name));
-                    console.log(`\u001b[32m[CMD ✅ ]\u001b[0m => Successfully loaded \u001b[34m${cmd.category}\u001b[0m:${cmd.name}`);
-                }
-                catch (e) {
-                    console.log(`\u001b[31m[CMD ❌ ]\u001b[0m => ${file} has an error: ${e.toString()}`);
-                }
-            }
-            console.log(`\u001b[32m[CMD ✅ ]\u001b[0m => Loaded all commands in ${ms(Date.now() - start)}!`);
-        };
-        this.loadEvents = this.loadEvents.bind(this);
-        this.loadCommands = this.loadCommands.bind(this);
+        this.logger = logger_1.default.get(Handler);
     }
     runCommand(message, member) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -73,7 +42,7 @@ class Handler extends events_1.EventEmitter {
                 yield command.run(message, args);
             }
             catch (e) {
-                console.log(e);
+                this.logger.error(e, command.name);
                 message.channel.send(new VorteEmbed_1.VorteEmbed(message)
                     .errorEmbed(process.execArgv.includes("--debug") ? e : undefined)
                     .setDescription("Sorry, I ran into an error."));
@@ -143,6 +112,35 @@ class Handler extends events_1.EventEmitter {
             }
             return true;
         });
+    }
+    loadEvents() {
+        const start = Date.now();
+        for (const file of Handler.walk(path_1.join(__dirname, "../..", "events"))) {
+            const evtClass = (_ => _.default || _.Evt || _)(require(file));
+            const evt = new evtClass();
+            evt._onLoad(this);
+            const emitters = { client: this.bot, process, andesite: this.bot.andesite, handler: this };
+            ((typeof evt.emitter === "function" && evt.emitter instanceof events_1.EventEmitter)
+                ? evt.emitter
+                : emitters[evt.emitter])[evt.type](evt.event, evt.run.bind(evt));
+        }
+        this.logger.info("Loaded all Events.", `${Date.now() - start}ms`);
+    }
+    loadCommands() {
+        const start = Date.now();
+        for (const file of Handler.walk(path_1.join(__dirname, "../..", "commands"))) {
+            try {
+                const cmdClass = (_ => _.default || _.Cmd || _)(require(file));
+                const cmd = new cmdClass(this.bot);
+                cmd._onLoad(this);
+                this.bot.commands.set(cmd.name, cmd);
+                cmd.aliases.forEach((alias) => this.bot.aliases.set(alias, cmd.name));
+            }
+            catch (e) {
+                this.logger.error(e, path_1.dirname(file).split(path_1.sep).reverse().slice(0, 2).reverse().join(path_1.sep));
+            }
+        }
+        this.logger.info("Loaded all Commands.", `${Date.now() - start}ms`);
     }
     get cateories() {
         return [...new Set(this.bot.commands.map(c => c.category))];

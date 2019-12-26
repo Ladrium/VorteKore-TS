@@ -12,14 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const logger_1 = __importDefault(require("@ayana/logger"));
+const body_parser_1 = require("body-parser");
 const discord_js_1 = require("discord.js");
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const lib_1 = require("../lib");
 const member_1 = require("../models/member");
-const body_parser_1 = require("body-parser");
 exports.app = express_1.default();
+const logger = logger_1.default.get(exports.app);
 function startServer(bot) {
     exports.app.use(body_parser_1.urlencoded({ extended: true }));
     exports.app.use(express_1.default.static(require("path").join(process.cwd(), "views")));
@@ -33,7 +35,7 @@ function startServer(bot) {
     exports.app.set("view engine", "ejs");
     addRoutes(bot);
     exports.app.listen(3000, () => {
-        console.log("Server listening on port 3000");
+        logger.info("Server listening on port 3000");
     });
 }
 exports.startServer = startServer;
@@ -127,20 +129,5 @@ function addRoutes(bot) {
             toPush.push({ member, username });
         });
         res.render("public/leaderboard", { info: toPush, bot, user });
-    }));
-    exports.app.post("/discordbotlist", (req, res) => __awaiter(this, void 0, void 0, function* () {
-        if (req.headers.authorization !== process.env.DBL_WEBHOOK_AUTH)
-            return res.status(401).json({ message: "fuck off" }).end();
-        if (req.body.type !== "upvote")
-            return res.status(200).json({ message: "thanks!" });
-        const user = yield bot.users.fetch(req.body.user);
-        const logs = bot.channels.get("613347362705768465");
-        const embed = new discord_js_1.MessageEmbed()
-            .setColor("#4b62fa")
-            .setAuthor(user.tag, user.displayAvatarURL())
-            .setDescription(`Thanks ${user.tag} for voting! You can vote again in 12 hours.\n*prizes coming in eco update.*`);
-        yield user.send(embed).catch(() => console.error("failed sending dm for vote"));
-        yield logs.send(embed);
-        return res.status(200).json({ message: "thanks!" });
     }));
 }

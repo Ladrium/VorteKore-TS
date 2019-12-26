@@ -11,6 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
 const util_1 = require("../../util");
+const Presence = {
+    dnd: "Do Not Disturb",
+    online: "Online",
+    idle: "Idling",
+    offline: "Offline"
+};
 class default_1 extends lib_1.Command {
     constructor() {
         super("userinfo", {
@@ -21,25 +27,26 @@ class default_1 extends lib_1.Command {
             channel: "guild"
         });
     }
-    run(message, [mem], thisMember = message.getMember()) {
+    run(message, [mem]) {
         return __awaiter(this, void 0, void 0, function* () {
-            const member = (yield util_1.findMember(message, mem)) || message.member;
+            const member = mem ? yield util_1.findMember(message, mem) : message.member;
             if (!member)
                 return message.channel.send(`Unable to find that member!`);
             const infoEmbed = new lib_1.VorteEmbed(message).baseEmbed().setDescription([
-                `**>** Name: ${member.user.tag}`,
-                `**>** Joined At: ${member.joinedAt}`,
-                `**>** Created At: ${member.user.createdAt}`,
-                `**>** Presence: ${member.presence.status}`,
-                `**>** Hoist Role: ${member.roles.hoist}`,
-                `**>** Roles: ${member.roles.array().toString().replace('@everyone', '')}`,
-                `**>** Level: ${thisMember.level}`,
-                `**>** XP: ${thisMember.xp}/${2 * 75 * thisMember.level}`,
-                `**>** Coins: ${thisMember.coins}`
+                `**Name**: ${member.user.tag} (${member.id})`,
+                `**Joined At**: ${member.joinedAt.toLocaleDateString()}`,
+                `**Created At**: ${member.user.createdAt.toLocaleDateString()}`,
+                `**Status**: ${Presence[member.presence.status]}`,
+                `**Game**: ${this.getGame(member)}`,
+                `**Roles**: ${member.roles.sorted((a, b) => b.position - a.position).filter(r => r.name !== "@everyone").map(r => r).join(" ")}`,
             ].join("\n"))
-                .setThumbnail(member.user.displayAvatarURL());
+                .setThumbnail(member.user.displayAvatarURL({ size: 2048 }));
             message.channel.send(infoEmbed);
         });
+    }
+    getGame(member) {
+        if (!member.presence.activity)
+            return "None.";
     }
 }
 exports.default = default_1;

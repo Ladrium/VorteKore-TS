@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/chaosphoe/vortekore-ts#readme",
   "dependencies": {
+    "@ayana/logger": "^2.1.1",
     "body-parser": "^1.19.0",
+    "botlist.space": "^3.3.1",
     "dblapi.js": "^2.3.0",
     "discord.js": "github:discordjs/discord.js",
     "discord.js-andesite": "^1.0.14",
@@ -27,6 +29,7 @@
     "eslint": "^6.5.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
+    "laffey": "^0.1.1",
     "mongoose": "^5.7.6",
     "ms": "^2.1.2",
     "pako": "^1.0.10"

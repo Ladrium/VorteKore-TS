@@ -2,7 +2,7 @@ import Collection from "@discordjs/collection";
 import { GuildChannel } from "discord.js";
 import { EventEmitter } from "events";
 import { readdirSync, statSync } from "fs";
-import { join } from "path";
+import { join, basename } from "path";
 import { developers } from "../../config";
 import { VorteGuild } from "../database/VorteGuild";
 import { VorteMember } from "../database/VorteMember";
@@ -10,15 +10,14 @@ import { VorteClient } from "../VorteClient";
 import { Command } from "./Command";
 import { VorteMessage } from "./Message";
 import { VorteEmbed } from "./VorteEmbed";
-import ms = require("ms");
+import Logger from "@ayana/logger";
 
 export class Handler extends EventEmitter {
+  public logger: Logger = Logger.get(Handler);
   constructor(
     public bot: VorteClient
   ) {
-    super()
-    this.loadEvents = this.loadEvents.bind(this);
-    this.loadCommands = this.loadCommands.bind(this);
+    super();
   }
 
   async runCommand(message: VorteMessage, member?: VorteMember) {
@@ -36,7 +35,6 @@ export class Handler extends EventEmitter {
     try {
       await command.run(message, args);
     } catch (e) {
-      console.log(e);
       message.channel.send(new VorteEmbed(message)
         .errorEmbed(process.execArgv.includes("--debug") ? e : undefined)
         .setDescription("Sorry, I ran into an error."))
@@ -112,9 +110,8 @@ export class Handler extends EventEmitter {
     return true;
   }
 
-  loadEvents = (): boolean | void => {
+  public loadEvents(): boolean | void {
     const start = Date.now();
-    console.log("----------------------------------------------");
     for (const file of Handler.walk(join(__dirname, "../..", "events"))) {
       const evtClass = (_ => _.default || _.Evt || _)(require(file));
       const evt = new evtClass();
@@ -127,15 +124,12 @@ export class Handler extends EventEmitter {
       ((typeof evt.emitter === "function" && evt.emitter instanceof EventEmitter)
         ? evt.emitter
         : emitters[evt.emitter])[evt.type](evt.event, evt.run.bind(evt));
-
-      console.log(`\u001b[32m[EVT ✅ ]\u001b[0m => Successfully loaded \u001b[34m${evt.category}\u001b[0m:${evt.name}`);
     }
-    console.log(`\u001b[32m[EVT ✅ ]\u001b[0m => Loaded all Events in ${ms(Date.now() - start)}!`);
+    this.logger.info("Loaded all Events.", `${Date.now() - start}ms`);
   }
 
-  loadCommands = (): void | boolean => {
+  public loadCommands(): void | boolean {
     const start = Date.now();
-    console.log("----------------------------------------------");
     for (const file of Handler.walk(join(__dirname, "../..", "commands"))) {
       try {
         const cmdClass = (_ => _.default || _.Cmd || _)(require(file));
@@ -144,13 +138,11 @@ export class Handler extends EventEmitter {
         cmd._onLoad(this);
         this.bot.commands.set(cmd.name, cmd);
         cmd.aliases.forEach((alias: string) => this.bot.aliases.set(alias, cmd.name));
-
-        console.log(`\u001b[32m[CMD ✅ ]\u001b[0m => Successfully loaded \u001b[34m${cmd.category}\u001b[0m:${cmd.name}`);
       } catch (e) {
-        console.log(`\u001b[31m[CMD ❌ ]\u001b[0m => ${file} has an error: ${e.toString()}`);
+        this.logger.error(e, basename(file));
       }
     }
-    console.log(`\u001b[32m[CMD ✅ ]\u001b[0m => Loaded all commands in ${ms(Date.now() - start)}!`);
+    this.logger.info("Loaded all Commands.", `${Date.now() - start}ms`);
   }
 
   public get cateories(): string[] {
@@ -166,11 +158,6 @@ export class Handler extends EventEmitter {
     return this.bot.commands.filter((command) => command.category.ignoreCase(name));
   }
 
-	/**
-	 * Reads files recursively from a directory.
-	 * @param {string} directory - Directory to read.
-	 * @returns {string[]} - An array of file paths.
-	 */
   public static walk(directory: string): string[] {
     const result = [];
     (function read(dir) {

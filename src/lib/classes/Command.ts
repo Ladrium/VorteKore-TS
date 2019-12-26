@@ -1,10 +1,13 @@
 import { ICommandOptions, PermissionGetter, Permissions } from "../../interfaces/IData";
 import { VorteMessage } from "./Message";
 import { VorteModule } from "./Module";
+import Logger from "@ayana/logger";
 
 export abstract class Command extends VorteModule {
-  public currentCooldowns: Map<string, number> = new Map();
+	static logger: Logger = Logger.get(Command);
 
+  public currentCooldowns: Map<string, number> = new Map();
+	public logger: Logger = Command.logger;
   public aliases: string[];
   public usage: string;
   public description: string;

@@ -5,7 +5,8 @@ export class VorteMember {
 
   public constructor(
     public id: string,
-    public guildID: string) {
+    public guildID: string
+  ) {
     this._init();
   }
 

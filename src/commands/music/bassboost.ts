@@ -1,5 +1,6 @@
 import { developers } from "../../config";
 import { Command, VorteMessage, VortePlayer } from "../../lib";
+import { checkPermissions } from "../../util";
 
 export default class extends Command {
   public constructor() {
@@ -7,7 +8,7 @@ export default class extends Command {
       aliases: ["bb"],
 			category: "Music",
 			userPermissions(message: VorteMessage) {
-        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj") || !developers.includes(message.author.id))
+        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj") || !developers.includes(message.author.id) || !checkPermissions(message.member!, "ADMINISTRATOR"))
           return "DJ";
         return;
       },

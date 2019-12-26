@@ -36,7 +36,7 @@ class VorteQueue extends events_1.EventEmitter {
                 if (!this.np.song)
                     return this.emit("finish");
                 const channel = this.player.node.manager.client.channels.get(player.channelId);
-                if (!(channel.members.filter(m => !m.user.bot).size))
+                if (!channel || !(channel.members.filter(m => !m.user.bot).size))
                     return this.emit("last_man_standing");
                 this.emit("next", this.np);
                 yield this.player.play(this.np.song.track);

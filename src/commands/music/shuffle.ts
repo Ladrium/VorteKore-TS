@@ -1,13 +1,14 @@
 import { VorteMessage, VortePlayer } from "../../lib";
 import { Command } from "../../lib/classes/Command";
 import { developers } from "../../config";
+import { checkPermissions } from "../../util";
 
 export default class extends Command {
   public constructor() {
     super("shuffle", {
       category: "Music",
       userPermissions(message: VorteMessage) {
-        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj") || !developers.includes(message.author.id))
+        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj") || !developers.includes(message.author.id) || !checkPermissions(message.member!, "ADMINISTRATOR"))
           return "DJ";
         return;
       },

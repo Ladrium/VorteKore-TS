@@ -10,7 +10,7 @@ export default class extends Event {
   }
 
   async run(deletedMessage: Message, bot = this.bot) {
-    const guild = new VorteGuild(deletedMessage.guild!)
+    const guild = new VorteGuild(deletedMessage.guild!)._init();
     const { channel, enabled } = guild.getLog("deleteMessage")
     if (!enabled) return;
     

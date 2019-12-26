@@ -7,15 +7,15 @@ const guild_1 = __importDefault(require("../../models/guild"));
 class VorteGuild {
     constructor(g) {
         this.g = g;
-        this._load();
     }
-    _load() {
+    _init() {
         guild_1.default.findOne({ guildID: this.g.id }).then((guild) => this.guild = guild);
         if (!this.guild)
             this.guild = new guild_1.default({
                 guildID: this.g.id,
                 case: 0,
                 prefix: "!",
+                ecoMsg: false,
                 autoRoles: [],
                 staffRoles: [],
                 welcome: {},
@@ -97,6 +97,9 @@ class VorteGuild {
             enabled: this.guild.logs[log] ? this.guild.logs[log] : false,
             channel: this.guild.logs.channel
         };
+    }
+    get ecoMsg() {
+        return this.guild.ecoMsg;
     }
     get autoRoles() {
         return this.guild.autoRoles;

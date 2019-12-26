@@ -5,16 +5,15 @@ export class VorteGuild {
   public guild?: any;
   constructor(
     public g: guild
-  ) {
-    this._load();
-  }
+  ) { }
 
-  public _load() {
+  public _init() {
     Guild.findOne({ guildID: this.g.id }).then((guild) => this.guild = guild);
     if (!this.guild) this.guild = new Guild({
       guildID: this.g.id,
       case: 0,
       prefix: "!",
+      ecoMsg: false,
       autoRoles: [],
       staffRoles: [],
       welcome: {},
@@ -95,6 +94,10 @@ export class VorteGuild {
       enabled: this.guild.logs[log] ? this.guild.logs[log] : false,
       channel: this.guild.logs.channel
     }
+  }
+
+  public get ecoMsg() {
+    return this.guild.ecoMsg;
   }
 
   public get autoRoles() {

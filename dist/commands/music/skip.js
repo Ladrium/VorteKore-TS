@@ -11,12 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const Command_1 = require("../../lib/classes/Command");
 const config_1 = require("../../config");
+const util_1 = require("../../util");
 class default_1 extends Command_1.Command {
     constructor() {
         super("skip", {
             category: "Music",
             userPermissions(message) {
-                if (!message.member.roles.some((role) => role.name.toLowerCase() === "dj") || !config_1.developers.includes(message.author.id))
+                if (!message.member.roles.some((role) => role.name.toLowerCase() === "dj") || !config_1.developers.includes(message.author.id) || !util_1.checkPermissions(message.member, "ADMINISTRATOR"))
                     return "DJ";
                 return;
             },

@@ -4,6 +4,7 @@ const mongoose_1 = require("mongoose");
 const Guild = new mongoose_1.Schema({
     guildID: String,
     case: Number,
+    ecoMsg: Boolean,
     logs: {
         deleteMessage: Boolean,
         editMessage: Boolean,

@@ -12,19 +12,19 @@ Structures.extend("Message", (msg) =>
 			return this.channel.send(e);
 		}
 
-		public getMember(member: string | GuildMember = this.member!): VorteMember | null {
+		public async getMember(member: string | GuildMember = this.member!): Promise<VorteMember|null> {
 			if (!this.guild) return null;
-			return new VorteMember(
+			return await new VorteMember(
 				typeof member === "string"
 					? member
 					: member.id,
 				this.guild.id
-			);
+			)._init();
 		}
 
 		public getGuild(): VorteGuild | null {
 			if (!this.guild) return null;
-			return new VorteGuild(this.guild);
+			return new VorteGuild(this.guild)._init();
 		}
 	}
 )

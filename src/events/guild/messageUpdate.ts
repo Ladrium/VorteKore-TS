@@ -10,7 +10,7 @@ export default class extends Event {
   }
 
   async run(oldmsg: Message, newmsg: Message, bot = this.bot) {
-    const guild = await new VorteGuild(oldmsg.guild!);
+    const guild = await new VorteGuild(oldmsg.guild!)._init();
     if (!oldmsg || !newmsg || oldmsg.content === newmsg.content) return;
     
     const { channel, enabled } = guild.getLog("editMessage");

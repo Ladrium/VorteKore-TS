@@ -11,6 +11,6 @@ export default class extends Event {
   }
 
   async run(guild: Guild) {
-    await new VorteGuild(guild);
+    await new VorteGuild(guild)._init();
   };
 }

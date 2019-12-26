@@ -19,7 +19,7 @@ class default_1 extends lib_1.Event {
     }
     run(oldmsg, newmsg, bot = this.bot) {
         return __awaiter(this, void 0, void 0, function* () {
-            const guild = yield new lib_1.VorteGuild(oldmsg.guild);
+            const guild = yield new lib_1.VorteGuild(oldmsg.guild)._init();
             if (!oldmsg || !newmsg || oldmsg.content === newmsg.content)
                 return;
             const { channel, enabled } = guild.getLog("editMessage");

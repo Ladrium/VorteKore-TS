@@ -20,7 +20,7 @@ class default_1 extends lib_2.Event {
     }
     run(guild) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield new lib_1.VorteGuild(guild);
+            yield new lib_1.VorteGuild(guild)._init();
         });
     }
     ;

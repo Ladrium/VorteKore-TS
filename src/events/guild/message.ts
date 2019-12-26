@@ -13,7 +13,7 @@ export default class extends Event {
 
   async run(message: VorteMessage) {
     if (message.author.bot) return;
-
+    const guild = message.getGuild();
     if (message.guild) {
       const member = await new VorteMember(message.author.id, message.guild.id)._init();
       if (!this.recently.has(message.author.id)) {
@@ -23,7 +23,7 @@ export default class extends Event {
             member.add("xp", this.xp(25, 2));
             if (member.xp > 2 * (75 * member.level)) {
               member.add("level", 1);
-              if (message.guild.id !== "264445053596991498")
+              if (guild && guild!.ecoMsg)
                 message.sem(`Congrats 🎉! You're now level ${member.level}`);
             }
           }

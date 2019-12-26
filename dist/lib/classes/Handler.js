@@ -16,7 +16,6 @@ const events_1 = require("events");
 const fs_1 = require("fs");
 const path_1 = require("path");
 const config_1 = require("../../config");
-const VorteGuild_1 = require("../database/VorteGuild");
 const VorteEmbed_1 = require("./VorteEmbed");
 const logger_1 = __importDefault(require("@ayana/logger"));
 class Handler extends events_1.EventEmitter {
@@ -31,7 +30,8 @@ class Handler extends events_1.EventEmitter {
                 return;
             if (message.guild && !message.member)
                 Object.defineProperty(message, "member", { value: yield message.guild.members.fetch(message.author) });
-            let prefix = message.guild ? new VorteGuild_1.VorteGuild(message.guild).prefix : "!";
+            const guild = yield message.getGuild();
+            let prefix = message.guild ? guild.prefix : "!";
             if (!message.content.startsWith(prefix))
                 return;
             const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
@@ -42,7 +42,6 @@ class Handler extends events_1.EventEmitter {
                 yield command.run(message, args);
             }
             catch (e) {
-                this.logger.error(e, command.name);
                 message.channel.send(new VorteEmbed_1.VorteEmbed(message)
                     .errorEmbed(process.execArgv.includes("--debug") ? e : undefined)
                     .setDescription("Sorry, I ran into an error."));
@@ -137,7 +136,7 @@ class Handler extends events_1.EventEmitter {
                 cmd.aliases.forEach((alias) => this.bot.aliases.set(alias, cmd.name));
             }
             catch (e) {
-                this.logger.error(e, path_1.dirname(file).split(path_1.sep).reverse().slice(0, 2).reverse().join(path_1.sep));
+                this.logger.error(e, path_1.basename(file));
             }
         }
         this.logger.info("Loaded all Commands.", `${Date.now() - start}ms`);

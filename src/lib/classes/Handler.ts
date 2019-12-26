@@ -24,8 +24,8 @@ export class Handler extends EventEmitter {
     if (message.author.bot) return;
     if (message.guild && !message.member)
       Object.defineProperty(message, "member", { value: await message.guild.members.fetch(message.author) });
-
-    let prefix = message.guild ? new VorteGuild(message.guild).prefix : "!";
+    const guild = await message.getGuild();
+    let prefix = message.guild ? guild!.prefix : "!";
     if (!message.content.startsWith(prefix)) return;
 
     const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);

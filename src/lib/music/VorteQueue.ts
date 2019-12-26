@@ -43,7 +43,7 @@ export class VorteQueue extends EventEmitter {
         if (!this.np.song) return this.emit("finish");
 
         const channel = this.player.node.manager.client.channels.get(player.channelId)! as VoiceChannel;
-        if (!(channel.members.filter(m => !m.user.bot).size)) 
+        if (!channel || !(channel.members.filter(m => !m.user.bot).size))
           return this.emit("last_man_standing");
 
         this.emit("next", this.np);

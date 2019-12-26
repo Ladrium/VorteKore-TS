@@ -3,6 +3,7 @@ import { model, Schema } from "mongoose";
 const Guild = new Schema({
   guildID: String,
   case: Number,
+  ecoMsg: Boolean,
   logs: {
     deleteMessage: Boolean,
     editMessage: Boolean,

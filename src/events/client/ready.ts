@@ -4,17 +4,24 @@ import { Event, Mute, VortePlayer } from "../../lib";
 import DBLAPI = require("dblapi.js");
 
 export default class extends Event {
-  public constructor() {
-    super("bot-ready", {
-      category: "client",
-      event: "ready"
-    });
-  }
+	public constructor() {
+		super("bot-ready", {
+			category: "client",
+			event: "ready"
+		});
+	}
 
-  async run(bot = this.bot) {
-    await bot.logger.info(`${bot.user!.username} is ready to rumble!`);
+	async run(bot = this.bot) {
+		await bot.logger.info(`${bot.user!.username} is ready to rumble!`);
 		bot.andesite.init(bot.user!.id);
-
+		bot.user!.setPresence({
+			activity: {
+				name: "VorteKore | !help",
+				type: "STREAMING",
+				url: "https://api.chaosphoe.xyz/rick"
+			},
+			
+		});
 		if (process.env.NODE_ENV!.ignoreCase("production")) {
 			bot.dbl = new DBLAPI(process.env.DBL_TOKEN!, {
 				statsInterval: 900000,
@@ -39,17 +46,17 @@ export default class extends Event {
 						member.roles.remove(muteRole!).catch(null);
 						return Mute.deleteOne(x.guildID, x.userID);
 					} catch (error) {
-						
+
 					}
 				}
 			});
 
-			const players = <Collection<string, VortePlayer>> bot.andesite.players;
+			const players = <Collection<string, VortePlayer>>bot.andesite.players;
 			for (const [, player] of players) {
 				const channel = bot.channels.get(player.channelId)! as VoiceChannel
-				if (!(channel.members.filter(m => !m.user.bot).size)) 
-					return player.queue.emit("last_man_standing");  
+				if (!channel || !(channel.members.filter(m => !m.user.bot).size))
+					return player.queue.emit("last_man_standing");
 			}
 		}, 5000);
-  };
+	};
 }

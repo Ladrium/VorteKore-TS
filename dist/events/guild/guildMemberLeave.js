@@ -20,7 +20,7 @@ class default_1 extends lib_1.Event {
     }
     run(member) {
         return __awaiter(this, void 0, void 0, function* () {
-            const guild = yield new lib_1.VorteGuild(member.guild);
+            const guild = yield new lib_1.VorteGuild(member.guild)._init();
             const { channel, enabled, message } = guild.leave;
             if (!enabled)
                 return;

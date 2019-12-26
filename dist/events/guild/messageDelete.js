@@ -19,7 +19,7 @@ class default_1 extends lib_1.Event {
     }
     run(deletedMessage, bot = this.bot) {
         return __awaiter(this, void 0, void 0, function* () {
-            const guild = new lib_1.VorteGuild(deletedMessage.guild);
+            const guild = new lib_1.VorteGuild(deletedMessage.guild)._init();
             const { channel, enabled } = guild.getLog("deleteMessage");
             if (!enabled)
                 return;

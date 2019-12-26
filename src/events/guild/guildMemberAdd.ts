@@ -11,7 +11,7 @@ export default class extends Event {
   }
 
   async run(member: GuildMember) {
-    const guild = await new VorteGuild(member.guild!);
+    const guild = await new VorteGuild(member.guild!)._init();
     const { channel, enabled, message } = guild.welcome;
     if (!enabled) return;
 

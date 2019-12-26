@@ -24,6 +24,7 @@ class default_1 extends lib_1.Event {
         return __awaiter(this, void 0, void 0, function* () {
             if (message.author.bot)
                 return;
+            const guild = message.getGuild();
             if (message.guild) {
                 const member = yield new lib_1.VorteMember(message.author.id, message.guild.id)._init();
                 if (!this.recently.has(message.author.id)) {
@@ -33,7 +34,7 @@ class default_1 extends lib_1.Event {
                             member.add("xp", this.xp(25, 2));
                             if (member.xp > 2 * (75 * member.level)) {
                                 member.add("level", 1);
-                                if (message.guild.id !== "264445053596991498")
+                                if (guild && guild.ecoMsg)
                                     message.sem(`Congrats 🎉! You're now level ${member.level}`);
                             }
                         }

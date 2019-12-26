@@ -1,4 +1,4 @@
-src/config.ts
+*/config.*
 node_modules/
 .eslintrc
 .env
@@ -9,4 +9,4 @@ application.*
 logs/
 *.jar
 *.lock
-dist/
+/dist/

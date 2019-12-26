@@ -18,8 +18,10 @@ const express_session_1 = __importDefault(require("express-session"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const lib_1 = require("../lib");
 const member_1 = require("../models/member");
+const body_parser_1 = require("body-parser");
 exports.app = express_1.default();
 function startServer(bot) {
+    exports.app.use(body_parser_1.urlencoded({ extended: true }));
     exports.app.use(express_1.default.static(require("path").join(process.cwd(), "views")));
     exports.app.use(express_session_1.default({
         secret: "ChaosIsCool",
@@ -125,5 +127,18 @@ function addRoutes(bot) {
             toPush.push({ member, username });
         });
         res.render("public/leaderboard", { info: toPush, bot, user });
+    }));
+    exports.app.post("/discordbotlist", (req, res) => __awaiter(this, void 0, void 0, function* () {
+        if (req.headers.authorization !== process.env.DBL_WEBHOOK_AUTH)
+            return res.status(401).json({ message: "fuck off" }).end();
+        if (req.body.type !== "upvote")
+            return res.status(200).json({ message: "thanks!" });
+        const user = yield bot.users.fetch(req.body.user);
+        const logs = bot.channels.get("613347362705768465");
+        logs.send(new discord_js_1.MessageEmbed()
+            .setColor("#4b62fa")
+            .setAuthor(user.tag, user.displayAvatarURL())
+            .setDescription(`Thanks ${user} for voting! You can vote again in 12 hours.\n*prizes coming in eco update.*`));
+        return res.status(200).json({ message: "thanks!" });
     }));
 }

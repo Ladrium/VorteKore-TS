@@ -24,16 +24,16 @@ class default_1 extends lib_1.Command {
             channel: "guild"
         });
     }
-    run(message, query) {
+    run(message) {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.andesite.players.get(message.guild.id);
             if (!player)
-                return message.sem("The bot isn't in a voice channel.");
+                return message.sem("The bot isn't in a voice channel.", { type: "error" });
             if (!player.in(message.member))
                 return message.sem("Please join the voice channel I'm in.", { type: "error" });
             yield player.stop();
             yield player.node.leave(player.guildId);
-            return message.sem("Successfully left the voice channel.");
+            return message.sem("Successfully left the voice channel.", { type: "music" });
         });
     }
 }

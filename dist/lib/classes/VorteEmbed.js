@@ -20,5 +20,8 @@ class VorteEmbed {
             embed.setDescription(`Sorry, I ran into an error!\n\`\`\`js\n${error}\`\`\``);
         return embed;
     }
+    musicEmbed() {
+        return this.baseEmbed();
+    }
 }
 exports.VorteEmbed = VorteEmbed;

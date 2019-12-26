@@ -18,18 +18,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../lib");
 const Hook_1 = require("../lib/classes/Hook");
 class QueueHook extends Hook_1.Hook {
+    last_man_standing({ player } = this.emitter) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield player.message.sem("Oh okay... I'm all alone *sobs*, I might as well leave :(");
+            return player.node.leave(player.guildId);
+        });
+    }
     next({ song }, { player } = this.emitter) {
         return __awaiter(this, void 0, void 0, function* () {
-            return player.message.sem(`Now playing **[${song.info.title}](${song.info.uri})**.`);
+            return player.message.sem(`Now playing **[${song.info.title}](${song.info.uri})** because <@${song.requester}> requested it.`, { type: "music" });
         });
     }
     finish({ player } = this.emitter) {
         return __awaiter(this, void 0, void 0, function* () {
-            player.message.sem(`There are no more songs left in the queue 👋!`);
+            player.message.sem(`There are no more songs left in the queue 👋\n*Psssst* If you liked the quality give us some feedback with \`!feedback\``, { type: "music" });
             return player.node.leave(player.guildId);
         });
     }
 }
+__decorate([
+    lib_1.listen("last_man_standing")
+], QueueHook.prototype, "last_man_standing", null);
 __decorate([
     lib_1.listen("next")
 ], QueueHook.prototype, "next", null);

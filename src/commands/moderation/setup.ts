@@ -26,6 +26,13 @@ export default class extends Command {
     )
     const toSetup = args[0].toLowerCase();
 
+    // switch (toSetup.toLowerCase()) {
+    //   case "prefix": {
+    //     if (!args[1] || args[1].length > 5) return message.sem("Please provide a prefix that's 5 or less characters in length", { type: "error" });
+        
+    //   }
+    // }
+
     if (toSetup === "prefix") {
 
       if (!checkPermissions(message.member!, "ADMINISTRATOR")) return message.channel.send(`Missing Permissions for using this command.`);

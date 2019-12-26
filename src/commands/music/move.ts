@@ -16,21 +16,22 @@ export default class extends Command {
 			channel: "guild",
 			description: "Moves the bot to another voice channel.",
 			example: "!move 613347362705768469",
-			usage: "<voice channel id>"
+      usage: "<voice channel id>",
+      disabled: true
     });
   }
   
   public async run(message: VorteMessage, [channel]: string[]) {
     const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
 
-    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
 		if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
 		if (!channel) return message.sem("Provide a voice channel to move to.", { type: "error" });
 
 		const chan = message.guild!.channels.get(channel);
-		if (!chan || !(chan instanceof VoiceChannel)) return message.sem("Please provide a valid voice channel id.");
+		if (!chan || !(chan instanceof VoiceChannel)) return message.sem("Please provide a valid voice channel id.", { type: "error" });
 
 		await player.moveVoiceChannel(chan.id);
-		return message.sem(`Successfully moved to ${chan}!`);
+		return message.sem(`Successfully moved to ${chan}!`, { type: "music" });
   }
 }

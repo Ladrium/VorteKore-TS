@@ -22,11 +22,11 @@ class default_1 extends lib_1.Command {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.andesite.players.get(message.guild.id);
             if (!player)
-                return message.sem("The bot isn't in a voice channel.");
+                return message.sem("The bot isn't in a voice channel.", { type: "error" });
             if (!player.in(message.member))
-                return message.sem("Please join my voice channel.");
+                return message.sem("Please join my voice channel.", { type: "error" });
             if (!player.paused)
-                return message.sem(`I'm not paused... :p`);
+                return message.sem(`I'm not paused... :p`, { type: "music" });
             yield player.resume();
             return message.sem(`Successfully resumed the player!`);
         });

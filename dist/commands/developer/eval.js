@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
+const util_1 = require("../../util");
 class default_1 extends lib_1.Command {
     constructor() {
         super("eval", {
@@ -26,7 +27,9 @@ class default_1 extends lib_1.Command {
             let embed;
             try {
                 const codein = args.join(" ");
-                let code = yield eval(codein);
+                let code = eval(codein);
+                if (util_1.isPromise(code))
+                    code = yield code;
                 const ctype = typeof code;
                 if (typeof code !== "string") {
                     code = require("util").inspect(code, {
@@ -39,6 +42,7 @@ class default_1 extends lib_1.Command {
                     .addField("Input", `\`\`\`js\n${codein}\`\`\``)
                     .addField("Output", `\`\`\`js\n${code}\`\`\``)
                     .addField("Type", `\`\`\`js\n${ctype}\`\`\``);
+                message.channel.send(embed);
             }
             catch (e) {
                 embed = new lib_1.VorteEmbed(message)
@@ -47,8 +51,8 @@ class default_1 extends lib_1.Command {
                     .setColor("#ff0000")
                     .addField("Input", `\`\`\`js\n${args.join(" ")}\`\`\``)
                     .addField("Error", `\`\`\`js\n${e.name}: ${e.message}\`\`\``);
+                message.channel.send(embed);
             }
-            message.channel.send(embed);
         });
     }
 }

@@ -20,14 +20,14 @@ class default_1 extends lib_1.Command {
             cooldown: 500
         });
     }
-    run(message, [selected = 1]) {
+    run(message, [selected]) {
         return __awaiter(this, void 0, void 0, function* () {
             let members = (yield member_1.member.find({ guildID: message.guild.id }));
             members = members.sort((a, b) => b.xp - a.xp);
-            let { items, page } = util_1.paginate(members, selected), str = "";
+            let { items, page } = util_1.paginate(members, selected), str = "", index = (page - 1) * 10;
             for (const member of items) {
-                const user = this.bot.users.get(member.id), xpPadding = items.reduce((base, _) => Math.max(base, String(_.xp).length), 0), levelPadding = items.reduce((base, _) => Math.max(base, String(_.level).length), 0);
-                str += `[XP ${String(member.xp).padStart(xpPadding)} LVL ${String(member.level).padStart(levelPadding)}] : "${user.username}"\n`;
+                const user = this.bot.users.get(member.id);
+                str += `${++index}. ${user.username} : ${member.level} [${member.xp}]\n`;
             }
             str += `Page : ${page}`;
             const leaderboardEmbed = new lib_1.VorteEmbed(message)

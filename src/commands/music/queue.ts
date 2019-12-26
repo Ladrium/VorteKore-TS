@@ -14,8 +14,9 @@ export default class extends Command {
   
   public async run(message: VorteMessage, [ page ]: [ string ], guild: VorteGuild = message.getGuild()!) {
     const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
-    if (!player) return message.sem("The bot isn't in a voice channel.");
-    if (!player.queue.np.song) return message.sem(`Hmmmm... the queue is empty, you should some more songs with \`${guild.prefix}play\``);
+    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
+    if (player.radio) return message.sem("Sorry, the player is currently in radio mode :p", { type: "error" });
+    if (!player.queue.np.song) return message.sem(`Hmmmm... the queue is empty, you should some more songs with \`${guild.prefix}play\``, { type: "music" });
 
     let total = player.queue.next.reduce((prev, song ) => prev + song.info.length, 0)
       , paginated = paginate(player.queue.next, parseInt(page || "1"))
@@ -26,7 +27,7 @@ export default class extends Command {
       : upNext = `Hmmmm... pretty empty, you should add some more songs with \`${guild.prefix}play\``      
     if (paginated.maxPage > 1) upNext += '\n"Use queue <page> to view a specific page."';
 
-    const np = player.queue.np.song!, queueEmbed = new VorteEmbed(message).baseEmbed()
+    const np = player.queue.np.song!, queueEmbed = new VorteEmbed(message).musicEmbed()
       .setDescription(upNext)
       .addField(`\u200B`, `**Now Playing:**\n**[${np.info.title}](${np.info.uri})** *[<@${np.requester}>]*`)
       .setFooter(paginated.items.length ? `Queue Length: ${ms(total)} | VorteKore` : `VorteKore | ChaosPhoe`);

@@ -27,9 +27,11 @@ class default_1 extends Command_1.Command {
         return __awaiter(this, void 0, void 0, function* () {
             const player = this.bot.andesite.players.get(message.guild.id);
             if (!player)
-                return message.sem("The bot isn't in a voice channel.");
+                return message.sem("The bot isn't in a voice channel.", { type: "error" });
+            if (player.radio)
+                return message.sem("Sorry, the player is currently in radio mode :p", { type: "error" });
             if (!player.in(message.member))
-                return message.sem("Please join my voice channel.");
+                return message.sem("Please join my voice channel.", { type: "error" });
             yield player.emit("end", {});
         });
     }

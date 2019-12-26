@@ -14,16 +14,18 @@ export default class extends Command {
   }
 
   public async run(message: VorteMessage) {
-    const { data, error } = await get<{ image: string }>("https://api.chaosphoe.xyz/meme");
+    const { data, error } = await get<RedditTopJSON.RootObject>("https://www.reddit.com/r/dankmemes/top.json");
     if (!data) {
       console.error(error);
       return message.sem(`Sorry, we ran into an error :(`, { type: "error" });
-    }
-
-    const memeEmbed = new VorteEmbed(message)
-      .baseEmbed()
-      .setAuthor(message.author.username, message.author.displayAvatarURL())
-      .setImage(data.image);
-    return message.channel.send(memeEmbed);
+		}
+		
+		const images = data.data.children.filter((post) => post.data.post_hint === "image")
+      , image = images[Math.floor(Math.random() * images.length)].data;
+		return message.channel.send(new VorteEmbed(message).baseEmbed()
+			.setAuthor(image.author)
+			.setTitle(image.title).setURL(`https://reddit.com${image.permalink}`)
+			.setImage(image.url)
+			.setFooter(`👍 ${image.ups}`))
   }
 }

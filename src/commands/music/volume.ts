@@ -16,14 +16,16 @@ export default class extends Command {
     });
   }
   
-  public async run(message: VorteMessage, [volume]: any) {
+  public async run(message: VorteMessage, [val]: string[]) {
     const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
-    if (!player) return message.sem("The bot isn't in a voice channel.");
-    if (!player.in(message.member!)) return message.sem("Please join my voice channel.")
 
-    if (isNaN(volume) || volume.includes("-") || volume.includes(".") || volume > 100 || volume < 1) return message.reply("Please return a valid number between 1-100");
-    volume = parseInt(volume);
+    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
+    if (!player.in(message.member!)) return message.sem("Please join my voice channel.", { type: "error" })
+
+    const volume = Number(val);
+    if (isNaN(volume) || ["-", "."].some(s => val.includes(s)) || volume > 100 || volume < 1) return message.sem("Please return a valid number between 1-100", { type: "error" });
+
     await player.setVolume(volume);
-    message.channel.send(`Set the Volume to: \`${volume}\``)
+    return message.sem(`Set the Volume to: \`${volume}\``, { type: "music" });
   }
 }

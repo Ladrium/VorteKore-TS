@@ -2,7 +2,7 @@ import { ICommandOptions, PermissionGetter, Permissions } from "../../interfaces
 import { VorteMessage } from "./Message";
 import { VorteModule } from "./Module";
 
-export class Command extends VorteModule {
+export abstract class Command extends VorteModule {
   public currentCooldowns: Map<string, number> = new Map();
 
   public aliases: string[];
@@ -17,7 +17,6 @@ export class Command extends VorteModule {
   public channel?: "guild" | "dm";
 
   public constructor(
-
     name: string,
     options: ICommandOptions
   ) {
@@ -49,7 +48,5 @@ export class Command extends VorteModule {
     this.channel = channel
   }
 
-  public async run(message: VorteMessage, args?: any[]): Promise<any> {
-    return message.sem("Sorry, this command is in development :(", { type: "error" });
-  }
+  public async abstract run(message: VorteMessage, args?: any[]): Promise<any>;
 }

@@ -18,7 +18,7 @@ export default class extends Command {
       for (const category of this.handler.cateories) {
         const commands = this.handler.getCategory(category);
         if (commands.size)
-          helpEmbed.addField(category, commands.map(c => `\`${c.name}\``).join(",\n"), true)
+          helpEmbed.addField(category, commands.map(c => `\`${c.name}\``).join(", "), true)
       }
     } else { 
       let info = "", command = this.handler.getCommand(args[0])!;

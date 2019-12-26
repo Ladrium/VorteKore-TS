@@ -31,11 +31,17 @@ class VorteClient extends discord_js_1.Client {
             restTimeout: 20000
         });
         this.queues = new discord_js_1.Collection();
-        this.dbl = new dblapi_js_1.default(process.env.DBLTOKEN, this);
         this.on("ready", () => {
             console.log(`${this.user.username} is ready to rumble!`);
             this.andesite.init(this.user.id);
-            setInterval(() => this.dbl.postStats(this.guilds.size), 30000);
+            if (process.env.NODE_ENV.ignoreCase("production")) {
+                this.dbl = new dblapi_js_1.default(process.env.DBL_TOKEN, {
+                    statsInterval: 900000,
+                    webhookAuth: process.env.DBL_WEBHOOK_AUTH,
+                    webhookPath: process.env.DBL_WEBHOOK_PATH,
+                    webhookPort: 3001
+                }, this);
+            }
             setInterval(() => __awaiter(this, void 0, void 0, function* () {
                 const mutes = yield Mute_1.Mute.getAll();
                 mutes.forEach((x) => __awaiter(this, void 0, void 0, function* () {
@@ -51,6 +57,12 @@ class VorteClient extends discord_js_1.Client {
                         return Mute_1.Mute.deleteOne(x.guildID, x.userID);
                     }
                 }));
+                const players = this.andesite.players;
+                for (const [, player] of players) {
+                    const channel = this.channels.get(player.channelId);
+                    if (!(channel.members.filter(m => !m.user.bot).size))
+                        return player.queue.emit("last_man_standing");
+                }
             }), 5000);
         });
     }

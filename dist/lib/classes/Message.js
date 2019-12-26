@@ -19,7 +19,7 @@ discord_js_1.Structures.extend("Message", (msg) => class VorteMessage extends ms
     sem(content, _a = {}) {
         var { type = "normal" } = _a, options = __rest(_a, ["type"]);
         const _ = new VorteEmbed_1.VorteEmbed(this);
-        let e = type === "normal" ? _.baseEmbed() : _.errorEmbed();
+        const e = _[`${type === "normal" ? "base" : type}Embed`]();
         e.setDescription(content);
         return this.channel.send(e);
     }

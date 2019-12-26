@@ -1,13 +1,13 @@
-import { GuildMember, Message, MessageOptions, Structures } from "discord.js";
+import { GuildMember, Message, MessageOptions, Structures, MessageEmbed } from "discord.js";
 import { VorteGuild } from "../database/VorteGuild";
 import { VorteMember } from "../database/VorteMember";
 import { VorteEmbed } from "./VorteEmbed";
 
 Structures.extend("Message", (msg) =>
 	class VorteMessage extends msg {
-		public sem(content: string, { type = "normal", ...options }: { type?: "normal" | "error" } & MessageOptions = {}): Promise<Message> {
+		public sem(content: string, { type = "normal", ...options } = {}): Promise<Message> {
 			const _ = new VorteEmbed(this);
-			let e = type === "normal" ? _.baseEmbed() : _.errorEmbed();
+			const e: MessageEmbed = (_ as any)[`${type === "normal" ? "base" : type}Embed`]();
 			e.setDescription(content);
 			return this.channel.send(e);
 		}
@@ -30,7 +30,7 @@ Structures.extend("Message", (msg) =>
 )
 
 export interface VorteMessage extends Message {
-	sem(content: string, options?: { type: "normal" | "error" } & MessageOptions): Promise<VorteMessage>;
+	sem(content: string, options?: { type: "normal" | "error" | "music" } & MessageOptions): Promise<VorteMessage>;
 	getMember(member?: string | GuildMember): VorteMember | null;
 	getGuild(): VorteGuild | null;
 }

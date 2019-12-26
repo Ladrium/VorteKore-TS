@@ -3,10 +3,9 @@
 <%- include ("inc/head") %>
 
 <body>
+    <%- include("inc/nav") %>
     <section class="hero is-fullheight">
         <div class="align-middle">
-            <%- include("inc/nav") %>
-
             <% if(guilds) {%>
             <h3>Select a server!</h3>
             <div class="colums is-multiline center">
@@ -32,24 +31,6 @@
             </div>
         </div>
     </section>
-
-    <style>
-        .hero {
-            background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
-        }
-
-        @media (max-width: 1024px) {
-            .hero {
-                background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero {
-                background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
-            }
-        }
-    </style>
 </body>
 
 

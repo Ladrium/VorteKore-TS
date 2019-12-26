@@ -1,4 +1,3 @@
-import { Message } from "discord.js";
 import { VorteMember, Event, VorteMessage, VorteEmbed } from "../../lib";
 
 export default class extends Event {

@@ -15,15 +15,14 @@ export default class extends Command {
     });
   }
 
-  public async run(message: VorteMessage, query: string[]) {
-
+  public async run(message: VorteMessage) {
     const player = <VortePlayer>this.bot.andesite!.players.get(message.guild!.id)!;
 
-    if (!player) return message.sem("The bot isn't in a voice channel.");
+    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
     if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
 
     await player.stop();
     await player.node.leave(player.guildId);
-    return message.sem("Successfully left the voice channel.");
+    return message.sem("Successfully left the voice channel.", { type: "music" });
   }
 }

@@ -3,6 +3,7 @@ import { AndesitePlayer, TrackInfo } from "discord.js-andesite";
 import { shuffle } from "../../util";
 import { VortePlayer } from "./VortePlayer";
 import { QueueHook } from "../../util/QueueHook";
+import { VoiceChannel } from "discord.js";
 
 
 export interface NowPlaying {
@@ -30,6 +31,7 @@ export class VorteQueue extends EventEmitter {
     super();
 
     this.player.on("end", async (d: { [key: string]: any }) => {
+      if (this.player.radio) return;
       if (d.type !== 'TrackEndEvent' || !['REPLACED', 'STOPPED'].includes(d.reason)) {
         if (!this.repeat.song) this._next();
         if (this.repeat.queue && !this.np.song) {
@@ -39,6 +41,11 @@ export class VorteQueue extends EventEmitter {
           this._next();
         }
         if (!this.np.song) return this.emit("finish");
+
+        const channel = this.player.node.manager.client.channels.get(player.channelId)! as VoiceChannel;
+        if (!(channel.members.filter(m => !m.user.bot).size)) 
+          return this.emit("last_man_standing");
+
         this.emit("next", this.np);
         await this.player.play(this.np.song.track);
       }

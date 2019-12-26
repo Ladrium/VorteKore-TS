@@ -7,6 +7,7 @@ export class VortePlayer extends Player {
   public readonly queue: VorteQueue = new VorteQueue(this);
   public message!: VorteMessage;
   public bass: "high" | "medium" | "low" | "none" = "none";
+  public radio?: RadioBrowser.RootObject;
 
   public useMessage(message: VorteMessage): VortePlayer {
     this.message = message;

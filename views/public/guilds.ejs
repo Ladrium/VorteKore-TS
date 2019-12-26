@@ -3,8 +3,8 @@
 <%- include inc/head %>
 
 <body>
+    <%- include inc/nav %>
     <section class="hero is-fullheight">
-        <%- include inc/nav %>
         <div class="is-vcentered">
             <% if(guilds) {%>
             <h3>Select a server!</h3>
@@ -27,23 +27,6 @@
             <% } %>
         </div>
     </section>
-    <style>
-        .hero {
-            background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
-        }
-
-        @media (max-width: 1024px) {
-            .hero {
-                background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .hero {
-                background: black url("https://i.imgur.com/v2CvSRb.jpg") center / cover;
-            }
-        }
-    </style>
 </body>
 
 </html>

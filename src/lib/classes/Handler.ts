@@ -53,6 +53,12 @@ export class Handler extends EventEmitter {
       this.emit("commandBlocked", message, command, "cooldown", cooldown);
       return false;
     }
+
+    if (command.disabled) {
+      this.emit("commandBlocked", message, command, "disabled");
+      return false;
+    }
+
     if (!developers.includes(message.author.id))
       command.currentCooldowns.set(message.author.id, Date.now());
 

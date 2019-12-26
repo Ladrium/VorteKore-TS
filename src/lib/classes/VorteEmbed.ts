@@ -21,4 +21,8 @@ export class VorteEmbed {
       embed.setDescription(`Sorry, I ran into an error!\n\`\`\`js\n${error}\`\`\``);
     return embed;
   }
+
+  public musicEmbed(): MessageEmbed {
+    return this.baseEmbed();
+  }
 }

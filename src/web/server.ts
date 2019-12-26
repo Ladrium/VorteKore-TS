@@ -1,13 +1,15 @@
-import { Permissions } from "discord.js";
+import { MessageEmbed, Permissions, TextChannel } from "discord.js";
 import express from "express";
 import session from "express-session";
 import fetch from "node-fetch";
 import { VorteClient, VorteGuild } from "../lib";
 import { member } from "../models/member";
+import { json, urlencoded } from "body-parser";
 
 export const app = express();
 
 export function startServer(bot: VorteClient) {
+	app.use(urlencoded({ extended: true }));
 	app.use(express.static(require("path").join(process.cwd(), "views")));
 	app.use(session({
 		secret: "ChaosIsCool",
@@ -18,7 +20,9 @@ export function startServer(bot: VorteClient) {
 
 	app.set("views", __dirname + "/../../views")
 	app.set("view engine", "ejs");
+
 	addRoutes(bot);
+
 	app.listen(3000, () => {
 		console.log("Server listening on port 3000");
 	});
@@ -124,5 +128,20 @@ function addRoutes(bot: VorteClient) {
 			toPush.push({ member, username });
 		});
 		res.render("public/leaderboard", { info: toPush, bot, user });
+	});
+
+	app.post("/discordbotlist", async (req, res) => {
+		if (req.headers.authorization !== process.env.DBL_WEBHOOK_AUTH) 
+			return res.status(401).json({ message: "fuck off" }).end();
+
+		if (req.body.type !== "upvote") return res.status(200).json({ message: "thanks!" });
+
+		const user = await bot.users.fetch(req.body.user);
+		const logs = <TextChannel> bot.channels.get("613347362705768465");
+		logs.send(new MessageEmbed()
+			.setColor("#4b62fa")
+			.setAuthor(user.tag, user.displayAvatarURL())
+			.setDescription(`Thanks ${user} for voting! You can vote again in 12 hours.\n*prizes coming in eco update.*`));
+		return res.status(200).json({ message: "thanks!" });
 	});
 }

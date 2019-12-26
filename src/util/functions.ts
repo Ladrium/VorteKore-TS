@@ -1,5 +1,5 @@
 import { GuildMember, BitFieldResolvable, PermissionString, Message } from "discord.js";
-import fetch from "node-fetch";
+import fetch, { Headers, RequestInit } from "node-fetch";
 import { VorteGuild, VortePlayer } from "../lib";
 import { TrackInfo } from "discord.js-andesite";
 
@@ -43,9 +43,9 @@ export async function findMember(message: Message, toFind: string) {
   return member;
 }
 
-export const get = async <T>(url: string, options?: any): Promise<{ data?: T, error?: Error }> => {
+export const get = async <T>(url: string, options?: RequestInit): Promise<{ data?: T, error?: Error }> => {
   return new Promise(resolve => {
-    return fetch(url, options!)
+    return fetch(url, options)
       .then(
         async res => resolve({ data: await res.json() }),
         error => resolve({ error })

@@ -18,8 +18,9 @@ export default class extends Command {
   public async run(message: VorteMessage, query: string[]) {
     const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
     
-    if (!player) return message.sem("The bot isn't in a voice channel.");
-    if (!player.in(message.member!)) return message.sem("Please join my voice channel.")
+    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
+    if (player.radio) return message.sem("Sorry, the player is currently in radio mode :p", { type: "error" });
+    if (!player.in(message.member!)) return message.sem("Please join my voice channel.", { type: "error" })
 
     await player.emit("end", {});
   }

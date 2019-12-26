@@ -12,14 +12,14 @@ export default class extends Command {
   }
 
   public async run(message: VorteMessage, _a: string[], guild: VorteGuild = message.getGuild()!) {
-		if (this.bot.andesite.players.has(message.guild!.id)) return message.sem(`Use \`${guild.prefix}play\` to queue a song.`);
-    if (!message.member!.voice.channel) return message.sem("Please join a voice channel.");
+		if (this.bot.andesite.players.has(message.guild!.id)) return message.sem(`Use \`${guild.prefix}play\` to queue a song.`, { type: "music" });
+    if (!message.member!.voice.channel) return message.sem("Please join a voice channel.", { type: "error" });
 
     this.bot.andesite.nodes.ideal.first()!.join<VortePlayer>({
       channelId: message.member!.voice.channelID!,
       guildId: message.guild!.id
 		}).useMessage(message);
 		
-		return message.sem(`Successfully joined **<#${message.member!.voice.channelID}>** 🎵`)
+		return message.sem(`Successfully joined **<#${message.member!.voice.channelID}>** 🎵`, { type: "music" })
   };
 }

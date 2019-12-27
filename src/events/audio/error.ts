@@ -9,7 +9,7 @@ export default class extends Event {
     });
   }
 
-  async run(error: Error, bot = this.bot) {
-    return bot.logger.warn(error);
+  async run(name: string, error: Error, bot = this.bot) {
+    return bot.logger.warn(error, name);
   };
 }

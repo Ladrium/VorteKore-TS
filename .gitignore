@@ -4,9 +4,8 @@ node_modules/
 .env
 .vscode/
 project.js
-logs/spring.log
 application.*
 logs/
 *.jar
 *.lock
-/dist/
+*.log

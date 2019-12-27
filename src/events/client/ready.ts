@@ -28,7 +28,7 @@ export default class extends Event {
 				webhookAuth: process.env.DBL_WEBHOOK_AUTH,
 				webhookPath: process.env.DBL_WEBHOOK_PATH,
 				webhookPort: 3001
-			}, this);
+			});
 		}
 
 		setInterval(async () => {
@@ -54,9 +54,9 @@ export default class extends Event {
 			const players = <Collection<string, VortePlayer>>bot.andesite.players;
 			for (const [, player] of players) {
 				const channel = bot.channels.get(player.channelId)! as VoiceChannel
-				if (!channel || !(channel.members.filter(m => !m.user.bot).size))
+				if (!channel.members.filter(m => !m.user.bot).size)
 					return player.queue.emit("last_man_standing");
 			}
-		}, 5000);
+		}, 10000);
 	};
 }

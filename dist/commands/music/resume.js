@@ -28,6 +28,7 @@ class default_1 extends lib_1.Command {
             if (!player.paused)
                 return message.sem(`I'm not paused... :p`, { type: "music" });
             yield player.resume();
+            player.paused = false;
             return message.sem(`Successfully resumed the player!`);
         });
     }

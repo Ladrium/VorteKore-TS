@@ -19,5 +19,11 @@ export class BLHandler {
 
 	public constructor(
 		public bot: VorteClient
-	) {}
+	) {  }
+
+	/**
+	 * Called when the bot is ready.
+	 * @returns {Promise<void>}
+	 */
+	public async _init(): Promise<void> {}
 }

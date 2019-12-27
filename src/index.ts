@@ -6,12 +6,13 @@ import { VortePlayer } from './lib';
 import "./lib/classes/Message";
 import { VorteClient } from "./lib/VorteClient";
 import { startServer } from "./web/server";
+import { Config } from "./util/Config";
 
 config({
   path: join(__dirname, "../", ".env")
 });
 
-mongoose.connect(process.env.URI!, {
+mongoose.connect(Config.get("uri")!, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }, (err: Error) => {
@@ -24,7 +25,7 @@ startServer(bot);
 bot.handler.loadCommands();
 bot.handler.loadEvents();
 
-bot.login(process.env.NODE_ENV!.ignoreCase("development") ? process.env.TOKEN_BETA! : process.env.TOKEN_PROD!);
+bot.login(Config.get("token"));
 
 process.on("SIGINT", async () => {
   try {

@@ -20,12 +20,12 @@ export default class extends Command {
     });
   }
   
-  public async run(message: VorteMessage, [level]: [string]) {
+  public async run(message: VorteMessage, [level]: ["high"|"medium"|"low"|"none"]) {
     const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
 
     if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
 		if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
-		if (!level) return message.sem(`The current bassboost level is **${player.bass}**.`);
+		if (!level) return message.sem(`The current bassboost level is **${player.bass.toLowerCase()}**.`);
 
 		let levels: {[key:string]:number} = {
 			high: 0.20,
@@ -40,6 +40,7 @@ export default class extends Command {
 		await player.filter("equalizer", {
 			bands: Array(3).fill(null).map(() => ({ band: i++, gain: levels[level.toLowerCase()] }))
 		});
+		player.bass = level;
 		return message.sem(`Set the bassboost to **${level.toLowerCase()}**.`);
   }
 }

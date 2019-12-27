@@ -19,6 +19,12 @@ export default class extends Command {
     if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
 		if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
 
+		// if (tags[0].ignoreCase("stop") && player.radio) {
+		// 	await player.stop();	
+		// 	delete player.radio;
+		// 	return message.sem("Stopped the radio!");
+		// }
+
 		const fetched = await get<RadioBrowser.RootObject[]>(`https://fr1.api.radio-browser.info/json/stations/bytag/${tags.join(",")}`);
 		if (!fetched.data || !fetched.data.length) {
 			console.error("radio command", fetched.error);

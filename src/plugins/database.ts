@@ -6,7 +6,6 @@ import { Config } from "../util/Config";
 import { CaseEntity } from "../models/Case";
 import { GuildEntity } from "../models/Guild";
 import { ProfileEntity } from "../models/Profile";
-import { StarEntity } from "../models/Star";
 
 export default class DatabasePlugin extends ClientPlugin {
 
@@ -22,7 +21,7 @@ export default class DatabasePlugin extends ClientPlugin {
 	public async onReady() {
 		createConnection({
 			url: Config.get("uri")!,
-			entities: [GuildEntity, ProfileEntity, CaseEntity, StarEntity],
+			entities: [GuildEntity, ProfileEntity, CaseEntity],
 			type: "mongodb",
 			extra: {
 				useUnifiedTopology: true

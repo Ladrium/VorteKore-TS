@@ -75,33 +75,6 @@ class Handler extends events_1.EventEmitter {
         return prefix;
     }
     async runChecks(message, command) {
-        const endTime = message.createdTimestamp + command.cooldown;
-        const id = message.author.id;
-        if (!this.cooldowns.has(id))
-            this.cooldowns.set(id, {});
-        if (!this.cooldowns.get(id)[command.name]) {
-            this.cooldowns.get(id)[command.name] = {
-                timer: this.bot.setTimeout(() => {
-                    this.bot.clearTimeout(this.cooldowns.get(id)[command.name].timer);
-                    this.cooldowns.get(id)[command.name] = null;
-                    if (!Object.keys(this.cooldowns.get(id)).length) {
-                        this.cooldowns.delete(id);
-                    }
-                }, command.cooldown),
-                end: endTime,
-                uses: 0
-            };
-        }
-        const entry = this.cooldowns.get(id)[command.name];
-        if (entry.uses >= 3) {
-            const end = this.cooldowns.get(message.author.id)[command.name].end;
-            const diff = end - message.createdTimestamp;
-            this.emit("commandBlocked", message, command, "cooldown", diff);
-            return true;
-        }
-        entry.uses++;
-        if (!config_1.developers.includes(message.author.id))
-            command.currentCooldowns.set(message.author.id, Date.now());
         if (command.devOnly && !config_1.developers.includes(message.author.id)) {
             this.emit("commandBlocked", message, command, "dev");
             return false;

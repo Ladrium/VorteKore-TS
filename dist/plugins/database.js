@@ -10,7 +10,6 @@ const Config_1 = require("../util/Config");
 const Case_1 = require("../models/Case");
 const Guild_1 = require("../models/Guild");
 const Profile_1 = require("../models/Profile");
-const Star_1 = require("../models/Star");
 class DatabasePlugin extends Plugin_1.ClientPlugin {
     constructor() {
         super(...arguments);
@@ -21,7 +20,7 @@ class DatabasePlugin extends Plugin_1.ClientPlugin {
     async onReady() {
         typeorm_1.createConnection({
             url: Config_1.Config.get("uri"),
-            entities: [Guild_1.GuildEntity, Profile_1.ProfileEntity, Case_1.CaseEntity, Star_1.StarEntity],
+            entities: [Guild_1.GuildEntity, Profile_1.ProfileEntity, Case_1.CaseEntity],
             type: "mongodb",
             extra: {
                 useUnifiedTopology: true

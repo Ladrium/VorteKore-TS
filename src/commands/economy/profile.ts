@@ -7,7 +7,8 @@ export default class extends Command {
 			description: "Displays your profile in an embed.",
 			channel: "guild",
 			usage: "[action] <value>",
-			example: "!profile set bio I'm cool!"
+			example: "!profile set bio I'm cool!",
+			category: "Economy"
 		});
 	}
 

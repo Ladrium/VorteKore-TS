@@ -8,7 +8,8 @@ class default_1 extends lib_1.Command {
             description: "Displays your profile in an embed.",
             channel: "guild",
             usage: "[action] <value>",
-            example: "!profile set bio I'm cool!"
+            example: "!profile set bio I'm cool!",
+            category: "Economy"
         });
     }
     async run(message, args) {

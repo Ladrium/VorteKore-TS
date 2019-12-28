@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nodes = [{
-        host: "92.222.201.243",
+        host: "localhost",
         auth: "youshallnotpass",
         name: "Production",
         port: 5000

@@ -6,10 +6,6 @@ export * from "./classes/VorteEmbed";
 export * from "./classes/Message";
 export * from "./classes/Decorator";
 
-export * from "./database/Mute";
-export * from "./database/VorteGuild";
-export * from "./database/VorteMember";
-
 export * from "./music/VortePlayer";
 export * from "./music/VorteQueue";
 

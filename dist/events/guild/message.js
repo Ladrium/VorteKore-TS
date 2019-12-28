@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
 class default_1 extends lib_1.Event {
@@ -20,32 +11,32 @@ class default_1 extends lib_1.Event {
         this.xp = (max, min) => Math.floor(Math.random() * max) + min;
         this.recently = new Set();
     }
-    run(message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (message.author.bot)
-                return;
-            const guild = message.getGuild();
-            if (message.guild) {
-                const member = yield new lib_1.VorteMember(message.author.id, message.guild.id)._init();
-                if (!this.recently.has(message.author.id)) {
-                    if (Math.random() > 0.50) {
-                        member.add("coins", this.coins(50, 5));
-                        if (Math.random() > 0.60) {
-                            member.add("xp", this.xp(25, 2));
-                            if (member.xp > 2 * (75 * member.level)) {
-                                member.add("level", 1);
-                                if (guild && guild.ecoMsg)
-                                    message.sem(`Congrats 🎉! You're now level ${member.level}`);
+    async run(message) {
+        if (message.author.bot || !this.bot.database.ready)
+            return;
+        await message.init();
+        if (message.guild) {
+            if (!this.recently.has(message.author.id)) {
+                if (Math.random() > 0.50) {
+                    message.profile.add("coins", this.coins(50, 5));
+                    if (Math.random() > 0.60) {
+                        message.profile.add("xp", this.xp(25, 2));
+                        if (message.profile.xp > 2 * (75 * message.profile.level)) {
+                            message.profile.add("level", 1);
+                            try {
+                                if (message._guild && !message._guild.levelUpMsg)
+                                    message.sem(`Congrats 🎉! You're now level ${message.profile.level}`);
                             }
+                            catch (e) { }
                         }
-                        member.save();
-                        this.recently.add(message.author.id);
-                        setTimeout(() => this.recently.delete(message.author.id), 25000);
                     }
+                    message.profile.save();
+                    this.recently.add(message.author.id);
+                    setTimeout(() => this.recently.delete(message.author.id), 25000);
                 }
             }
-            return this.handler.runCommand(message);
-        });
+        }
+        return this.handler.runCommand(message);
     }
     ;
 }

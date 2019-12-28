@@ -1,5 +1,5 @@
 import { Command } from "../../lib/classes/Command";
-import { VorteClient, VorteEmbed } from "../../lib";
+import { VorteClient, VorteEmbed, VorteMessage } from "../../lib";
 import { Message, TextChannel } from "discord.js";
 import fetch from "node-fetch";
 export default class extends Command {
@@ -12,7 +12,7 @@ export default class extends Command {
     });
   }
 
-  public async run(message: Message, [...image]: string[]) {
+  public async run(message: VorteMessage, [...image]: string[]) {
     if (!image[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a query to search."))
 
     let link: any = `https://imgur.com/r/${image.join(" ")}/hot.json`;

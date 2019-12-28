@@ -14,10 +14,8 @@ export default class extends Command {
 	}
 
 	public async run(message: VorteMessage, [...tags]: [string]) {
-		const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
-
-    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
-		if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
+    if (!message.player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
+		if (!message.player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
 
 		// if (tags[0].ignoreCase("stop") && player.radio) {
 		// 	await player.stop();	
@@ -65,12 +63,12 @@ export default class extends Command {
 			const station = avaliableStations[Number(collected.first()!.content) - 1];
 			if (!station) return message.sem("HMMM, i think I broke, fuck... contact my developers :((((((", { type: "error" });
 
-			const search = await this.bot.andesite.search(station.url_resolved, player.node);
+			const search = await this.bot.andesite.search(station.url_resolved, message.player.node);
 			if (["NO_MATCHES", "LOAD_FAILED"].includes(search.loadType))
 				return message.sem("Sorry, I guess we couldn't play this one :(", { type: "error" });
 
-			player.radio = station;
-			await player.play(search.tracks![0].track);
+			message.player.radio = station;
+			await message.player.play(search.tracks![0].track);
 			return message.sem(`***VorteKore 420.69 FM*** [${station.name}](${station.homepage})\n*you won't get updates when a new song plays*`, { type: "music" });
 		} catch(e) {
 			return message.sem("Sorry buckaroo you ran out of time :p", { type: "error" });

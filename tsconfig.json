@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "target": "es6",
+    "target": "es2019",
     "module": "commonjs",
     "outDir": "dist/",
     "removeComments": true,
@@ -10,13 +10,8 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "noImplicitThis": true,
-    "allowJs": true,
     "declaration": false,
-    "disableSizeLimit": true
-  },
-  "typedocOptions": {
-    "name": "discordutility",
-    "readme": "README.md",
-    "out": "docs"
+    "disableSizeLimit": true,
+    "emitDecoratorMetadata": true
   }
 }

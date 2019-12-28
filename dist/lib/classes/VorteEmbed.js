@@ -10,7 +10,7 @@ class VorteEmbed {
             .setAuthor(this.message.author.username, this.message.author.displayAvatarURL())
             .setTimestamp()
             .setFooter(`VorteKore`)
-            .setColor("#4b62fa");
+            .setColor(this.message.guild ? this.message._guild.embedColor ? this.message._guild.embedColor : "#4b62fa" : "#4b62fa");
     }
     errorEmbed(error) {
         const embed = this.baseEmbed()

@@ -1,5 +1,5 @@
-import { Message, TextChannel } from "discord.js";
-import { VorteGuild, VorteEmbed, Event } from "../../lib";
+import { TextChannel, Util } from "discord.js";
+import { Event, VorteEmbed, VorteMessage } from "../../lib";
 
 export default class extends Event {
   public constructor() {
@@ -9,18 +9,24 @@ export default class extends Event {
     });
   }
 
-  async run(deletedMessage: Message, bot = this.bot) {
-    const guild = new VorteGuild(deletedMessage.guild!)._init();
-    const { channel, enabled } = guild.getLog("deleteMessage")
-    if (!enabled) return;
-    
-    const chan = deletedMessage.guild!.channels.get(channel) as TextChannel;
-    guild.increaseCase();
+  async run(message: VorteMessage) {
+    const guild = await this.bot.database.getGuild(message.guild!.id)
+    const { logs: { dltmsg, channel } } = guild;
+    if (!dltmsg) return;
+
+    const chan = message.guild!.channels.get(channel) as TextChannel;
 
     chan.send(
-      new VorteEmbed(deletedMessage)
+      new VorteEmbed(message)
         .baseEmbed()
-        .setDescription(`Event: Message Deleted [Case ID: ${guild.case}]\nUser: ${deletedMessage.author.tag} (${deletedMessage.author.id})\nMessage: ${deletedMessage.content}`).setTimestamp()
+        .setTitle(`Event: Message Delete`)
+        .setDescription([
+          `**Channel**: ${message.channel} (${message.channel.id})`,
+          `**Link**: ${message.url}`,
+          `**Author**: ${message.author.tag} (${message.author.id})`
+        ].join("\n"))
+        .addField(`Message Content`, `${Util.escapeMarkdown(message.cleanContent.slice(0, 900))}`)
+        .setTimestamp()
     );
   };
 }

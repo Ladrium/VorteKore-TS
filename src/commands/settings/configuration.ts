@@ -8,7 +8,7 @@ export default class extends Command {
 			userPermissions: [ "MANAGE_GUILD" ],
 			category: "Settings",
 			disabled: true
-		})
+		});
 	}
 
 	public async run(message: VorteMessage, [prefix]: string[]) {}

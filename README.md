@@ -24,7 +24,7 @@ To see the full list of commands either join the support server or invite the bo
 - Information
 	-	Help
 	- Ping
-	- Botinfo
+  - Botinfo
 	- Invite
 
 # Collaborators
@@ -32,3 +32,7 @@ To see the full list of commands either join the support server or invite the bo
 - [ChaosPhoe](https://github.com/ChaosPhoe)
 - [Johna3212](https://github.com/johna3212)
 - [MeLike2D](https://github.com/MeLike2D)
+
+# Aknowledgements
+
+[Hoshi by 1Computer1](https://github.com/1Computer1/Hoshi) for the starboard!

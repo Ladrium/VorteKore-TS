@@ -1,6 +1,6 @@
 import { TextChannel } from "discord.js";
 import ms from "ms";
-import { Mute, VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
+import { VorteEmbed, VorteMessage } from "../../lib";
 import { Command } from "../../lib/classes/Command";
 
 export default class extends Command {
@@ -15,9 +15,9 @@ export default class extends Command {
     });
   }
 
-  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
+  public async run(message: VorteMessage, args: string[]) {
     if (message.deletable) await message.delete();
-    if (!(args[0] && args[1])) return message.sem("Please provide a mute duration and member.", { type: "error" });
+    if (!(args[0] && args[1] && args[2])) return message.sem("Please provide a mute duration, member to mute, and a reason.", { type: "error" });
 
     const member = message.mentions.members!.first() || message.guild!.members.find(r => r.displayName === args[0] || r.id === args[0]);
     if (!member) return message.sem("Invalid member provided");
@@ -35,28 +35,35 @@ export default class extends Command {
 
     try {
       await member.roles.add(muteRole);
-      const mute = new Mute(member.id, message.guild!.id)
-      mute._load().setTime(time);
       message.sem("Successfully muted that member.");
     } catch (error) {
       console.error(`mute command`, error);
       return message.sem(`Sorry, I ran into an error. Please contact the developers too see if they can help!`);
     }
 
+    const reason = args.slice(2).join(" ");
 
-    const { channel, enabled } = guild.getLog("mute");
-    guild.increaseCase();
-    if (!enabled) return;
+    const _case = await this.bot.database.newCase(message.guild!.id, {
+      type: "mute",
+      subject: member.id,
+      reason,
+      amount: time,
+      moderator: message.author.id
+    });
 
-    (message.guild!.channels.get(channel.id) as TextChannel).send(
+    if (!message._guild!.logs.channel || !message._guild!.logs.mute) return;
+
+    const logChannel = member.guild.channels.get(message._guild!.logs.channel) as TextChannel;
+    logChannel.send(
       new VorteEmbed(message)
         .baseEmbed()
-        .setTitle(`Moderation: Mute [Case ID: ${guild.case}]`)
+        .setTitle(`Moderation: Mute [Case ID: ${_case.id}]`)
         .setDescription([
-          `**>** Staff: ${message.author.tag} (${message.author.id})`,
-          `**>** Muted: ${member.user.tag}`,
-          `**>** Time: ${time}`
-        ].join("\n"))
+          `**Staff**: ${message.author.tag} (${message.author.id})`,
+          `**Muted**: ${member.user.tag}`,
+          `**Time**: ${time}`,
+          `**Reason**: ${reason}`
+        ].join("\n")).setTimestamp()
     );
   }
 };

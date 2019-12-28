@@ -4,8 +4,8 @@ import { Permissions } from "discord.js";
 import express from "express";
 import session from "express-session";
 import fetch from "node-fetch";
-import { VorteClient, VorteGuild } from "../lib";
-import { member } from "../models/member";
+import { VorteClient } from "../lib";
+import { ProfileEntity } from "../models/Profile";
 
 export const app = express();
 const logger = Logger.get(app)
@@ -39,14 +39,14 @@ function addRoutes(bot: VorteClient) {
 	app.get("/guilds/:id", (req, res) => {
 		const guild = bot.guilds.get(req.params.id);
 		if (!guild) return res.redirect("/");
-		const Guild = new VorteGuild(guild);
+		const Guild = bot.database.getGuild(guild.id);
 	});
 
 	app.get("/callback", async (req, res) => {
 		if (!req.query.code) return res.redirect("/");
 		let params = new URLSearchParams();
 		params.append('client_id', "634766962378932224");
-		params.append('client_secret', 'v6OKjC7jHMrzU8b5mddk__Y3ihs4zTr0');
+		params.append('client_secret', process.env.CLIENT_SECRET!);
 		params.append('grant_type', 'authorization_code');
 		params.append('code', req.query.code);
 		params.append('redirect_uri', 'http://localhost:3000/callback');
@@ -97,7 +97,7 @@ function addRoutes(bot: VorteClient) {
 	app.get("/leaderboard/:page", async (req, res) => {
 		let user = req.session!.user || false;
 		let page = Number(req.params.page);
-		let members = await member.find({});
+		let members = await ProfileEntity.find();
 
 		// @ts-ignore
 		members.sort((a, b) => b["x["] - a["xp"]);
@@ -106,7 +106,7 @@ function addRoutes(bot: VorteClient) {
 
 		for (let i = page * 10 - 10; i < page * 10; i++) {
 			try {
-				let user = bot.users.get(members[i].id);
+				let user = bot.users.get(members[i].userId);
 				let username = user ? user.username : "Unknown";
 				toPush.push({ member: members[i], username })
 			} catch (e) { }
@@ -117,15 +117,15 @@ function addRoutes(bot: VorteClient) {
 	app.get("/leaderboard", async (req, res) => {
 		let user = req.session!.user || false;
 
-		let members = await member.find();
+		let members = await ProfileEntity.find();
 
 		// @ts-ignore
 		members = members.sort((a, b) => b.xp - a.xp);
 		members = members.slice(0, 10);
-		let toPush: { member: import("mongoose").Document; username: string; }[] = [];
+		let toPush: { member: ProfileEntity; username: string; }[] = [];
 
 		members.forEach((member) => {
-			let user = bot.users.get(member.id);
+			let user = bot.users.get(member.userId);
 			let username = user ? user.username : "Unknown";
 			toPush.push({ member, username });
 		});

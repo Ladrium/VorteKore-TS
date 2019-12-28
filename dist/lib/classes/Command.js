@@ -12,9 +12,10 @@ class Command extends Module_1.VorteModule {
         this.logger = Command.logger;
         this.userPermissions = [];
         this.botPermissions = [];
-        const { aliases = [], cooldown = 2000, description = "", example = "", usage = "", botPermissions = this.botPermissions, userPermissions = this.userPermissions, devOnly = false, channel, permsCheckAdmin = true } = options;
+        const { aliases = [], cooldown = 2000, description = "", example = "", usage = "", botPermissions = this.botPermissions, userPermissions = this.userPermissions, devOnly = false, channel, permsCheckAdmin = true, disabledMessage } = options;
         this.botPermissions = typeof botPermissions === "function" ? botPermissions.bind(this) : botPermissions;
         this.userPermissions = typeof userPermissions === "function" ? userPermissions.bind(this) : userPermissions;
+        this.disabledMessage = disabledMessage;
         this.aliases = aliases;
         this.permsCheckAdmin = permsCheckAdmin;
         this.usage = usage;

@@ -1,8 +1,9 @@
 import { Message, MessageEmbed } from "discord.js";
+import { VorteMessage } from "./Message";
 
 export class VorteEmbed {
   constructor(
-    public message: Message
+    public message: VorteMessage
   ) { }
 
   public baseEmbed(): MessageEmbed {
@@ -10,7 +11,7 @@ export class VorteEmbed {
       .setAuthor(this.message.author.username, this.message.author.displayAvatarURL())
       .setTimestamp()
       .setFooter(`VorteKore`)
-      .setColor("#4b62fa");
+      .setColor(this.message.guild ? this.message._guild.embedColor ? this.message._guild.embedColor : "#4b62fa" : "#4b62fa");
   }
 
   public errorEmbed(error?: string): MessageEmbed {

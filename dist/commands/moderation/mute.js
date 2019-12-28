@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -26,48 +17,52 @@ class default_1 extends Command_1.Command {
             channel: "guild"
         });
     }
-    run(message, args, guild = message.getGuild()) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (message.deletable)
-                yield message.delete();
-            if (!(args[0] && args[1]))
-                return message.sem("Please provide a mute duration and member.", { type: "error" });
-            const member = message.mentions.members.first() || message.guild.members.find(r => r.displayName === args[0] || r.id === args[0]);
-            if (!member)
-                return message.sem("Invalid member provided");
-            const time = ms_1.default(args[1]);
-            if (!time)
-                return message.sem("Please provide a valid time");
-            const muteRole = message.guild.roles.find((x) => x.name.toLowerCase() === "muted") ||
-                (yield message.guild.roles.create({
-                    data: {
-                        name: "Muted",
-                        color: "#1f1e1c"
-                    }
-                }));
-            try {
-                yield member.roles.add(muteRole);
-                const mute = new lib_1.Mute(member.id, message.guild.id);
-                mute._load().setTime(time);
-                message.sem("Successfully muted that member.");
-            }
-            catch (error) {
-                console.error(`mute command`, error);
-                return message.sem(`Sorry, I ran into an error. Please contact the developers too see if they can help!`);
-            }
-            const { channel, enabled } = guild.getLog("mute");
-            guild.increaseCase();
-            if (!enabled)
-                return;
-            message.guild.channels.get(channel.id).send(new lib_1.VorteEmbed(message)
-                .baseEmbed()
-                .setTitle(`Moderation: Mute [Case ID: ${guild.case}]`)
-                .setDescription([
-                `**>** Staff: ${message.author.tag} (${message.author.id})`,
-                `**>** Muted: ${member.user.tag}`,
-                `**>** Time: ${time}`
-            ].join("\n")));
+    async run(message, args) {
+        if (message.deletable)
+            await message.delete();
+        if (!(args[0] && args[1] && args[2]))
+            return message.sem("Please provide a mute duration, member to mute, and a reason.", { type: "error" });
+        const member = message.mentions.members.first() || message.guild.members.find(r => r.displayName === args[0] || r.id === args[0]);
+        if (!member)
+            return message.sem("Invalid member provided");
+        const time = ms_1.default(args[1]);
+        if (!time)
+            return message.sem("Please provide a valid time");
+        const muteRole = message.guild.roles.find((x) => x.name.toLowerCase() === "muted") ||
+            await message.guild.roles.create({
+                data: {
+                    name: "Muted",
+                    color: "#1f1e1c"
+                }
+            });
+        try {
+            await member.roles.add(muteRole);
+            message.sem("Successfully muted that member.");
+        }
+        catch (error) {
+            console.error(`mute command`, error);
+            return message.sem(`Sorry, I ran into an error. Please contact the developers too see if they can help!`);
+        }
+        const reason = args.slice(2).join(" ");
+        const _case = await this.bot.database.newCase(message.guild.id, {
+            type: "mute",
+            subject: member.id,
+            reason,
+            amount: time,
+            moderator: message.author.id
         });
+        if (!message._guild.logs.channel || !message._guild.logs.mute)
+            return;
+        const logChannel = member.guild.channels.get(message._guild.logs.channel);
+        logChannel.send(new lib_1.VorteEmbed(message)
+            .baseEmbed()
+            .setTitle(`Moderation: Mute [Case ID: ${_case.id}]`)
+            .setDescription([
+            `**Staff**: ${message.author.tag} (${message.author.id})`,
+            `**Muted**: ${member.user.tag}`,
+            `**Time**: ${time}`,
+            `**Reason**: ${reason}`
+        ].join("\n")).setTimestamp());
     }
 }
 exports.default = default_1;

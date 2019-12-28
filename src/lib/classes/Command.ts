@@ -18,6 +18,7 @@ export abstract class Command extends VorteModule {
   public devOnly: boolean;
   public permsCheckAdmin: boolean;
   public channel?: "guild" | "dm";
+  public disabledMessage?: string;
 
   public constructor(
     name: string,
@@ -35,12 +36,14 @@ export abstract class Command extends VorteModule {
       userPermissions = this.userPermissions,
       devOnly = false,
       channel,
-      permsCheckAdmin = true
+      permsCheckAdmin = true,
+      disabledMessage
     }: ICommandOptions = options;
 
     this.botPermissions = typeof botPermissions === "function" ? botPermissions.bind(this) : botPermissions;
     this.userPermissions = typeof userPermissions === "function" ? userPermissions.bind(this) : userPermissions;
 
+    this.disabledMessage = disabledMessage;
     this.aliases = aliases;
     this.permsCheckAdmin = permsCheckAdmin;
     this.usage = usage;

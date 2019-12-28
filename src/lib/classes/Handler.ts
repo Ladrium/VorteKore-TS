@@ -1,18 +1,17 @@
+import Logger from "@ayana/logger";
 import Collection from "@discordjs/collection";
 import { GuildChannel } from "discord.js";
 import { EventEmitter } from "events";
 import { readdirSync, statSync } from "fs";
-import { join, basename } from "path";
+import { basename, join } from "path";
 import { developers } from "../../config";
-import { VorteGuild } from "../database/VorteGuild";
-import { VorteMember } from "../database/VorteMember";
 import { VorteClient } from "../VorteClient";
 import { Command } from "./Command";
 import { VorteMessage } from "./Message";
 import { VorteEmbed } from "./VorteEmbed";
-import Logger from "@ayana/logger";
 
 export class Handler extends EventEmitter {
+  public cooldowns: Collection<string, { [key: string]: {timer: NodeJS.Timer, end: number, uses: number } | null }> = new Collection();
   public logger: Logger = Logger.get(Handler);
   constructor(
     public bot: VorteClient
@@ -20,12 +19,22 @@ export class Handler extends EventEmitter {
     super();
   }
 
-  async runCommand(message: VorteMessage, member?: VorteMember) {
+  public get mentionOnly(): RegExp { 
+    return new RegExp(`^<@!?${this.bot.user!.id}>$`);
+  }
+  
+  public get prefixMention(): RegExp {
+    return new RegExp(`^<@!?${this.bot.user!.id}>`)
+  };
+
+  async runCommand(message: VorteMessage) {
     if (message.author.bot) return;
     if (message.guild && !message.member)
       Object.defineProperty(message, "member", { value: await message.guild.members.fetch(message.author) });
-    const guild = await message.getGuild();
-    let prefix = message.guild ? guild!.prefix : "!";
+
+    if (this.mentionOnly.test(message.content)) return message.sem("Hello!");
+    
+    let prefix = await this.prefix(message);
     if (!message.content.startsWith(prefix)) return;
 
     const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
@@ -45,17 +54,54 @@ export class Handler extends EventEmitter {
     }, command.cooldown);
   }
 
+  public prefix(message: VorteMessage): string {
+    let prefix: string = "";
+    if (this.bot.prefix && typeof this.bot.prefix === "function") {
+      let returned = this.bot.prefix(message);
+      if (Array.isArray(returned)) for (const _prefix of returned) {
+        if (message.content.startsWith(_prefix)) prefix = _prefix;
+      } else if (typeof returned === "string") {
+        if (message.content.startsWith(returned)) prefix = returned;
+      };
+    } else if (typeof this.bot.prefix === "string" && message.content.startsWith(this.bot.prefix)) prefix = this.bot.prefix;
+    if (!prefix) {
+      if (message.content.match(this.prefixMention)) prefix = message.content.match(this.prefixMention)![0];
+    }
+    return prefix;
+  }
+
   private async runChecks(message: VorteMessage, command: Command) {
-    const cooldown = command.currentCooldowns.get(message.author.id);
-    if (cooldown) {
-      this.emit("commandBlocked", message, command, "cooldown", cooldown);
-      return false;
+    const endTime = message.createdTimestamp + command.cooldown;
+
+    const id = message.author.id;
+    if (!this.cooldowns.has(id)) this.cooldowns.set(id, {});
+
+    if (!this.cooldowns.get(id)![command.name]) {
+      this.cooldowns.get(id)![command.name] = {
+        timer: this.bot.setTimeout(() => {
+          this.bot.clearTimeout(this.cooldowns.get(id)![command.name]!.timer);
+          this.cooldowns.get(id)![command.name] = null;
+
+          if (!Object.keys(this.cooldowns.get(id)!).length) {
+            this.cooldowns.delete(id);
+          }
+        }, command.cooldown),
+        end: endTime,
+        uses: 0
+      };
     }
 
-    if (command.disabled) {
-      this.emit("commandBlocked", message, command, "disabled");
-      return false;
+    const entry = this.cooldowns.get(id)![command.name]!;
+
+    if (entry.uses >= 3) {
+      const end = this.cooldowns.get(message.author.id)![command.name]!.end;
+      const diff = end - message.createdTimestamp;
+
+      this.emit("commandBlocked", message, command, "cooldown", diff);
+      return true;
     }
+
+    entry.uses++;
 
     if (!developers.includes(message.author.id))
       command.currentCooldowns.set(message.author.id, Date.now());
@@ -124,6 +170,7 @@ export class Handler extends EventEmitter {
       ((typeof evt.emitter === "function" && evt.emitter instanceof EventEmitter)
         ? evt.emitter
         : emitters[evt.emitter])[evt.type](evt.event, evt.run.bind(evt));
+      this.bot.events.set(evt.name, evt);
     }
     this.logger.info("Loaded all Events.", `${Date.now() - start}ms`);
   }
@@ -137,7 +184,6 @@ export class Handler extends EventEmitter {
 
         cmd._onLoad(this);
         this.bot.commands.set(cmd.name, cmd);
-        cmd.aliases.forEach((alias: string) => this.bot.aliases.set(alias, cmd.name));
       } catch (e) {
         this.logger.error(e, basename(file));
       }

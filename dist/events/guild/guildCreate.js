@@ -1,27 +1,21 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const discord_js_1 = require("discord.js");
 const lib_1 = require("../../lib");
-const lib_2 = require("../../lib");
-class default_1 extends lib_2.Event {
+class default_1 extends lib_1.Event {
     constructor() {
         super("guild-created", {
             category: "guild",
             event: "guildCreate"
         });
     }
-    run(guild) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield new lib_1.VorteGuild(guild)._init();
-        });
+    async run(guild) {
+        const entry = await this.bot.database.getGuild(guild.id);
+        const logs = await this.bot.channels.fetch("613827877015650304");
+        return logs.send(new discord_js_1.MessageEmbed({ thumbnail: guild.iconURL() ? { url: guild.iconURL() } : {} })
+            .setColor("green")
+            .setTitle("New Guild!")
+            .setDescription(`I have joined a new guild called "${guild.name}", they have ${guild.members.filter(g => !g.user.bot).size} members!\n\nWe now have ${this.bot.guilds.size.toLocaleString}`));
     }
     ;
 }

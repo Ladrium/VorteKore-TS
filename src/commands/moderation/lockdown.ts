@@ -1,6 +1,6 @@
 
 import { GuildChannel, TextChannel } from "discord.js";
-import { Command, VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
+import { Command, VorteEmbed, VorteMessage } from "../../lib";
 import ms = require("ms");
 
 export default class extends Command {
@@ -18,7 +18,7 @@ export default class extends Command {
     });
   }
 
-  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
+  public async run(message: VorteMessage, args: string[]) {
     const chan = message.channel as GuildChannel;
 
     if (!args[0]) return message.sem("Please provide a reason to lockdown this channel.", { type: "error" });
@@ -58,16 +58,22 @@ export default class extends Command {
         message.sem("Successfully unlocked the channel.");
       }, time);
 
-      const { channel, enabled } = guild.getLog("lockdown");
-      guild.increaseCase();
-      if (!enabled) return;
 
-      const cha = message.guild!.channels.get(channel.id) as TextChannel;
-      cha.send(new VorteEmbed(message).baseEmbed()
-        .setAuthor(`Moderation: Channel Lockdown (Case ID: ${guild.case})`, message.author.displayAvatarURL())
+      const _case = await this.bot.database.newCase(message.guild!.id, {
+        type: "lockdown",
+        subject: chan.id,
+        reason,
+        moderator: message.author.id
+      });
+
+      if (!message._guild!.logs.channel || !message._guild!.logs.lockdown) return;
+
+      const logChannel = message.guild!.channels.get(message._guild!.logs.channel) as TextChannel;
+      logChannel.send(new VorteEmbed(message).baseEmbed()
+        .setAuthor(`Moderation: Channel Lockdown (Case ID: ${_case.id})`, message.author.displayAvatarURL())
         .setDescription([
           `**>** Staff: ${message.author.tag} (${message.author.id})`,
-          `**>** Channel: ${chan} (${channel.id})`,
+          `**>** Channel: ${chan} (${chan.id})`,
           `**>** Reason: ${reason === undefined ? `No reason provided` : reason}`
         ].join("\n"))
       );

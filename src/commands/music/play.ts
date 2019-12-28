@@ -14,7 +14,7 @@ export default class extends Command {
   }
 
   public async run(message: VorteMessage, [ ...query ]: string[]) {
-    let player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
+    let player = message.player
     
     if (!player && !message.member!.voice.channel) return message.sem("Please join a voice channel.", { type: "error" });
     if (player && !player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });

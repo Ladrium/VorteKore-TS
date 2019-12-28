@@ -1,6 +1,5 @@
-import { Message } from "discord.js";
-import { Command, VorteEmbed } from "../../lib";
-import { member } from "../../models/member";
+import { Command, VorteEmbed, VorteMessage } from "../../lib";
+import { ProfileEntity } from "../../models/Profile";
 import { paginate } from "../../util";
 
 export default class extends Command {
@@ -12,9 +11,10 @@ export default class extends Command {
     })
   }
 
-  public async run(message: Message, [selected]: any) {
-    let members: any[] = (await member.find({ guildID: message.guild!.id }));
-    members = members.sort((a: { xp: number; }, b: { xp: number; }) => b.xp - a.xp);
+  public async run(message: VorteMessage, [selected]: any) {
+    let members: any[] = (await ProfileEntity.find({ guildId: message.guild!.id }));
+    if (!members.length) return message.sem("Nothing to show ¯\\_(ツ)_/¯")
+    members = members.sort((a, b) => b.xp - a.xp);
 
     let { items, page } = paginate(members, selected),
       str = "", index = (page - 1) * 10;
@@ -28,7 +28,7 @@ export default class extends Command {
     const leaderboardEmbed = new VorteEmbed(message)
       .baseEmbed()
       .setAuthor("Leaderboard", message.author.displayAvatarURL())
-      .setDescription("\`\`\`prolog\n" + str + "\`\`\`")
+      .setDescription("\`\`\`\n" + str + "\`\`\`")
     return message.channel.send(leaderboardEmbed);
   }
 }

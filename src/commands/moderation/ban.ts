@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js";
-import { Command, VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
+import { Command, VorteEmbed, VorteMessage } from "../../lib";
 
 export default class extends Command {
   public constructor() {
@@ -14,7 +14,7 @@ export default class extends Command {
     });
   }
 
-  public async run(message: VorteMessage, [mem, ...reason]: any, guild: VorteGuild = message.getGuild()!) {
+  public async run(message: VorteMessage, [mem, ...reason]: any) {
     if (message.deletable) await message.delete();
 
     if (!mem) return message.sem("Please provide a user to ban");
@@ -37,16 +37,21 @@ export default class extends Command {
       return message.sem(`Sorry, we ran into an error.`, { type: "error" });
     }
 
-    const { channel, enabled } = guild.getLog("ban");
-    guild.increaseCase();
-    if (!enabled) return;
+    const _case = await this.bot.database.newCase(message.guild!.id, {
+      type: "ban",
+      subject: member.id,
+      reason,
+      moderator: message.author.id
+    });
 
-    const logChannel = member.guild.channels.get(channel.id) as TextChannel;
+    if (!message._guild!.logs.channel || !message._guild!.logs.ban) return;
+
+    const logChannel = member.guild.channels.get(message._guild!.logs.channel) as TextChannel;
     logChannel.send(
       new VorteEmbed(message)
         .baseEmbed()
         .setTimestamp()
-        .setTitle(`Moderation: Member Ban [Case ID: ${guild.case}] `)
+        .setTitle(`Moderation: Member Ban [Case ID: ${_case.id}] `)
         .setDescription([
           `**>** Staff: ${message.author.tag} (${message.author.id})`,
           `**>** Banned: ${member.user.tag} (${member.user.id})`,

@@ -1,4 +1,4 @@
-import { VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
+import { VorteEmbed, VorteMessage } from "../../lib";
 import { Command } from "../../lib/classes/Command";
 import ms = require("ms");
 
@@ -10,7 +10,7 @@ export default class extends Command {
     });
   }
 
-  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
+  public async run(message: VorteMessage, args: string[]) {
     const helpEmbed = new VorteEmbed(message).baseEmbed()
 
     if (!args[0] || !this.bot.commands.some(v => v.name.ignoreCase(args[0]) || v.aliases.some(a => a.ignoreCase(args[0])))) {
@@ -28,7 +28,7 @@ export default class extends Command {
       info += `**Aliases**: ${command.aliases.length ? command.aliases.map(a => `\`${a}\``).join(", ") : "None"}\n`
       info += `**Example**: ${command.example || "None"}`;
 
-      helpEmbed.setAuthor(`${guild ? guild.prefix : "!"}${command.name} ${command.usage}`, message.author.displayAvatarURL())
+      helpEmbed.setAuthor(`${this.handler.prefix(message)}${command.name} ${command.usage}`, message.author.displayAvatarURL())
       helpEmbed.setDescription(info)
     }
     message.channel.send(helpEmbed);

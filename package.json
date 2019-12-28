@@ -32,7 +32,8 @@
     "laffey": "^0.1.1",
     "mongoose": "^5.7.6",
     "ms": "^2.1.2",
-    "pako": "^1.0.10"
+    "pako": "^1.0.10",
+    "typeorm": "^0.2.22"
   },
   "devDependencies": {
     "@types/body-parser": "^1.17.1",

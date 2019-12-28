@@ -1,6 +1,5 @@
 import "./util/Formatter";
 import { config } from 'dotenv';
-import mongoose from "mongoose";
 import { join } from "path";
 import { VortePlayer } from './lib';
 import "./lib/classes/Message";
@@ -10,13 +9,6 @@ import { Config } from "./util/Config";
 
 config({
   path: join(__dirname, "../", ".env")
-});
-
-mongoose.connect(Config.get("uri")!, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}, (err: Error) => {
-  if (err) console.log(err);
 });
 
 const bot = new VorteClient();

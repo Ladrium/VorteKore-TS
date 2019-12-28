@@ -1,16 +1,8 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("../../lib");
 const Command_1 = require("../../lib/classes/Command");
+const ms = require("ms");
 class default_1 extends Command_1.Command {
     constructor() {
         super("slowmode", {
@@ -21,38 +13,44 @@ class default_1 extends Command_1.Command {
             userPermissions: ["MANAGE_MESSAGES"]
         });
     }
-    run(message, args, guild = message.getGuild()) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const chan = message.channel;
-            if (!args[0])
-                return message.sem("Please provide a valid number", { type: "error" });
-            if (["remove" || "release" || "rel"].includes(args[0])) {
-                message.channel.send("Succesffully removed the slowmode");
-                return chan.edit({
-                    rateLimitPerUser: 0
-                });
-            }
-            else {
-                ;
-                const sec = parseInt(args[0]);
-                const reason = args.slice(1).join(" ") || "No reason provided";
-                chan.edit({
-                    rateLimitPerUser: sec
-                });
-                const { channel, enabled } = guild.getLog("slowmode");
-                if (!enabled)
-                    return;
-                guild.increaseCase();
-                const cha = message.guild.channels.get(channel.id);
-                cha.send(new lib_1.VorteEmbed(message)
-                    .baseEmbed()
-                    .setDescription(`**>** Executor: ${message.author.tag} (${message.author.id})\n**>** Channel: ${chan.name} (${chan.id})\n**>** Reason: ${reason}`)
-                    .setTimestamp());
-                if (reason) {
-                    message.channel.send(`This channel is in slowmode due to: ${reason}`);
-                }
-            }
-        });
+    async run(message, args) {
+        const chan = message.channel;
+        if (["remove" || "release" || "rel"].includes(args[0])) {
+            message.sem("Succesffully removed the slowmode");
+            return chan.edit({
+                rateLimitPerUser: 0
+            });
+        }
+        else if (!isNaN(args[0]) && args[1]) {
+            const sec = parseInt(args[0]);
+            const reason = args.slice(1).join(" ");
+            chan.edit({
+                rateLimitPerUser: sec
+            });
+            const _case = await this.bot.database.newCase(message.guild.id, {
+                type: "slowmode",
+                subject: chan.id,
+                reason,
+                amount: sec,
+                moderator: message.author.id
+            });
+            if (!message._guild.logs.channel || !message._guild.logs.slowmode)
+                return;
+            const logChannel = message.guild.channels.get(message._guild.logs.channel);
+            logChannel.send(new lib_1.VorteEmbed(message)
+                .baseEmbed()
+                .setTitle(`Moderation: Slowmode (Case ID: ${_case.id})`)
+                .setDescription([
+                `**Moderator**: ${message.author.tag} (${message.author.id})`,
+                `**Channel**: ${chan.name} (${chan.id})`,
+                `**Reason**: ${reason}`,
+                `**Cooldown**: ${ms(sec)}`
+            ].join("\n"))
+                .setTimestamp());
+        }
+        else {
+            return message.sem("Please provide a number, and a reason.");
+        }
     }
 }
 exports.default = default_1;

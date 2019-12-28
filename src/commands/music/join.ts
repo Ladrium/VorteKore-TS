@@ -1,4 +1,4 @@
-import { Command, VorteGuild, VortePlayer } from "../../lib";
+import { Command, VortePlayer } from "../../lib";
 import { VorteMessage } from "../../lib/classes/Message";
 
 export default class extends Command {
@@ -11,8 +11,8 @@ export default class extends Command {
     })
   }
 
-  public async run(message: VorteMessage, _a: string[], guild: VorteGuild = message.getGuild()!) {
-		if (this.bot.andesite.players.has(message.guild!.id)) return message.sem(`Use \`${guild.prefix}play\` to queue a song.`, { type: "music" });
+  public async run(message: VorteMessage, _a: string[]) {
+		if (message.player) return message.sem(`Use \`${this.handler.prefix(message)}play\` to queue a song.`, { type: "music" });
     if (!message.member!.voice.channel) return message.sem("Please join a voice channel.", { type: "error" });
 
     this.bot.andesite.nodes.ideal.first()!.join<VortePlayer>({

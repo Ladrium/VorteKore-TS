@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js";
-import { VorteEmbed, VorteGuild, VorteMessage } from "../../lib";
+import { VorteEmbed, VorteMessage } from "../../lib";
 import { Command } from "../../lib/classes/Command";
 
 export default class extends Command {
@@ -15,22 +15,34 @@ export default class extends Command {
     })
   }
 
-  public async run(message: VorteMessage, args: string[], guild: VorteGuild = message.getGuild()!) {
-    if (!args[0]) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Please provide a user to warn."));
+  public async run(message: VorteMessage, args: string[]) {
+    if (!(args[0] && args[1])) return message.sem("Please provide a user to warn, and a reason.");
     const member = message.mentions.members!.first() || message.guild!.members.find(r => r.displayName === args[0] || r.id === args[0]);
-    const reason = args.slice(1).join(" ") || "No Reason.";
+    const reason = args.slice(1).join(" ");
 
-    if (!member) return message.channel.send(new VorteEmbed(message).baseEmbed().setDescription("Couldn't find that user!"));
-    member.user.send(`You have been warned due to **${reason}**`)
-    const { channel, enabled } = guild.getLog("warn");
-    if (!enabled) return;
-    guild.increaseCase()
-    const chan = message.guild!.channels.get(channel.id) as TextChannel;
-    chan.send(
+    if (!member) return message.sem("Couldn't find that user!");
+
+    const _case = await this.bot.database.newCase(message.guild!.id, {
+      type: "slowmode",
+      subject: member.id,
+      reason,
+      moderator: message.author.id
+    });
+
+    ++message.profile!.warns
+    await message.profile!.save();
+    if (!message._guild!.logs.channel || !message._guild!.logs.warn) return;
+
+    const logChannel = message.guild!.channels.get(message._guild!.logs.channel) as TextChannel;
+    logChannel.send(
       new VorteEmbed(message)
         .baseEmbed()
-        .setTitle(`Moderation: Warn [Case ID: ${guild.case}]`)
-        .setDescription(`**>**Executor: ${message.author.tag} (${message.author.id})\n**>**Warn: ${member.user.tag} (${member.user.id})\n**>**Reason: ${reason}`)
+        .setTitle(`Moderation: Warn [Case ID: ${_case.id}]`)
+        .setDescription([
+          `**Moderator**: ${message.author.tag} (${message.author.id})`, 
+          `**Warned**: ${member.user.tag} (${member.user.id})`, 
+          `**Reason**: ${reason}`
+        ].join("\n"))
         .setTimestamp()
 
     )

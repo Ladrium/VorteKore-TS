@@ -9,3 +9,6 @@ logs/
 *.jar
 *.lock
 *.log
+Starboard.*
+starboard.*
+Star.*

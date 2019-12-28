@@ -1,6 +1,6 @@
-import { VoiceChannel } from "discord.js";
-import { Collection } from "discord.js";
-import { Event, Mute, VortePlayer } from "../../lib";
+import { Collection, VoiceChannel } from "discord.js";
+import { Event, VortePlayer } from "../../lib";
+import { CaseEntity } from "../../models/Case";
 import DBLAPI = require("dblapi.js");
 
 export default class extends Event {
@@ -12,7 +12,9 @@ export default class extends Event {
 	}
 
 	async run(bot = this.bot) {
+		await bot.plugins.forEach(plugin => plugin.onReady())
 		await bot.logger.info(`${bot.user!.username} is ready to rumble!`);
+
 		bot.andesite.init(bot.user!.id);
 		bot.user!.setPresence({
 			activity: {
@@ -20,31 +22,30 @@ export default class extends Event {
 				type: "STREAMING",
 				url: "https://api.chaosphoe.xyz/rick"
 			},
-			
 		});
+
 		if (process.env.NODE_ENV!.ignoreCase("production")) {
-			bot.dbl = new DBLAPI(process.env.DBL_TOKEN!, {
-				statsInterval: 900000,
-				webhookAuth: process.env.DBL_WEBHOOK_AUTH,
-				webhookPath: process.env.DBL_WEBHOOK_PATH,
-				webhookPort: 3001
-			});
+			bot.dbl = new DBLAPI(process.env.DBL_TOKEN!, this.bot);
 		}
 
 		setInterval(async () => {
-			const mutes = await Mute.getAll();
-			mutes.forEach(async (x: any) => {
-				if (x.time <= Date.now()) {
+			const cases = await this.bot.database.cases!.find({ type: "mute" });
+			cases.forEach(async (x: CaseEntity) => {
+				if (x.amount <= Date.now()) {
 					try {
-						const guild = bot.guilds.get(x.guildID);
-						if (!guild) return Mute.deleteOne(x.guildID, x.userID);
+						const guild = bot.guilds.get(x.guildId);
+						if (!guild) return CaseEntity.delete({ id: x.id });
 
-						const member = guild.members.get(x.userID) || await guild.members.fetch(x.userID) || null;
-						if (!member) return Mute.deleteOne(x.guildID, x.userID);
+						const _guild = await bot.database.getGuild(guild.id);
+						if (!_guild.muteRole) return CaseEntity.delete({ id: x.id });
 
-						const muteRole = guild.roles.find((x) => x.name.toLowerCase() === "muted");
+						const member = guild.members.get(x.subject) || await guild.members.fetch(x.subject) || null;
+						if (!member) return CaseEntity.delete({ id: x.id });
+
+						const muteRole = guild.roles.find((r) => r.id === _guild.muteRole);
 						member.roles.remove(muteRole!).catch(null);
-						return Mute.deleteOne(x.guildID, x.userID);
+
+						return CaseEntity.delete({ id: x.id });
 					} catch (error) {
 
 					}

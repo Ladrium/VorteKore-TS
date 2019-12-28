@@ -11,14 +11,12 @@ export default class extends Command {
   }
 
   public async run(message: VorteMessage) {
-    const player = <VortePlayer> this.bot.andesite!.players.get(message.guild!.id)!;
+    if (!message.player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
+    if (!message.player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
+    if (message.player.paused) return message.sem(`I'm already paused... :p`, { type: "music" });
 
-    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
-    if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
-    if (player.paused) return message.sem(`I'm already paused... :p`, { type: "music" });
-
-    await player.pause();
-    player.paused = true;
+    await message.player.pause();
+    message.player.paused = true;
     return message.sem(`Successfully paused the player!`, { type: "music" });
   }
 }

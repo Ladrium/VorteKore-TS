@@ -1,7 +1,6 @@
-import { Command } from "../../lib/classes/Command";
-import { VorteClient, VorteEmbed } from "../../lib";
 import { Message } from "discord.js";
-import { checkPermissions } from "../../util";
+import { VorteEmbed, VorteMessage } from "../../lib";
+import { Command } from "../../lib/classes/Command";
 
 export default class extends Command {
   constructor() {
@@ -16,7 +15,7 @@ export default class extends Command {
     });
   }
 
-  public async run(message: Message, args: string[]) {
+  public async run(message: VorteMessage, args: string[]) {
 
     const emb = args.join(" ").split(" | ");
 

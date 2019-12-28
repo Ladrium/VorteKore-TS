@@ -1,6 +1,5 @@
-import { Command, VorteMessage, VortePlayer } from "../../lib";
 import { developers } from "../../config";
-import { checkPermissions } from "../../util";
+import { Command, VorteMessage } from "../../lib";
 
 export default class extends Command {
   public constructor() {
@@ -8,7 +7,9 @@ export default class extends Command {
       aliases: ["stop"],
       category: "Music",
       userPermissions(message: VorteMessage) {
-        if (!message.member!.roles.some((role) => role.name.toLowerCase() === "dj") || !developers.includes(message.author.id) || !checkPermissions(message.member!, "ADMINISTRATOR"))
+        if (developers.includes(message.author.id) || message.member!.hasPermission("ADMINISTRATOR"))
+          return;
+        else if (message._guild!.djRole && message.member!.roles.some(r => r.id !== message._guild!.djRole))
           return "DJ";
         return;
       },
@@ -17,13 +18,11 @@ export default class extends Command {
   }
 
   public async run(message: VorteMessage) {
-    const player = <VortePlayer>this.bot.andesite!.players.get(message.guild!.id)!;
+    if (!message.player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
+    if (!message.player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
 
-    if (!player) return message.sem("The bot isn't in a voice channel.", { type: "error" });
-    if (!player.in(message.member!)) return message.sem("Please join the voice channel I'm in.", { type: "error" });
-
-    await player.stop();
-    await player.node.leave(player.guildId);
+    await message.player.stop();
+    await message.player.node.leave(message.player.guildId);
     return message.sem("Successfully left the voice channel.", { type: "music" });
   }
 }

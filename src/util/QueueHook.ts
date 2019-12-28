@@ -1,5 +1,6 @@
 import { listen, NowPlaying, VorteQueue } from "../lib";
 import { Hook } from "../lib/classes/Hook";
+import { Util } from "discord.js";
 
 export class QueueHook extends Hook {
   public emitter!: VorteQueue;
@@ -12,7 +13,7 @@ export class QueueHook extends Hook {
 
   @listen("next")
   public async next({ song }: NowPlaying, { player }: VorteQueue = this.emitter) {
-    return player.message!.sem(`Now playing **[${song!.info.title}](${song!.info.uri})** because <@${song!.requester}> requested it.`, { type: "music" });
+    return player.message!.sem(`Now playing **[${Util.escapeMarkdown(song!.info.title)}](${song!.info.uri})** because <@${song!.requester}> requested it.`, { type: "music" });
   }
 
   @listen("finish")

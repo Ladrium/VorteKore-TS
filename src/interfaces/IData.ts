@@ -15,4 +15,5 @@ export interface ICommandOptions extends VorteModuleOptions {
   devOnly?: boolean;
   channel?: "guild" | "dm";
   permsCheckAdmin?: boolean;
+  disabledMessage?: string;
 }

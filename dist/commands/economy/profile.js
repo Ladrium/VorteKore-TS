@@ -31,6 +31,7 @@ class default_1 extends lib_1.Command {
                 const { level, xp, bio, coins, warns } = message.profile;
                 message.channel.send(new lib_1.VorteEmbed(message).baseEmbed()
                     .setDescription(bio)
+                    .setThumbnail(message.author.displayAvatarURL())
                     .addField("\u200b", [
                     `**Level**: ${level}`,
                     `**Exp**: ${Math.round(xp)}`,

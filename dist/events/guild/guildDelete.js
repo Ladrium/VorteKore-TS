@@ -13,9 +13,9 @@ class default_1 extends lib_1.Event {
         await this.bot.database.guilds.findOneAndDelete({ where: { guildId: guild.id } });
         const logs = await this.bot.channels.fetch("613827877015650304");
         return logs.send(new discord_js_1.MessageEmbed({ thumbnail: guild.iconURL() ? { url: guild.iconURL() } : {} })
-            .setColor("red")
+            .setColor("RED")
             .setTitle("Oh no :(")
-            .setDescription(`I have left a guild called "${guild.name}" :( \n\nWe now have ${this.bot.guilds.size.toLocaleString}`));
+            .setDescription(`I have left a guild called "${guild.name}" :( \n\nWe now have ${this.bot.guilds.size.toLocaleString()}`));
     }
     ;
 }

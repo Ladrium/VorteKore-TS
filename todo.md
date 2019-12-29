@@ -20,14 +20,14 @@ A list of things we should do or things we should be doing *cough cough @ChaosPh
 	- [ ] Player stuff in the dashboard???
 - [ ] Work on commands.
 	- [ ] Moderation
-		- [x] Cleaned up current code (2D)
+		- [x] Clean up current code (2D)
 		- [ ] More commands?
 			- [ ] !softban <@member> [reason]
 			- [ ] !warns <@member>
 			- [ ] !tempban <@member> [reason]
 	- [ ] Fun
-		- [ ] rps (rock paper scissors)
-		- [ ] 8ball (yes... 8ball it's the easiest shit ever)
+		- [x] rps (rock paper scissors)
+		- [x] 8ball (yes... 8ball it's the easiest shit ever)
 		- [ ] trivia?
 	- [ ] Image
 		- [x] Meme (2D)

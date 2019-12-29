@@ -55,7 +55,7 @@ export default class extends Event {
 			const players = <Collection<string, VortePlayer>>bot.andesite.players;
 			for (const [, player] of players) {
 				const channel = bot.channels.get(player.channelId)! as VoiceChannel
-				if (!channel.members.filter(m => !m.user.bot).size)
+				if (!channel || !channel.members.filter(m => !m.user.bot).size)
 					return player.queue.emit("last_man_standing");
 			}
 		}, 10000);

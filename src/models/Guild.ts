@@ -48,7 +48,7 @@ export class GuildEntity extends BaseEntity {
 
 	public constructor(guildId: string) {
 		super();
-
+		
 		this.guildId = guildId;
 	}
 

@@ -14,8 +14,8 @@ export default class extends Event {
     const logs = <TextChannel> await this.bot.channels.fetch("613827877015650304");
 
     return logs.send(new MessageEmbed({ thumbnail: guild.iconURL() ? { url: guild.iconURL()! } : {} })
-      .setColor("green")
+      .setColor("GREEN")
       .setTitle("New Guild!")
-      .setDescription(`I have joined a new guild called "${guild.name}", they have ${guild.members.filter(g => !g.user.bot).size} members!\n\nWe now have ${this.bot.guilds.size.toLocaleString}`))
+      .setDescription(`I have joined a new guild called "${guild.name}", they have ${guild.members.filter(g => !g.user.bot).size} members!\n\nWe now have ${this.bot.guilds.size.toLocaleString()}`))
   };
 }

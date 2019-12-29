@@ -3,7 +3,7 @@ import { Command, VorteEmbed, VorteMessage } from "../../lib";
 export default class extends Command {
 	public constructor() {
 		super("profile", {
-			aliases: [ "profile", "me" ],
+			aliases: ["profile", "me"],
 			description: "Displays your profile in an embed.",
 			channel: "guild",
 			usage: "[action] <value>",
@@ -31,6 +31,7 @@ export default class extends Command {
 				const { level, xp, bio, coins, warns } = message.profile!;
 				message.channel.send(new VorteEmbed(message).baseEmbed()
 					.setDescription(bio)
+					.setThumbnail(message.author.displayAvatarURL())
 					.addField("\u200b", [
 						`**Level**: ${level}`,
 						`**Exp**: ${Math.round(xp)}`,

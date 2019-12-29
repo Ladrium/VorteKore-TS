@@ -10,7 +10,6 @@ String.prototype.ignoreCase = function (value: string): boolean {
 	return this.toLowerCase() === value.toLowerCase();
 }
 
-
 declare global {
 	interface String {
 		ignoreCase(value: string): boolean;

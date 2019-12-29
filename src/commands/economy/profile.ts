@@ -1,4 +1,5 @@
 import { Command, VorteEmbed, VorteMessage } from "../../lib";
+import { createCanvas, loadImage } from "canvas";
 
 export default class extends Command {
 	public constructor() {
@@ -29,6 +30,17 @@ export default class extends Command {
 				break;
 			default:
 				const { level, xp, bio, coins, warns } = message.profile!;
+				/*c
+				const canvas = createCanvas(500, 200);
+				const ctx = canvas.getContext("2d");
+				const xpNeed = 2 * (75 * level);
+				const image = await loadImage("../../../images/rank-card.png");
+
+				ctx.lineWidth = 15;
+				ctx.font = "30px Impact";
+				ctx.fillText(level.toString(), 5, 5);
+				ctx.drawImage(image, 0, 0);
+				*/
 				message.channel.send(new VorteEmbed(message).baseEmbed()
 					.setDescription(bio)
 					.setThumbnail(message.author.displayAvatarURL())

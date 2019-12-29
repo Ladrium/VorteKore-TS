@@ -9,7 +9,7 @@ const answers = ["You may rely on it.", "Yes – definitely.", "Yes.", "Without 
 export default class extends Command {
   public constructor() {
     super("8ball", {
-      category: "Economy",
+      category: "fun",
       cooldown: 500
     })
   }

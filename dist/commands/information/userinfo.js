@@ -36,6 +36,7 @@ class default_1 extends lib_1.Command {
     getGame(member) {
         if (!member.presence.activity)
             return "None.";
+        return member.presence.activity.name;
     }
 }
 exports.default = default_1;

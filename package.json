@@ -21,6 +21,7 @@
     "@ayana/logger": "^2.1.1",
     "body-parser": "^1.19.0",
     "botlist.space": "^3.3.1",
+    "canvas": "^2.6.1",
     "dblapi.js": "^2.3.0",
     "discord.js": "github:discordjs/discord.js",
     "discord.js-andesite": "^1.0.14",

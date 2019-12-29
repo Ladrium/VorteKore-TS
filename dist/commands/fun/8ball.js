@@ -9,7 +9,7 @@ const answers = ["You may rely on it.", "Yes – definitely.", "Yes.", "Without 
 class default_1 extends lib_1.Command {
     constructor() {
         super("8ball", {
-            category: "Economy",
+            category: "fun",
             cooldown: 500
         });
     }

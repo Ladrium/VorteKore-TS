@@ -45,6 +45,7 @@ class Handler extends events_1.EventEmitter {
             message.channel.send(new VorteEmbed_1.VorteEmbed(message)
                 .errorEmbed(process.execArgv.includes("--debug") ? e : undefined)
                 .setDescription("Sorry, I ran into an error."));
+            console.log(e);
         }
         ;
         setTimeout(() => {

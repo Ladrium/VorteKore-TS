@@ -110,7 +110,10 @@ export function progressBar(percent: number, length = 8) {
   }
   return str;
 }
-
+export function formatNumber(n: number) {
+  if (n < 1e3) return n;
+  if (n >= 1e3) return +(n / 1e3).toFixed(1) + "K";
+};
 export function getVolumeIcon(volume: number) {
   if (volume == 0) return "\uD83D\uDD07";
   else if (volume < 33) return "\uD83D\uDD08";

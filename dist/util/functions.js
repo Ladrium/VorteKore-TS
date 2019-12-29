@@ -106,6 +106,14 @@ function progressBar(percent, length = 8) {
     return str;
 }
 exports.progressBar = progressBar;
+function formatNumber(n) {
+    if (n < 1e3)
+        return n;
+    if (n >= 1e3)
+        return +(n / 1e3).toFixed(1) + "K";
+}
+exports.formatNumber = formatNumber;
+;
 function getVolumeIcon(volume) {
     if (volume == 0)
         return "\uD83D\uDD07";

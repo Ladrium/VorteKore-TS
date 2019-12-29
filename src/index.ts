@@ -17,7 +17,7 @@ startServer(bot);
 bot.handler.loadCommands();
 bot.handler.loadEvents();
 
-bot.login(Config.get("token"));
+bot.login("NjI4OTg4MDgwNDA5NTQyNzA2.Xgj_6g.5qlR6lKGMGiRTQBI_15O3H9jMxo");
 
 process.on("SIGINT", async () => {
   try {

@@ -6,7 +6,6 @@ const path_1 = require("path");
 require("./lib/classes/Message");
 const VorteClient_1 = require("./lib/VorteClient");
 const server_1 = require("./web/server");
-const Config_1 = require("./util/Config");
 dotenv_1.config({
     path: path_1.join(__dirname, "../", ".env")
 });
@@ -14,7 +13,7 @@ const bot = new VorteClient_1.VorteClient();
 server_1.startServer(bot);
 bot.handler.loadCommands();
 bot.handler.loadEvents();
-bot.login(Config_1.Config.get("token"));
+bot.login("NjI4OTg4MDgwNDA5NTQyNzA2.Xgj_6g.5qlR6lKGMGiRTQBI_15O3H9jMxo");
 process.on("SIGINT", async () => {
     try {
         if (bot.andesite.userId)

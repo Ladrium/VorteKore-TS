@@ -18,8 +18,8 @@ class default_1 extends lib_1.Command {
         members = members.sort((a, b) => b.xp - a.xp);
         let { items, page } = util_1.paginate(members, selected), str = "", index = (page - 1) * 10;
         for (const member of items) {
-            const user = this.bot.users.get(member.id);
-            str += `${++index}. ${user.username} : ${member.level} [${member.xp}]\n`;
+            const user = this.bot.users.get(member.userId);
+            str += `${++index}. ${user ? user.username : "Unknown"} : ${member.level} [${member.xp}]\n`;
         }
         str += `Page : ${page}`;
         const leaderboardEmbed = new lib_1.VorteEmbed(message)

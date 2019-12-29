@@ -1,5 +1,8 @@
 import { Command, VorteEmbed, VorteMessage } from "../../lib";
+import { formatNumber } from "../../util";
 import { createCanvas, loadImage } from "canvas";
+import { MessageAttachment } from "discord.js";
+import { ProfileEntity } from "../../models/Profile";
 
 export default class extends Command {
 	public constructor() {
@@ -30,26 +33,36 @@ export default class extends Command {
 				break;
 			default:
 				const { level, xp, bio, coins, warns } = message.profile!;
-				/*c
+				let users = await ProfileEntity.find({ where: { guildId: message.guild!.id } });
+				users = users.sort((a, b) => b.xp - a.xp);
+				const rank = users.findIndex((user) => user.userId === message.author.id);
+
 				const canvas = createCanvas(500, 200);
 				const ctx = canvas.getContext("2d");
 				const xpNeed = 2 * (75 * level);
-				const image = await loadImage("../../../images/rank-card.png");
+				const image = await loadImage(process.cwd() + "../../images/rank-card.png");
+				const lineLength = Math.round((xp / xpNeed) * 458);
 
-				ctx.lineWidth = 15;
-				ctx.font = "30px Impact";
-				ctx.fillText(level.toString(), 5, 5);
+				ctx.lineWidth = 20;
+				ctx.font = "20px Impact";
+				ctx.fillStyle = "#00000"
+
 				ctx.drawImage(image, 0, 0);
-				*/
-				message.channel.send(new VorteEmbed(message).baseEmbed()
-					.setDescription(bio)
-					.setThumbnail(message.author.displayAvatarURL())
-					.addField("\u200b", [
-						`**Level**: ${level}`,
-						`**Exp**: ${Math.round(xp)}`,
-						`**Coins**: ${Math.round(coins)}`,
-						`**Warns**: ${warns}`
-					].join("\n")));
+				ctx.fillText(message.author.username, 30, 85);
+				ctx.fillText(`[${formatNumber(level)}]`, 102, 155);
+				ctx.fillText(`[${formatNumber(xp)}/${formatNumber(xpNeed)}]`, 400, 155);
+				ctx.fillText(`#${formatNumber(rank)}`, 370, 60)
+				ctx.moveTo(40, 170);
+				ctx.lineTo(lineLength, 170);
+				ctx.lineCap = "round"
+				ctx.strokeStyle = "#4b62fa"
+				ctx.stroke();
+				const attachment = new MessageAttachment(canvas.toBuffer(), `RankCard-${message.author.username}.png`);
+				const embed = new VorteEmbed(message)
+					.baseEmbed()
+					.setImage(`attachment://RankCard-${message.author.username}.png`);
+
+				message.channel.send({ embed, files: [attachment] });
 				break;
 		}
 	}

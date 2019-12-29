@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.nodes = [
     {
         name: "chaos",
-        host: "127.0.0.1",
+        host: "92.222.201.243",
         port: 5000,
         password: "youshallnotpass"
     }
